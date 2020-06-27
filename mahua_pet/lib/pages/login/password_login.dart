@@ -1,10 +1,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:mahua_pet/component/component.dart';
+import 'package:mahua_pet/config/config_index.dart';
 import 'package:mahua_pet/pages/login/register.dart';
+import 'package:mahua_pet/pages/main/main_page.dart';
+import 'package:mahua_pet/providered/model/user_info.dart';
 
 import 'package:mahua_pet/styles/app_style.dart';
-import 'package:mahua_pet/untils/untils.dart';
+import 'package:mahua_pet/utils/utils_index.dart';
 import 'views/login_input.dart';
 
 
@@ -74,7 +77,7 @@ class _PasswordContentState extends State<PasswordContent> {
             SizedBox(height: 15.px),
             registerWidget(),
             SizedBox(height: 30.px),
-            loginButton(),
+            loginButton(context),
           ],
         ),
       ),
@@ -146,18 +149,33 @@ class _PasswordContentState extends State<PasswordContent> {
     );
   }
 
-  Widget loginButton() {
+  Widget loginButton(BuildContext context) {
     return LargeButton(
       title: '登录',
       disabled: _disabled,
       onPressed: () {
-        loginAction();
-        print('object---------------');
+        loginAction(context);
       }
     );
   }
 
-  void loginAction() {
-    
+  void loginAction(BuildContext context) {
+    TKToast.showLoading();
+    final params = {'username': _account, 'password': _password, 'type': 'password', 'token': ''};
+    HttpRequest.request(HttpConfig.applogin, method: 'post', params: params)
+      .then((value) {
+        TKToast.dismiss();
+        if (value.isSuccess) {
+          Map<String, dynamic> result = value.data;
+          UserInfo.fromJson(result);
+          TKRoute.popToRoutePage(context);
+          TKToast.showSuccess('登录成功');
+        } else {
+          TKToast.showError(value.message);
+        }
+      })
+      .catchError((error) {
+        TKToast.dismiss();
+      });
   }
 }

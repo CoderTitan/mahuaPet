@@ -23,7 +23,7 @@ class LoginInput extends StatefulWidget {
     @required this.leftTitle,
     TextEditingController controller,
     FocusNode focusNode,
-    this.leftWidth = 50,
+    this.leftWidth = 65,
     this.keyboardType,
     this.maxLength,
     this.autofocus = false,
@@ -60,7 +60,6 @@ class _LoginInputState extends State<LoginInput> {
               width: widget.leftWidth,
               child: Text(widget.leftTitle, style: TextStyle(fontSize: 16.px, color: TKColor.color_666666)),
             ),
-            SizedBox(width: 15.px),
             Expanded(
               child: TextInput(
                 keyboardType: widget.keyboardType,

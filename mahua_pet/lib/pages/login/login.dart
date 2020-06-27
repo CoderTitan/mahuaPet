@@ -2,10 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/pages/login/password_login.dart';
-import 'package:mahua_pet/pages/login/register.dart';
+import 'package:mahua_pet/providered/shared/shared_index.dart';
+import 'package:mahua_pet/providered/shared/shared_util.dart';
 
 import 'package:mahua_pet/styles/app_style.dart';
-import 'package:mahua_pet/untils/untils.dart';
+import 'package:mahua_pet/utils/utils_index.dart';
+import 'package:mahua_pet/config/config_index.dart';
 import 'views/login_input.dart';
 
 
@@ -57,6 +59,14 @@ class _LoginContentState extends State<LoginContent> {
   String _code = '';
 
   @override
+  void initState() {
+    super.initState();
+
+    SharedUtils.getString(ShareConstant.deviceNo).then((userid) => print(userid));
+    
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Positioned(
       top: 105.px,
@@ -75,9 +85,9 @@ class _LoginContentState extends State<LoginContent> {
             SizedBox(height: 10.px),
             codeWidget(),
             SizedBox(height: 15.px),
-            registerWidget(),
+            registerWidget(context),
             SizedBox(height: 30.px),
-            loginButton(),
+            loginButton(context),
           ],
         ),
       ),
@@ -124,23 +134,23 @@ class _LoginContentState extends State<LoginContent> {
   }
 
   Widget codeButtonWidget() {
-    
     return AuthCodeButton(
       key: authCodeKey,
-      timeCount: 6,
+      timeCount: 60,
       onPressed: () {
-        final isPhone = FuncUntils.isPhoneNumber(_account);
+        final isPhone = FuncUtils.isPhoneNumber(_account);
         if (!isPhone) {
-          print('请输入正确手机号');
+          TKToast.showWarn('请输入正确手机号');
           return;
         }
-        authCodeKey.currentState.startAction();
-        print('开始获取验证码');
+
+        getCodeAction();
       }
     );
   }
 
-  Widget registerWidget() {
+  Widget registerWidget(BuildContext context) {
+    final routeName = ModalRoute.of(context).settings.arguments;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.px),
       child: Container(
@@ -151,33 +161,41 @@ class _LoginContentState extends State<LoginContent> {
             GestureDetector(
               child: Text('账号密码登录', style: TextStyle(fontSize: 13.px, color: TKColor.main_color)),
               onTap: () {
-                Navigator.of(context).pushNamed(PasswordPage.rooteName);
+                Navigator.of(context).pushNamed(PasswordPage.rooteName, arguments: routeName);
               },
             ),
-            GestureDetector(
-              child: Text('注册', style: TextStyle(fontSize: 13.px, color: TKColor.main_color)),
-              onTap: () {
-                Navigator.of(context).pushNamed(RegisterPage.rooteName);
-              },
-            )
           ],
         ),
       ),
     );
   }
 
-  Widget loginButton() {
+  Widget loginButton(BuildContext context) {
     return LargeButton(
       title: '登录',
       disabled: _disabled,
       onPressed: () {
-        loginAction();
-        print('object---------------');
+        loginAction(context);
       }
     );
   }
 
-  void loginAction() {
+  void getCodeAction() {
+    HttpRequest.request(HttpConfig.sendCode, method: 'get', params: {'phone': _account})
+      .then((result) {
+        if (result.isSuccess) {
+          TKToast.showSuccess('验证码已发送');
+          authCodeKey.currentState.startAction();
+        } else {
+          TKToast.showError(result.message);
+        }
+      })
+      .catchError((error) {
+        print('object = $error');
+      });
+  }
+
+  void loginAction(BuildContext context) {
     
   }
 }

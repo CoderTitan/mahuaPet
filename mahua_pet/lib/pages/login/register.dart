@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mahua_pet/component/component.dart';
 
 import 'package:mahua_pet/styles/app_style.dart';
-import 'package:mahua_pet/untils/untils.dart';
+import 'package:mahua_pet/utils/utils_index.dart';
 import 'views/login_input.dart';
 
 
@@ -15,7 +15,7 @@ class RegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('注册'),
+        title: Text('修改密码'),
         elevation: 0,
       ),
       body: Container(
@@ -141,7 +141,7 @@ class _RegisterContentState extends State<RegisterContent> {
     return AuthCodeButton(
       timeCount: 6,
       onPressed: () {
-        final isPhone = FuncUntils.isPhoneNumber(_account);
+        final isPhone = FuncUtils.isPhoneNumber(_account);
         if (!isPhone) {
           print('请输入正确手机号');
           return;

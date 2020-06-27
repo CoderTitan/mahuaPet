@@ -22,6 +22,7 @@ class TKColor {
   static const color_e5e5e5 = Color(0xFFe5e5e5);
   static const color_e8e8e8 = Color(0xFFe8e8e8);
   static const color_e1e1e1 = Color(0xFFe1e1e1);
+  static const color_dedede = Color(0xFFdedede);
   static const color_cccccc = Color(0xFFcccccc);
   static const color_999999 = Color(0xFF999999);
   static const color_666666 = Color(0xFF666666);

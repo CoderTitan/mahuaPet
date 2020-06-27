@@ -1,5 +1,25 @@
+import 'package:flutter/material.dart';
+import 'package:mahua_pet/providered/shared/shared_index.dart';
+import 'package:mahua_pet/providered/model/model_index.dart';
 
-class FuncUntils {
+class FuncUtils {
+
+  // 是否登录
+  static Future<bool> isLogin() async {
+    final token = await SharedUtils.getString(ShareConstant.token);
+    if (token.isNotEmpty) {
+      return true;
+    }
+    return false;
+  }
+
+  // 退出登录
+  static loginOut() {
+    UserInfo.cleanShared();
+    
+  }
+
+  
   
   // 格式化手机号, 添加空格
   static String formatPhone(account) {
