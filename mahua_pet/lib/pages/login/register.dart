@@ -9,7 +9,7 @@ import 'views/login_input.dart';
 
 class RegisterPage extends StatelessWidget {
 
-  static const rooteName = '/register';
+  static const routeName = '/register';
 
   @override
   Widget build(BuildContext context) {

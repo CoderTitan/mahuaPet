@@ -42,7 +42,7 @@ class UserLevel {
         "userId": userId,
         "level": level,
         "growthValue": growthValue,
-        "createTime": createTime.toIso8601String(),
+        "createTime": createTime?.toIso8601String(),
         "isFlag": isFlag,
         "delFlag": delFlag,
     };

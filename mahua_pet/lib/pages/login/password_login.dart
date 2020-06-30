@@ -1,10 +1,13 @@
 
 import 'package:flutter/material.dart';
+import 'package:mahua_pet/providered/model/model_index.dart';
+import 'package:provider/provider.dart';
+
+
 import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/config/config_index.dart';
 import 'package:mahua_pet/pages/login/register.dart';
-import 'package:mahua_pet/pages/main/main_page.dart';
-import 'package:mahua_pet/providered/model/user_info.dart';
+import 'package:mahua_pet/providered/provider_index.dart';
 
 import 'package:mahua_pet/styles/app_style.dart';
 import 'package:mahua_pet/utils/utils_index.dart';
@@ -13,7 +16,7 @@ import 'views/login_input.dart';
 
 class PasswordPage extends StatelessWidget {
 
-  static const rooteName = '/psd_login';
+  static const routeName = '/psd_login';
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +143,7 @@ class _PasswordContentState extends State<PasswordContent> {
             GestureDetector(
               child: Text('忘记密码', style: TextStyle(fontSize: 13.px, color: TKColor.main_color)),
               onTap: () {
-                Navigator.of(context).pushNamed(RegisterPage.rooteName);
+                Navigator.of(context).pushNamed(RegisterPage.routeName);
               },
             )
           ],
@@ -167,7 +170,10 @@ class _PasswordContentState extends State<PasswordContent> {
         TKToast.dismiss();
         if (value.isSuccess) {
           Map<String, dynamic> result = value.data;
-          UserInfo.fromJson(result);
+          UserProvider userModel = Provider.of<UserProvider>(context, listen: false);
+          userModel.loginInfo = LoginInfo.fromJson(result);
+          UserProvider.config('APP首页', userModel.loginInfo.token, userModel.loginInfo.userId);
+          UserProvider.user(userModel.loginInfo.userId);
           TKRoute.popToRoutePage(context);
           TKToast.showSuccess('登录成功');
         } else {

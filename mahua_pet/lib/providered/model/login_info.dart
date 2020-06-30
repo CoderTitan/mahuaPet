@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:mahua_pet/providered/shared/shared_index.dart';
 
 
 LoginInfo loginInfoFromJson(String str) => LoginInfo.fromJson(json.decode(str));
@@ -29,6 +28,9 @@ class LoginInfo {
         this.hxPassword,
     });
 
+    // 最后一位登录的用户的userId
+    int lastUserId = 0;
+
     int userId;
     String userPhone;
     String userPassword;
@@ -50,16 +52,6 @@ class LoginInfo {
     String hxPassword;
 
   factory LoginInfo.fromJson(Map<String, dynamic> json) {
-
-    SharedUtils.setInt(ShareConstant.userId, json['userId'] ?? 0);
-    SharedUtils.setString(ShareConstant.token, json['token'] ?? '');
-    SharedUtils.setString(ShareConstant.userPhone, json['userPhone'] ?? '');
-    SharedUtils.setString(ShareConstant.userPassword, json['userPassword'] ?? '');
-    SharedUtils.setString(ShareConstant.userType, json['userType'] ?? '');
-    SharedUtils.setString(ShareConstant.authStatus, json['authStatus'] ?? '');
-    SharedUtils.setString(ShareConstant.userProperty, json['userProperty'] ?? '');
-    SharedUtils.setString(ShareConstant.registerChannel, json['registerChannel'] ?? '');
-    SharedUtils.setString(ShareConstant.registerType, json['registerType'] ?? '');
 
     return LoginInfo(
       userId: json["userId"],
@@ -94,8 +86,8 @@ class LoginInfo {
         "registerChannel": registerChannel,
         "registerType": registerType,
         "platformType": platformType,
-        "createTime": createTime.toIso8601String(),
-        "modifyTime": modifyTime.toIso8601String(),
+        "createTime": createTime?.toIso8601String(),
+        "modifyTime": modifyTime?.toIso8601String(),
         "isFlag": isFlag,
         "delFlag": delFlag,
         "token": token,

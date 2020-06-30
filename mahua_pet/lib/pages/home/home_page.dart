@@ -1,7 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:mahua_pet/pages/home/contents/calendar_page.dart';
 
+import 'package:flutter/material.dart';
+import 'package:mahua_pet/pages/home/contents/pet_add.dart';
+import 'package:mahua_pet/pages/home/contents/pet_list.dart';
+import 'package:provider/provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
+import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/styles/app_style.dart';
+import 'package:mahua_pet/utils/utils_index.dart';
+
+import 'package:mahua_pet/pages/home/contents/calendar_page.dart';
+import 'package:mahua_pet/pages/home/models/pet_model.dart';
+import './view_model/pet_view_model.dart';
 import 'views/home_list.dart';
 
 
@@ -25,19 +35,27 @@ class HomeContent extends StatefulWidget {
 class _HomeContentState extends State<HomeContent> {
   
 
+  @override
+  void initState() {
+    super.initState();
+
+    if (FuncUtils.isLogin()) {
+      PetViewModel();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
       scrollDirection: Axis.vertical,
       slivers: <Widget>[
-        renderHeader(),
-        HomeList()
+        renderHeader(context),
+        // HomeList()
       ],
     );
   }
 
-  Widget renderHeader() {
+  Widget renderHeader(BuildContext context) {
     return SliverToBoxAdapter(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -47,9 +65,9 @@ class _HomeContentState extends State<HomeContent> {
             child: Stack(
               children: <Widget>[
                 initBackImage(),
-                initRightSelect(),
-                initAnimalInfo(),
-                initAnimalLifes()
+                initRightSelect(context),
+                initAnimalInfo(context),
+                initAnimalLifes(context)
               ],
             ),
           ),
@@ -57,7 +75,7 @@ class _HomeContentState extends State<HomeContent> {
             iconSize: 18.px,
             icon: Image.asset('${TKImages.image_path}calendar.png'), 
             onPressed: () {
-              Navigator.of(context).pushNamed(CalendarPage.rooteName);
+              Navigator.of(context).pushNamed(CalendarPage.routeName);
             }
           )
         ],
@@ -74,63 +92,119 @@ class _HomeContentState extends State<HomeContent> {
     );
   }
 
-  Widget initRightSelect() {
+  Widget initRightSelect(BuildContext context) {
     return Positioned(
       right: 15.px,
       top: 10.px + SizeFit.statusHeight,
       child: GestureDetector(
-        child: Image.asset(
-          '${TKImages.image_path}home_animal.png', 
-          width: 90.px,
-          height: 37.px,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(30.px))
+          ),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(12.px, 6.px, 4.px, 6.px),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Consumer<PetViewModel>(builder: (ctx, petVM, child) {
+                  String _selectTitle = petVM.petArray.length > 0 ? '选择宠物' : '添加宠物';
+                  return Text(_selectTitle, style: TextStyle(fontSize: 14.px, color: TKColor.color_333333));
+                }),
+                Icon(Icons.keyboard_arrow_right, size: 24, color: TKColor.color_1a1a1a)
+              ],
+            ),
+          ),
         ),
-        onTap: () => selectAnimal(),
+        onTap: () => selectAnimal(context),
       )
     );
   }
 
-  Widget initAnimalInfo() {
-    return Positioned(
-      left: 20.px,
-      top: 60.px,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            width: 70.px, height: 70.px,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.white, width: 2),
-              shape: BoxShape.circle,
-              image: DecorationImage(image: AssetImage('${TKImages.image_path}animal_icon.png'))
+  Widget initAnimalInfo(BuildContext context) {
+    return Consumer<PetViewModel>(builder: (ctx, petVM, chiild) {
+      final model = petVM.currentModel;
+      final isLogin = FuncUtils.isLogin();
+      final isPet = petVM.petArray.length > 0;
+      final animalIcon = isLogin ? (isPet ? model.petImg : '') : '';
+
+      return Positioned(
+        left: 20.px,
+        top: 90.px,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            GestureDetector(
+              child: TKNetworkImage(
+                imageUrl: animalIcon,
+                width: 70.px, height: 70.px,
+                borderColor: Colors.white,
+                borderWidth: 2,
+                borderRadius: 35.px,
+                showProgress: true,
+                placeholder: '${TKImages.image_path}animal_icon.png',
+              ),
+              onTap: () => animalHeaderClick(context, isPet, model)
             ),
-          ),
-          SizedBox(width: 16.px),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text.rich(TextSpan(children: [
-                WidgetSpan(
-                  child: Text('麻花宠物', style: TextStyle(fontSize: 18.px, color: TKColor.color_333333, fontWeight: FontWeight.w600, height: 1.3)),
-                  // style: ,
-                  alignment: PlaceholderAlignment.middle
-                ),
-                WidgetSpan(
-                  child: Image.asset('${TKImages.image_path}animal_cat.png', width: 20.px, height: 20.px),
-                  baseline: TextBaseline.ideographic,
-                  alignment: PlaceholderAlignment.middle
-                )
-              ])),
-              SizedBox(height: 2.px),
-              Text('已陪伴356天', style: TextStyle(fontSize: 13.px, color: TKColor.color_333333, height: 1.3)),
-              Text('1岁6个月|比熊|3kg', style: TextStyle(fontSize: 13.px, color: TKColor.color_333333, height: 1.3)),
-            ],
-          )
-        ],
-      ),
-    );
+            SizedBox(width: 16.px),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: animalInfoList(model, isPet),
+            )
+          ],
+        ),
+      );
+    });
   }
 
-  Widget initAnimalLifes() {
+  List<Widget> animalInfoList(PetModel model, bool isPet) {
+    final isLogin = FuncUtils.isLogin();
+    final animalName = isLogin ? (isPet ? model.petName : '未添加宠物') : '未登录';
+    final animalBreed = isLogin ? (isPet ? model.petBreed : '') : '';
+    final animalSex = isLogin ? (isPet ? model.sex : '') : '';
+    final animalDay = isLogin ? (isPet ? '已${model.day}' : '') : '';
+    final animalAge = isLogin ? (isPet ? model.age : '') : '';
+    final animalWeight = isLogin ? (isPet ? model.petKg : '') : '';
+    final animalInfo = animalAge.length > 0 || animalBreed.length > 0 || animalWeight.length > 0 ? '$animalAge|$animalBreed|${animalWeight}KG' : '';
+
+    List<Widget> lists = [];
+    Text title = Text.rich(TextSpan(children: titleTexts(animalName, animalSex)));
+    lists.add(title);
+    if (animalDay.length > 0) {
+      lists.add(SizedBox(height: 2.px));
+      lists.add(Text(animalDay, style: TextStyle(fontSize: 13.px, color: TKColor.color_333333, height: 1.3)));
+    }
+    if (animalInfo.length > 0) {
+      lists.add(Text(animalInfo, style: TextStyle(fontSize: 13.px, color: TKColor.color_333333, height: 1.3)));
+    }
+    return lists;
+  }
+
+  List<InlineSpan> titleTexts(String name, String sex) {
+    List<InlineSpan> lists = [];
+    WidgetSpan title = WidgetSpan(
+      child: Text(
+        name, 
+        style: TextStyle(fontSize: 18.px, color: TKColor.color_333333, fontWeight: FontWeight.w600, height: 1.3)
+      ),
+      alignment: PlaceholderAlignment.middle
+    );
+    lists.add(title);
+    if (sex.length > 0) {
+      final imgIcon = sex == '0' ? '${TKImages.image_path}animal_female.png' : '${TKImages.image_path}animal_male.png';
+      WidgetSpan icon = WidgetSpan(
+        child: Image.asset(imgIcon, width: 15.px, height: 15.px),
+        baseline: TextBaseline.ideographic,
+        alignment: PlaceholderAlignment.middle
+      );
+      lists.add(icon);
+    }
+      
+    return lists;
+  }
+
+  Widget initAnimalLifes(BuildContext context) {
     final titles = ['日常打卡', '提醒吧', '健康管理', '体重记录', '相册'];
     final images = ['home_record.png', 'home_warn.png', 'home_fit.png', 'home_weight.png', 'home_album.png'];
     return Positioned(
@@ -139,7 +213,7 @@ class _HomeContentState extends State<HomeContent> {
       child: Container(
         width: SizeFit.screenWidth - 30.px,
         height: 100.px,
-        // padding: EdgeInsets.symmetric(horizontal: 10.px),
+        padding: EdgeInsets.symmetric(horizontal: 10.px),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(12.px)),
@@ -149,35 +223,62 @@ class _HomeContentState extends State<HomeContent> {
           ]
         ),
         child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: titles.length,
-            itemBuilder: (ctx, index) {
-              return GestureDetector(
-                child: Container(
-                  width: 75.px,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Image.asset('${TKImages.image_path}${images[index]}', width: 38.px, height: 38.px, fit: BoxFit.contain),
-                      SizedBox(height: 8.px),
-                      Text(titles[index], style: TextStyle(fontSize: 13.px, color: TKColor.color_333333)),
-                    ],
-                  ),
+          scrollDirection: Axis.horizontal,
+          itemCount: titles.length,
+          itemBuilder: (ctx, index) {
+            return GestureDetector(
+              child: Container(
+                width: 75.px,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Image.asset('${TKImages.image_path}${images[index]}', width: 38.px, height: 38.px, fit: BoxFit.contain),
+                    SizedBox(height: 8.px),
+                    Text(titles[index], style: TextStyle(fontSize: 13.px, color: TKColor.color_333333)),
+                  ],
                 ),
-                onTap: () => headerItemClick(index),
-              );
-            }
-          ),
+              ),
+              onTap: () => scrollItemClick(context, index)
+            );
+          }
+        ),
       ),
     );
   }
 
-  void selectAnimal() {
+  void selectAnimal(BuildContext context) {
+    final isLogin = FuncUtils.isLogin();
+    if (!isLogin) {
+      FuncUtils.jumpLogin(context);
+      return;
+    }
 
+    PetViewModel petVM = Provider.of<PetViewModel>(context, listen: false);
+
+    if (petVM.petArray.length > 0) {
+      Navigator.of(context).pushNamed(PetListPage.routeName);
+    } else {
+      Navigator.of(context).pushNamed(PetAddPage.routeName, arguments: {'add': true, 'model': null});
+    }
   }
 
-  void headerItemClick(index) {
-    print('index = $index');
+  void animalHeaderClick(BuildContext context, bool isPet, PetModel model) {
+    final isLogin = FuncUtils.isLogin();
+    if (!isLogin) {
+      FuncUtils.jumpLogin(context);
+      return;
+    }
+
+    Navigator.of(context).pushNamed(PetAddPage.routeName, arguments: {'add': false, 'model': model});
+  }
+
+  void scrollItemClick(BuildContext context, int index) {
+    final isLogin = FuncUtils.isLogin();
+    if (!isLogin) {
+      FuncUtils.jumpLogin(context);
+      return;
+    }
+    TKToast.showSuccess('已经登录了');
   }
 }

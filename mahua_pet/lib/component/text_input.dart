@@ -74,6 +74,8 @@ class _TextInputState extends State<TextInput> {
         autofocus: widget.autofocus,
         obscureText: _securityText,
         style: widget.style,
+        textAlign: widget.textAlign,
+        textInputAction: widget.textInputAction,
         textAlignVertical: TextAlignVertical.center,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(vertical: 12.px),

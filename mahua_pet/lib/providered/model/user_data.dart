@@ -74,10 +74,10 @@ class UserData {
     );
 
     Map<String, dynamic> toJson() => {
-        "user": user.toJson(),
-        "userinfo": userinfo.toJson(),
-        "userlevel": userlevel.toJson(),
-        "usermedalList": List<dynamic>.from(usermedalList.map((x) => x)),
+        "user": user?.toJson(),
+        "userinfo": userinfo?.toJson(),
+        "userlevel": userlevel?.toJson(),
+        "usermedalList": List<dynamic>.from(usermedalList?.map((x) => x)),
         "petCount": petCount,
         "messageCount": messageCount,
         "fansCount": fansCount,
@@ -86,10 +86,10 @@ class UserData {
         "isSelf": isSelf,
         "followStatus": followStatus,
         "totalWalkDogTime": totalWalkDogTime,
-        "targetRule": targetRule.toJson(),
+        "targetRule": targetRule?.toJson(),
         "fansNotifyStatus": fansNotifyStatus,
         "deviceStatus": deviceStatus,
-        "userMember": userMember.toJson(),
+        "userMember": userMember?.toJson(),
         "tribeFirstStatus": tribeFirstStatus,
         "validCouponCount": validCouponCount,
     };
@@ -128,8 +128,8 @@ class TargetRule {
         "ruleId": ruleId,
         "level": level,
         "growthValue": growthValue,
-        "createTime": createTime.toIso8601String(),
-        "delTime": delTime.toIso8601String(),
+        "createTime": createTime?.toIso8601String(),
+        "delTime": delTime?.toIso8601String(),
         "isFlag": isFlag,
         "delFlag": delFlag,
     };
@@ -192,8 +192,8 @@ class User {
         "registerChannel": registerChannel,
         "registerType": registerType,
         "platformType": platformType,
-        "createTime": createTime.toIso8601String(),
-        "modifyTime": modifyTime.toIso8601String(),
+        "createTime": createTime?.toIso8601String(),
+        "modifyTime": modifyTime?.toIso8601String(),
         "isFlag": isFlag,
         "delFlag": delFlag,
     };

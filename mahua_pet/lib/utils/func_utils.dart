@@ -1,22 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:mahua_pet/providered/shared/shared_index.dart';
+import 'package:provider/provider.dart';
+
+import 'package:mahua_pet/component/component.dart';
+import 'package:mahua_pet/providered/provider_index.dart';
 import 'package:mahua_pet/providered/model/model_index.dart';
+
+import 'package:mahua_pet/pages/login/login.dart';
+import 'package:mahua_pet/utils/utils_index.dart';
 
 class FuncUtils {
 
   // 是否登录
-  static Future<bool> isLogin() async {
-    final token = await SharedUtils.getString(ShareConstant.token);
-    if (token.isNotEmpty) {
+  static bool isLogin() {
+    LoginInfo loginInfo = SharedStorage.loginInfo;
+    UserData userData = SharedStorage.userData;
+    if (loginInfo.token != null && loginInfo.token.length > 0 && userData.userinfo.userId != null && userData.userinfo.userId > 0) {
       return true;
     }
     return false;
   }
 
+  // 跳转登录页面
+  static void jumpLogin(BuildContext context) {
+    Navigator.of(context).pushNamed(LoginPage.routeName, arguments: '/');
+  }
+
   // 退出登录
-  static loginOut() {
-    UserInfo.cleanShared();
-    
+  static void loginOut(BuildContext context) {
+    UserProvider userModel = Provider.of<UserProvider>(context, listen: false);
+    userModel.loginInfo = LoginInfo();
+    userModel.userData = null;
+    TKToast.showSuccess('退出登录成功');
+    TKRoute.popRoot(context);
   }
 
   

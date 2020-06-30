@@ -1,9 +1,12 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/pages/login/password_login.dart';
-import 'package:mahua_pet/providered/shared/shared_index.dart';
-import 'package:mahua_pet/providered/shared/shared_util.dart';
+import 'package:mahua_pet/providered/provider_index.dart';
 
 import 'package:mahua_pet/styles/app_style.dart';
 import 'package:mahua_pet/utils/utils_index.dart';
@@ -13,7 +16,7 @@ import 'views/login_input.dart';
 
 class LoginPage extends StatelessWidget {
 
-  static const rooteName = '/login';
+  static const routeName = '/login';
 
   @override
   Widget build(BuildContext context) {
@@ -61,8 +64,6 @@ class _LoginContentState extends State<LoginContent> {
   @override
   void initState() {
     super.initState();
-
-    SharedUtils.getString(ShareConstant.deviceNo).then((userid) => print(userid));
     
   }
 
@@ -161,7 +162,7 @@ class _LoginContentState extends State<LoginContent> {
             GestureDetector(
               child: Text('账号密码登录', style: TextStyle(fontSize: 13.px, color: TKColor.main_color)),
               onTap: () {
-                Navigator.of(context).pushNamed(PasswordPage.rooteName, arguments: routeName);
+                Navigator.of(context).pushNamed(PasswordPage.routeName, arguments: routeName);
               },
             ),
           ],
@@ -181,8 +182,17 @@ class _LoginContentState extends State<LoginContent> {
   }
 
   void getCodeAction() {
+
+    // final phone = '%7B%22phone%22%3A%2213456789417%22,%22time%22%3A%221593436035612%22,%22sign%22%3A%2288F2127F942900F5199A43BC0042C195%22%7D';
+    // Utf8Decoder()
+
+
+
+
+    TKToast.showLoading();
     HttpRequest.request(HttpConfig.sendCode, method: 'get', params: {'phone': _account})
       .then((result) {
+        TKToast.dismiss();
         if (result.isSuccess) {
           TKToast.showSuccess('验证码已发送');
           authCodeKey.currentState.startAction();
@@ -191,11 +201,31 @@ class _LoginContentState extends State<LoginContent> {
         }
       })
       .catchError((error) {
+        TKToast.dismiss();
         print('object = $error');
       });
   }
 
   void loginAction(BuildContext context) {
-    
+    TKToast.showLoading();
+    final params = {'username': _account, 'code': _code, 'type': 'code', 'token': ''};
+    HttpRequest.request(HttpConfig.applogin, method: 'post', params: params)
+      .then((value) {
+        TKToast.dismiss();
+        if (value.isSuccess) {
+          Map<String, dynamic> result = value.data;
+          UserProvider userModel = Provider.of<UserProvider>(context, listen: false);
+          userModel.loginInfo = LoginInfo.fromJson(result);
+          UserProvider.config('APP首页', userModel.loginInfo.token, userModel.loginInfo.userId);
+          UserProvider.user(userModel.loginInfo.userId);
+          TKRoute.popToRoutePage(context);
+          TKToast.showSuccess('登录成功');
+        } else {
+          TKToast.showError(value.message);
+        }
+      })
+      .catchError((error) {
+        TKToast.dismiss();
+      });
   }
 }

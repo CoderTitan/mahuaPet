@@ -9,7 +9,11 @@ import 'package:mahua_pet/pages/login/password_login.dart';
 
 // 首页相关模块
 import 'package:mahua_pet/pages/home/contents/calendar_page.dart';
+import 'package:mahua_pet/pages/home/contents/pet_add.dart';
+import 'package:mahua_pet/pages/home/contents/pet_list.dart';
+
 import 'package:mahua_pet/pages/discover/find_page.dart';
+
 
 
 class TKRoute {
@@ -21,12 +25,16 @@ class TKRoute {
     MainPage.routerName: (ctx) => MainPage(),
 
     // 登录
-    LoginPage.rooteName: (ctx) => LoginPage(),
-    RegisterPage.rooteName: (ctx) => RegisterPage(),
-    PasswordPage.rooteName: (ctx) => PasswordPage(),
+    LoginPage.routeName: (ctx) => LoginPage(),
+    RegisterPage.routeName: (ctx) => RegisterPage(),
+    PasswordPage.routeName: (ctx) => PasswordPage(),
 
     // 首页相关模块
-    CalendarPage.rooteName: (ctx) => CalendarPage(),
+    CalendarPage.routeName: (ctx) => CalendarPage(),
+    PetAddPage.routeName: (ctx) => PetAddPage(),
+    PetListPage.routeName: (ctx) => PetListPage(),
+
+
     FindPage.routeName: (ctx) => FindPage(''),
   };
 
@@ -56,7 +64,7 @@ class TKRoute {
   // 登录返回到指定路由
   static popToRoutePage(BuildContext context) {
     final routeName = ModalRoute.of(context).settings.arguments;
-    if (routeName == 'main') {
+    if (routeName == '/') {
       popRoot(context);
     } else {
       Navigator.of(context).popUntil(routeName);

@@ -1,6 +1,6 @@
 
 import 'dart:convert';
-import 'package:mahua_pet/providered/shared/shared_index.dart';
+
 
 ConfigInfo configInfoFromJson(String str) => ConfigInfo.fromJson(json.decode(str));
 
@@ -56,18 +56,6 @@ class ConfigInfo {
     String delFlag;
 
     factory ConfigInfo.fromJson(Map<String, dynamic> json) {
-
-      SharedUtils.setInt(ShareConstant.userId, json['userId'] ?? 0);
-      SharedUtils.setString(ShareConstant.ip, json['ip'] ?? '');
-      SharedUtils.setString(ShareConstant.province, json['province'] ?? '');
-      SharedUtils.setString(ShareConstant.city, json['city'] ?? '');
-      SharedUtils.setString(ShareConstant.area, json['area'] ?? '');
-      SharedUtils.setString(ShareConstant.clientVersion, json['clientVersion'] ?? '');
-      SharedUtils.setString(ShareConstant.sysVersion, json['sysVersion'] ?? '');
-      SharedUtils.setString(ShareConstant.deviceBrand, json['deviceBrand'] ?? '');
-      SharedUtils.setString(ShareConstant.deviceModel, json['deviceModel'] ?? '');
-      SharedUtils.setString(ShareConstant.deviceNo, json['deviceNo'] ?? '');
-      SharedUtils.setString(ShareConstant.loginType, json['loginType'] ?? '');
 
       return ConfigInfo(
         eventBaseId: json["eventBaseId"],

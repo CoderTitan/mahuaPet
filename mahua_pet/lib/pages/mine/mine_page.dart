@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mahua_pet/utils/func_utils.dart';
 
 class MinePage extends StatefulWidget {
   MinePage({Key key}) : super(key: key);
@@ -15,7 +16,13 @@ class _MinePageState extends State<MinePage> {
         body: Container(
         child: Column(
           children: <Widget>[
-
+            RaisedButton(
+              elevation: 16,
+              child: Text('退出登录'),
+              onPressed: (){  
+                FuncUtils.loginOut(context);
+              }
+            )
           ],
         )
       ),
