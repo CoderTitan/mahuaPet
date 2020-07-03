@@ -13,5 +13,6 @@ class ProviderConfig {
     ChangeNotifierProvider(create: (ctx) => PetViewModel()),
     ChangeNotifierProvider(create: (ctx) => HomeViewModel()),
     ChangeNotifierProvider(create: (ctx) => UserProvider()),
+    // ChangeNotifierProvider(create: (ctx) => HomeViewModel()),
   ];
 }

@@ -24,8 +24,8 @@ class TextSelectCell extends StatefulWidget {
     double height,
     double horizontalPadding,
     this.backcolorColor = Colors.white,
-    this.leftTitle,
-    this.rightTitle,
+    this.leftTitle = '',
+    this.rightTitle = '',
     double leftTitleFont,
     double rightTitleFont,
     this.leftTitleColor = TKColor.color_666666,
@@ -76,20 +76,31 @@ class _TextSelectCellState extends State<TextSelectCell> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: childrenRowItem(),
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              widget.leftTitle, 
+              style: TextStyle(fontSize: widget.leftTitleFont, color: widget.leftTitleColor)
+            )
+          ),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: childrenRowItem(),
+            )
+          )
+        ],
       ),
     );
     itemList.add(topItem);
 
     if (widget.showLine) {
       itemList.add(
-        Padding(
+        Container(
           padding: EdgeInsets.only(left: widget.leftLineMargin),
-          child: Container(
-            width: SizeFit.screenWidth - widget.leftLineMargin,
-            height: 0.5,
-            color: widget.lineColor,
-          )
+          width: SizeFit.screenWidth - widget.leftLineMargin,
+          height: 0.5,
+          color: widget.lineColor,
         )
       );
     }
@@ -98,21 +109,6 @@ class _TextSelectCellState extends State<TextSelectCell> {
   }
 
   List<Widget> childrenRowItem() {
-    List<Widget> itemList = [];
-
-    Widget leftTitle = Expanded(child: Text(widget.leftTitle, style: TextStyle(fontSize: widget.leftTitleFont, color: widget.leftTitleColor)));
-    itemList.add(leftTitle);
-
-    Widget input = Expanded(child: Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: childrenRightRowItem(),
-    ));
-    itemList.add(input);
-
-    return itemList;
-  }
-
-  List<Widget> childrenRightRowItem() {
     List<Widget> itemList = [];
 
     Widget textInput = Text(

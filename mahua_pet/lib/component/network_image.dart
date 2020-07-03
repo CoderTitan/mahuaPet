@@ -38,31 +38,17 @@ class TKNetworkImage extends StatelessWidget {
       fadeOutDuration: const Duration(milliseconds: 300),
       fadeInDuration: const Duration(milliseconds: 300),
       imageBuilder: imageBuilder == null ? (ctx, imageProvide) {
-        return Container(
-          width: width,
-          height: height,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: imageProvide,
-              fit: fit
-            ),
-            borderRadius: BorderRadius.circular(borderRadius),
-            border: Border.all(
-              width: borderWidth,
-              color: borderColor
-            )
-          ),
-        );
+        return renderImage(imageProvide);
       } : imageBuilder,
       placeholder: (ctx, url) {
         if (placeholder.length > 0) {
-          return Image.asset(placeholder, width: width, height: height, fit: fit);
+          return renderImage(AssetImage(placeholder));
         }
         return Icon(Icons.error, size: width > height ? height : width, color: Colors.black38);
       },
       errorWidget: (ctx, url, error) {
         if (placeholder.length > 0) {
-          return Image.asset(placeholder, width: width, height: height, fit: fit);
+          return renderImage(AssetImage(placeholder));
         }
         return Icon(Icons.error, size: width > height ? height : width, color: Colors.black38);
       },
@@ -71,6 +57,24 @@ class TKNetworkImage extends StatelessWidget {
           value: downloadProgress.progress,
         ) : null;
       },
+    );
+  }
+
+  Widget renderImage(ImageProvider image) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: image,
+          fit: fit
+        ),
+        borderRadius: BorderRadius.circular(borderRadius),
+        border: Border.all(
+          width: borderWidth,
+          color: borderColor
+        )
+      ),
     );
   }
 }

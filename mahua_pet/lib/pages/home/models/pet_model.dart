@@ -4,6 +4,11 @@
 
 import 'dart:convert';
 
+enum PetSex {
+  gg,
+  mm,
+}
+
 PetModel petModelFromJson(String str) => PetModel.fromJson(json.decode(str));
 
 String petModelToJson(PetModel data) => json.encode(data.toJson());
@@ -33,8 +38,8 @@ class PetModel {
     String petBreed;
     String isSterilization;
     String sex;
-    DateTime birthday;
-    DateTime adoptionDate;
+    String birthday;
+    String adoptionDate;
     String petKg;
     String age;
     String isLoss;
@@ -50,8 +55,8 @@ class PetModel {
         petBreed: json["petBreed"],
         isSterilization: json["isSterilization"],
         sex: json["sex"],
-        birthday: DateTime.parse(json["birthday"]),
-        adoptionDate: DateTime.parse(json["adoptionDate"]),
+        birthday: json["birthday"],
+        adoptionDate: json["adoptionDate"],
         petKg: json["petKg"],
         age: json["age"],
         isLoss: json["isLoss"],
@@ -68,8 +73,8 @@ class PetModel {
         "petBreed": petBreed,
         "isSterilization": isSterilization,
         "sex": sex,
-        "birthday": "${birthday.year.toString().padLeft(4, '0')}-${birthday.month.toString().padLeft(2, '0')}-${birthday.day.toString().padLeft(2, '0')}",
-        "adoptionDate": "${adoptionDate.year.toString().padLeft(4, '0')}-${adoptionDate.month.toString().padLeft(2, '0')}-${adoptionDate.day.toString().padLeft(2, '0')}",
+        "birthday": birthday,
+        "adoptionDate": adoptionDate,
         "petKg": petKg,
         "age": age,
         "isLoss": isLoss,

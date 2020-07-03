@@ -1,7 +1,10 @@
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mahua_pet/pages/home/contents/pet_add.dart';
 import 'package:mahua_pet/pages/home/contents/pet_list.dart';
+import 'package:mahua_pet/pages/home/request/home_request.dart';
+import 'package:mahua_pet/pages/home/view_model/home_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -12,6 +15,7 @@ import 'package:mahua_pet/utils/utils_index.dart';
 import 'package:mahua_pet/pages/home/contents/calendar_page.dart';
 import 'package:mahua_pet/pages/home/models/pet_model.dart';
 import './view_model/pet_view_model.dart';
+import 'views/home_swiper.dart';
 import 'views/home_list.dart';
 
 
@@ -40,7 +44,8 @@ class _HomeContentState extends State<HomeContent> {
     super.initState();
 
     if (FuncUtils.isLogin()) {
-      PetViewModel();
+      HomeRequest.requestPetList(context);
+      HomeRequest.requestHomeSwiper(context);
     }
   }
 
@@ -50,6 +55,10 @@ class _HomeContentState extends State<HomeContent> {
       scrollDirection: Axis.vertical,
       slivers: <Widget>[
         renderHeader(context),
+        // SizedBox(height: 10.px),
+        // SliverToBoxAdapter(
+        //   child: HomeSwiper(),
+        // ),
         // HomeList()
       ],
     );
@@ -77,7 +86,7 @@ class _HomeContentState extends State<HomeContent> {
             onPressed: () {
               Navigator.of(context).pushNamed(CalendarPage.routeName);
             }
-          )
+          ),
         ],
       ),
     );
@@ -108,10 +117,14 @@ class _HomeContentState extends State<HomeContent> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Consumer<PetViewModel>(builder: (ctx, petVM, child) {
-                  String _selectTitle = petVM.petArray.length > 0 ? '选择宠物' : '添加宠物';
-                  return Text(_selectTitle, style: TextStyle(fontSize: 14.px, color: TKColor.color_333333));
-                }),
+                Selector<PetViewModel, List<PetModel>>(
+                  selector: (ctx, petVM) => petVM.petList,
+                  shouldRebuild: (previous, next) => !listEquals(previous, next),
+                  builder: (ctx, pets, child) {
+                    String _selectTitle = pets.length > 0 ? '选择宠物' : '添加宠物';
+                    return Text(_selectTitle, style: TextStyle(fontSize: 14.px, color: TKColor.color_333333));
+                  }, 
+                ),
                 Icon(Icons.keyboard_arrow_right, size: 24, color: TKColor.color_1a1a1a)
               ],
             ),
@@ -126,7 +139,7 @@ class _HomeContentState extends State<HomeContent> {
     return Consumer<PetViewModel>(builder: (ctx, petVM, chiild) {
       final model = petVM.currentModel;
       final isLogin = FuncUtils.isLogin();
-      final isPet = petVM.petArray.length > 0;
+      final isPet = petVM.petList.length > 0;
       final animalIcon = isLogin ? (isPet ? model.petImg : '') : '';
 
       return Positioned(
@@ -143,6 +156,7 @@ class _HomeContentState extends State<HomeContent> {
                 borderWidth: 2,
                 borderRadius: 35.px,
                 showProgress: true,
+                fit: BoxFit.cover,
                 placeholder: '${TKImages.image_path}animal_icon.png',
               ),
               onTap: () => animalHeaderClick(context, isPet, model)
@@ -256,7 +270,7 @@ class _HomeContentState extends State<HomeContent> {
 
     PetViewModel petVM = Provider.of<PetViewModel>(context, listen: false);
 
-    if (petVM.petArray.length > 0) {
+    if (petVM.petList.length > 0) {
       Navigator.of(context).pushNamed(PetListPage.routeName);
     } else {
       Navigator.of(context).pushNamed(PetAddPage.routeName, arguments: {'add': true, 'model': null});

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mahua_pet/pages/home/view_model/pet_view_model.dart';
 import 'package:provider/provider.dart';
 
 import 'package:mahua_pet/component/component.dart';
@@ -30,6 +31,10 @@ class FuncUtils {
     UserProvider userModel = Provider.of<UserProvider>(context, listen: false);
     userModel.loginInfo = LoginInfo();
     userModel.userData = null;
+
+    PetViewModel petVM = Provider.of<PetViewModel>(context, listen: false);
+    petVM.petList = [];
+
     TKToast.showSuccess('退出登录成功');
     TKRoute.popRoot(context);
   }

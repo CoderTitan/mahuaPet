@@ -38,6 +38,7 @@ class HttpRequest {
           return response;
         },
         onError: (err) {
+          TKToast.dismiss();
           switch (err.type) {
             case DioErrorType.CONNECT_TIMEOUT:
               TKToast.showToast('请求超时, 请稍后再试');

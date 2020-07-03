@@ -34,6 +34,7 @@ dependencies:
   flutter_easyloading: ^1.1.4
   table_calendar: ^2.2.3
   cached_network_image: ^2.2.0+1
+  carousel_slider: ^2.2.1
 
 
 dev_dependencies:

@@ -11,12 +11,13 @@ class ActionAlert {
     String contentStr,
     bool isSureButton = false,
     String sureTitle = '确认',
-    
   }) {
     showDialog(
       context: context,
       builder: (ctx) {
         return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          clipBehavior: Clip.antiAlias,
           backgroundColor: Colors.white,
           child: TKActionAlert(
             title: title,
@@ -50,7 +51,17 @@ class TKActionAlert extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return Container(
+      width: SizeFit.screenWidth - 70.px,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: columnChildren(context),
+      ),
+    );
+  }
 
+  List<Widget> columnChildren(BuildContext context) {
     List<Widget> columnChildren;
     if (scrollable) {
       columnChildren = <Widget>[
@@ -81,32 +92,17 @@ class TKActionAlert extends StatelessWidget {
       ];
     }
 
-    return Container(
-      width: SizeFit.screenWidth - 70.px,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(30)),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: columnChildren,
-      ),
-    );
+    return columnChildren;
   }
 
   Widget renderTitle() {
     if (title != null) {
       return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(30))
-        ),
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(24.0, 24.0, 24.0, content == null ? 20.0 : 0.0),
-          child: Text(
-            title, 
-            textAlign: TextAlign.center, 
-            style: TextStyle(fontSize: 17.px, color: TKColor.color_333333, fontWeight: FontWeight.w500)
-          ),
+        padding: EdgeInsets.fromLTRB(24.0, 24.0, 24.0, content == null ? 20.0 : 0.0),
+        child: Text(
+          title, 
+          textAlign: TextAlign.center, 
+          style: TextStyle(fontSize: 17.px, color: TKColor.color_333333, fontWeight: FontWeight.w500)
         ),
       );
     }
