@@ -1,5 +1,6 @@
 import 'package:mahua_pet/pages/home/contents/pet_add.dart';
 import 'package:mahua_pet/pages/home/request/home_request.dart';
+import 'package:mahua_pet/utils/router.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
@@ -25,7 +26,7 @@ class PetListPage extends StatelessWidget {
           GestureDetector(
             child: Center(child: Text('添加', style: TextStyle(fontSize: 16.px, color: TKColor.color_1a1a1a))),
             onTap: () {
-              Navigator.of(context).pushNamed(PetAddPage.routeName, arguments: {'add': true, 'model': null});
+              TKRoute.push(context, PetAddPage(isAdd: true));
             },
           ),
           SizedBox(width: 8.px),

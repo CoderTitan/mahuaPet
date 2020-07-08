@@ -18,9 +18,9 @@ class TKNetworkImage extends StatelessWidget {
 
   TKNetworkImage({
     Key key,
-    @required this.imageUrl,
+    @required String imageUrl,
     this.imageBuilder,
-    this.placeholder = '',
+    this.placeholder,
     this.width,
     this.height,
     this.fit = BoxFit.contain,
@@ -28,7 +28,7 @@ class TKNetworkImage extends StatelessWidget {
     this.borderWidth = 0.0,
     this.borderColor = const Color(0x00000000),
     this.showProgress = false,
-  }): super(key: key);
+  }): imageUrl = imageUrl ?? '', super(key: key);
 
 
   @override

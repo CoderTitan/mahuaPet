@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:mahua_pet/pages/home/home_page.dart';
-import 'package:mahua_pet/pages/discover/discover_page.dart';
+import 'package:mahua_pet/pages/find/find_page.dart';
 import 'package:mahua_pet/pages/college/college_page.dart';
 import 'package:mahua_pet/pages/mine/mine_page.dart';
 
@@ -10,7 +10,7 @@ import 'package:mahua_pet/styles/app_images.dart';
 
 final List<Widget> pageList = [
   HomePage(),
-  DiscoverPage(),
+  FindPage(),
   CollegePage(),
   CollegePage(),
   MinePage()

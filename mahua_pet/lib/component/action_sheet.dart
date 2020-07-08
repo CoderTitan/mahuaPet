@@ -17,7 +17,8 @@ class TKActionSheet {
       builder: (ctx) {
         return TKActionSheetWidget(
           rows: rows,
-          showCancel: showCancel
+          showCancel: showCancel,
+          selectAction: selectAction,
         );
     });
   } 

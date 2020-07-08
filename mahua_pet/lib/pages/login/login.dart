@@ -192,7 +192,6 @@ class _LoginContentState extends State<LoginContent> {
     TKToast.showLoading();
     HttpRequest.request(HttpConfig.sendCode, method: 'get', params: {'phone': _account})
       .then((result) {
-        TKToast.dismiss();
         if (result.isSuccess) {
           TKToast.showSuccess('验证码已发送');
           authCodeKey.currentState.startAction();
@@ -211,7 +210,6 @@ class _LoginContentState extends State<LoginContent> {
     final params = {'username': _account, 'code': _code, 'type': 'code', 'token': ''};
     HttpRequest.request(HttpConfig.applogin, method: 'post', params: params)
       .then((value) {
-        TKToast.dismiss();
         if (value.isSuccess) {
           Map<String, dynamic> result = value.data;
           UserProvider userModel = Provider.of<UserProvider>(context, listen: false);

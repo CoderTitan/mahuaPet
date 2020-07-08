@@ -1,65 +1,87 @@
 import 'package:flutter/material.dart';
 import 'package:mahua_pet/component/component.dart';
+import 'package:mahua_pet/pages/home/models/swiper_model.dart';
 import 'package:mahua_pet/pages/home/view_model/home_view_model.dart';
 import 'package:mahua_pet/styles/app_style.dart';
 import 'package:provider/provider.dart';
 
-import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
-class HomeSwiper extends StatelessWidget {
+
+class HomeSwiper extends StatefulWidget {
+  @override
+  _HomeSwiperState createState() => _HomeSwiperState();
+}
+
+class _HomeSwiperState extends State<HomeSwiper> {
+
+  int _currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Consumer<HomeViewModel>(
       builder: (ctx, homeVM, child) {
-        return CarouselSlider(
-          items: null, 
-          options: null
+        final swipers = homeVM.swiperArray ?? [];
+        return Container(
+          height: 120.px,
+          color: Colors.white,
+          child: Column(
+            children: <Widget>[
+              CarouselSlider(
+                items: renderItems(swipers), 
+                options: CarouselOptions(
+                  height: 100.px,
+                  viewportFraction: 1,
+                  autoPlay: true,
+                  autoPlayInterval: Duration(seconds: 2),
+                  onPageChanged: (i, page) {
+                    setState(() {
+                      _currentIndex = i;
+                    });
+                  }
+                )
+              ),
+              SizedBox(height: 5.px),
+              Container(
+                width: 50.px,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: swipers.map((e) {
+                    final index = swipers.indexOf(e);
+                    return Container(
+                      width: 5.px,
+                      height: 5.px,
+                      decoration: BoxDecoration(
+                        color: _currentIndex == index ? TKColor.main_color: TKColor.color_e5e5e5,
+                        borderRadius: BorderRadius.circular(4.px)
+                      ),
+                    );
+                  }).toList(),
+                ),
+              )
+            ],
+          ),
         );
       },
     );
   }
+
+  List<Widget> renderItems(List<SwiperModel> models) {
+    return models.map((item) => Container(
+      padding: EdgeInsets.only(top: 5.px),
+      color: Colors.white,
+      child: Center(
+        child: TKNetworkImage(
+          imageUrl: item.directImg,
+          width: SizeFit.screenWidth - 32.px,
+          height: 100.px,
+          fit: BoxFit.cover,
+          borderRadius: 4,
+          placeholder: TKImages.image_path + 'find_swiper_banner.png',
+        ),
+      ),
+    )).toList();
+  }
 }
 
-
-
-
-
-
-/**
-
-@override
-  Widget build(BuildContext context) {
-    return Container(
-      // width: SizeFit.screenWidth,
-      height: 150.px,
-      color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 16.px, vertical: 8.px),
-      child: Consumer<HomeViewModel>(
-        builder: (ctx, homeVM, child) {
-          final swipers = homeVM.swiperArray;
-          return ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: swipers.length,
-            itemBuilder: (ctx, i) {
-              final model = swipers[i];
-              return Container(
-                child: TKNetworkImage(
-                  imageUrl: model.directImg,
-                  width: 70.px, height: 70.px,
-                  borderColor: Colors.white,
-                  borderWidth: 2,
-                  borderRadius: 35.px,
-                  showProgress: true,
-                  fit: BoxFit.cover,
-                  placeholder: '${TKImages.image_path}animal_icon.png',
-                ),
-              );
-            }
-          );
-        }
-      ),
-    );
-  }
- */

@@ -14,8 +14,7 @@ class FuncUtils {
   // 是否登录
   static bool isLogin() {
     LoginInfo loginInfo = SharedStorage.loginInfo;
-    UserData userData = SharedStorage.userData;
-    if (loginInfo.token != null && loginInfo.token.length > 0 && userData.userinfo.userId != null && userData.userinfo.userId > 0) {
+    if (loginInfo.userId != null && loginInfo.userId > 0) {
       return true;
     }
     return false;
@@ -29,8 +28,9 @@ class FuncUtils {
   // 退出登录
   static void loginOut(BuildContext context) {
     UserProvider userModel = Provider.of<UserProvider>(context, listen: false);
-    userModel.loginInfo = LoginInfo();
-    userModel.userData = null;
+    LoginInfo loginInfo = userModel.loginInfo;
+    loginInfo.userId = 0;
+    userModel.loginInfo = loginInfo;
 
     PetViewModel petVM = Provider.of<PetViewModel>(context, listen: false);
     petVM.petList = [];

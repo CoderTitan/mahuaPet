@@ -8,14 +8,17 @@ class TKColor {
 
   // Color
   static const color_ffea9e = Color(0xFFffea9e);
+  static const color_ffea9e_33 = Color(0x33ffea9e);
   static const color_f5ca2b = Color(0xFFF5CA2B);
   static const color_ffb51b = Color(0xFFffb51b);
   static const color_ff9600 = Color(0xFFff9600);
   static const color_ff0000 = Color(0xFFff0000);
   static const color_ff4040 = Color(0xFFff4040);
   static const color_ec0000 = Color(0xFFec0000);
+  static const color_79b7f7 = Color(0xFF79b7f7);
   static const color_05cb98 = Color(0xFF05cb98);
   static const color_0386ff = Color(0xFF0386ff);
+  static const color_526e94 = Color(0xFF526e94);
 
 
   static const color_f7f7f7 = Color(0xFFf7f7f7);
@@ -38,6 +41,7 @@ class TKColor {
   static const MaterialColor main_color = MaterialColor(
     _mainValue,
     <int, Color>{
+       25: Color(0xDDFFF3E0),
        50: Color(0xFFFFF3E0),
       100: Color(0xFFFFE0B2),
       200: Color(0xFFFFCC80),

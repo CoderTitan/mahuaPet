@@ -36,6 +36,7 @@ class _MainPageState extends State<MainPage> {
         selectedLabelStyle: TextStyle(fontSize: 10, color: TKColor.main_color),
         unselectedLabelStyle: TextStyle(fontSize: 10, color: TKColor.main_color),
         onTap: (index) {
+          if (index == 2) { return; }
           setState(() {
             _currentIndex = index;
           });

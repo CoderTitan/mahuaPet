@@ -9,10 +9,9 @@ import 'package:mahua_pet/pages/login/password_login.dart';
 
 // 首页相关模块
 import 'package:mahua_pet/pages/home/contents/calendar_page.dart';
-import 'package:mahua_pet/pages/home/contents/pet_add.dart';
 import 'package:mahua_pet/pages/home/contents/pet_list.dart';
 
-import 'package:mahua_pet/pages/discover/find_page.dart';
+// 发现相关模块
 
 
 
@@ -31,11 +30,9 @@ class TKRoute {
 
     // 首页相关模块
     CalendarPage.routeName: (ctx) => CalendarPage(),
-    PetAddPage.routeName: (ctx) => PetAddPage(),
     PetListPage.routeName: (ctx) => PetListPage(),
 
 
-    FindPage.routeName: (ctx) => FindPage(''),
   };
 
   // 自行扩展的
@@ -55,6 +52,13 @@ class TKRoute {
   };
 
 
+  /// push
+  static push(BuildContext context, Widget pageRoute, {RouteSettings settings}) {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (ctx) => pageRoute,
+      settings: settings
+    ));
+  }
 
   // 返回到根路由
   static popRoot(BuildContext context) {

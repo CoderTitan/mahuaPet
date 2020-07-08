@@ -55,10 +55,9 @@ class _HomeContentState extends State<HomeContent> {
       scrollDirection: Axis.vertical,
       slivers: <Widget>[
         renderHeader(context),
-        // SizedBox(height: 10.px),
-        // SliverToBoxAdapter(
-        //   child: HomeSwiper(),
-        // ),
+        SliverToBoxAdapter(
+          child: HomeSwiper(),
+        ),
         // HomeList()
       ],
     );
@@ -273,7 +272,7 @@ class _HomeContentState extends State<HomeContent> {
     if (petVM.petList.length > 0) {
       Navigator.of(context).pushNamed(PetListPage.routeName);
     } else {
-      Navigator.of(context).pushNamed(PetAddPage.routeName, arguments: {'add': true, 'model': null});
+      TKRoute.push(context, PetAddPage(isAdd: true, model: null));
     }
   }
 
@@ -283,8 +282,9 @@ class _HomeContentState extends State<HomeContent> {
       FuncUtils.jumpLogin(context);
       return;
     }
-
-    Navigator.of(context).pushNamed(PetAddPage.routeName, arguments: {'add': false, 'model': model});
+    
+    Widget pet = PetAddPage(isAdd: false, model: model);
+    TKRoute.push(context, pet);
   }
 
   void scrollItemClick(BuildContext context, int index) {

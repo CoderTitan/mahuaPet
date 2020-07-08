@@ -5,39 +5,46 @@ import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/config/config_index.dart';
 import 'package:mahua_pet/config/http_request.dart';
 import 'package:mahua_pet/pages/home/models/pet_model.dart';
-import 'package:mahua_pet/pages/home/view_model/pet_view_model.dart';
 import 'package:mahua_pet/providered/provider_index.dart';
 import 'package:mahua_pet/styles/app_style.dart';
 
 class PetAddPage extends StatelessWidget {
 
-  static const routeName = '/pet_add';
+  final bool isAdd;
+  final PetModel model;
+  PetAddPage({this.isAdd, this.model});
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> settingMap = ModalRoute.of(context).settings.arguments;
-    final isAdd = settingMap['add'] ?? true;
     final title = isAdd ? '添加宠物' : '编辑宠物';
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
         centerTitle: true,
       ),
-      body: PetAddContent(),
+      body: PetAddContent(isAdd: isAdd, model: model),
     );
   }
 }
 
 class PetAddContent extends StatefulWidget {
+
+  final bool isAdd;
+  final PetModel model;
+  PetAddContent({this.isAdd, this.model});
+
   @override
-  _PetAddContentState createState() => _PetAddContentState();
+  _PetAddContentState createState() => _PetAddContentState(isAdd: isAdd, model: model);
 }
 
 class _PetAddContentState extends State<PetAddContent> {
 
+
   ScrollController _scrollController = ScrollController();
   TextEditingController _nicknameController = TextEditingController();
   TextEditingController _weightController = TextEditingController();
+
+  final PetModel model;
   String _petImage = '';
   String _nickname = '';
   String _petSex = '';
@@ -47,25 +54,24 @@ class _PetAddContentState extends State<PetAddContent> {
   String _isDisable = '';
   String _petWeight = '';
   bool _disabled = false;
+
+  _PetAddContentState({bool isAdd, this.model}): 
+    _petImage = isAdd ? '' : (model.petImg ?? ''),
+    _nickname = isAdd ? '' : model.petName,
+    _petSex = isAdd ? '' : (model.sex == '0' ? 'GG' : 'MM'),
+    _petBreed = isAdd ? '' : model.petBreed,
+    _birthday = isAdd ? '' : model.birthday,
+    _homeDay = isAdd ? '' : model.adoptionDate,
+    _isDisable = isAdd ? '' : (model.isSterilization == '0' ? '已绝育' : '未绝育'),
+    _petWeight = isAdd ? '' : model.petKg,
+    _nicknameController = TextEditingController(text: isAdd ? '' : model.petName),
+    _weightController = TextEditingController(text: isAdd ? '' : model.petKg),
+    _disabled = !isAdd;
+
   
 
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> settingMap = ModalRoute.of(context).settings.arguments;
-    final isAdd = settingMap['add'] ?? true;
-    PetModel model = settingMap['model'];
-    _petImage = isAdd ? '' : (model.petImg ?? '');
-    _nickname = isAdd ? '' : model.petName;
-    _nicknameController.text = _nickname;
-    _petSex = isAdd ? '' : (model.sex == '0' ? 'GG' : 'MM');
-    _petBreed = isAdd ? '' : model.petBreed;
-    _birthday = isAdd ? '' : model.birthday;
-    _homeDay = isAdd ? '' : model.adoptionDate;
-    _isDisable = isAdd ? '' : (model.isSterilization == '0' ? '已绝育' : '未绝育');
-    _petWeight = isAdd ? '' : model.petKg;
-    _weightController.text = _petWeight;
-    updateButtonState();
-
     return GestureDetector(
       onTap: () => inputFocusNode(context),
       child: SingleChildScrollView(
@@ -128,7 +134,9 @@ class _PetAddContentState extends State<PetAddContent> {
                   maximumDate: DateTime.now(),
                   onDateTimeChanged: (date) {
                     final dateStr = '${date.year}-${date.month}-${date.day}';
-                    _birthday = dateStr;
+                    setState(() {
+                      _birthday = dateStr;
+                    });
                     updateButtonState();
                   }
                 );
@@ -182,7 +190,8 @@ class _PetAddContentState extends State<PetAddContent> {
               onPressed: () {
                 saveAnimalInfo(context, model);
               }
-            )
+            ),
+            SizedBox(height: 100.px),
           ],
         ),
       ),
@@ -259,7 +268,6 @@ class _PetAddContentState extends State<PetAddContent> {
     TKToast.showLoading();
     HttpRequest.request(HttpConfig.pet_save, method: 'post', params: params)
       .then((value) {
-        TKToast.dismiss();
         if (value.isSuccess) {
           // PetViewModel();
           TKToast.showSuccess('保存成功');

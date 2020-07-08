@@ -167,7 +167,6 @@ class _PasswordContentState extends State<PasswordContent> {
     final params = {'username': _account, 'password': _password, 'type': 'password', 'token': ''};
     HttpRequest.request(HttpConfig.applogin, method: 'post', params: params)
       .then((value) {
-        TKToast.dismiss();
         if (value.isSuccess) {
           Map<String, dynamic> result = value.data;
           UserProvider userModel = Provider.of<UserProvider>(context, listen: false);

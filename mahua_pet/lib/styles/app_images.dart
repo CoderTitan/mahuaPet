@@ -3,6 +3,9 @@ class TKImages {
   // 所有的图片路径
   static const image_path = 'resource/images/';
 
+  /// 占位头像
+  static const user_header = 'resource/images/user_header.png';
+
   // tabbar
   static const tabbar_home_select = 'resource/images/tabbar_home_select.png';
   static const tabbar_home_unselect = 'resource/images/tabbar_home_noselect.png';
