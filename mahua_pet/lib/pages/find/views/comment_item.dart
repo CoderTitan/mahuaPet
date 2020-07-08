@@ -1,36 +1,128 @@
 import 'package:flutter/material.dart';
 
 import 'package:mahua_pet/styles/app_style.dart';
+import 'package:mahua_pet/component/component.dart';
 import '../models/model_index.dart';
 import 'comment_reply_item.dart';
-import 'comment_info_item.dart';
 
 
 class CommentItem extends StatelessWidget {
   final CommentModel model;
-  CommentItem({this.model, Key key}): super(key: key);
+  final int userId;
+  CommentItem({this.model, this.userId, Key key}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: TKColor.white,
-      padding: EdgeInsets.symmetric(horizontal: 16.px),
+      decoration: BoxDecoration(
+        color: TKColor.white,
+        border: Border(bottom: BorderSide(color: TKColor.color_f7f7f7))
+      ),
+      padding: EdgeInsets.only(left: 16.px, right: 16.px, bottom: 16.px),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: renderItemList(),
+        children: renderFirstCommentItem(),
       ),
     );
   }
 
-  List<Widget> renderItemList() {
+  List<Widget> renderFirstCommentItem() {
     List<Widget> itemList = [];
 
-    Widget commentItem = CommentInfoItem(commentModel: model, isFirstComment: true, key: key);
-    itemList.add(commentItem);
+    itemList.add(renderUserInfo());
+    itemList.add(renderCommentInfo());
+
     if (model.commentReplyVOs != null && model.commentReplyVOs.length > 0) {
-      itemList.add(CommentReplyItem(replyLists: model.commentReplyVOs, key: key));
+      itemList.add(CommentReplyItem(replyLists: model.commentReplyVOs, userId: userId, key: key));
     }
 
     return itemList;
   }
+
+  Widget renderUserInfo() {
+    return Container(
+      padding: EdgeInsets.only(top: 10.px),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          renderUserLeft(),
+          renderUserRight()
+        ],
+      ),
+    );
+  }
+
+  Widget renderCommentInfo() {
+    return Container(
+      padding: EdgeInsets.only(left: 36.px, right: 20.px, top: 3.px),
+      child: Text(
+        model.commentInfo, 
+        style: TextStyle(fontSize: 14.px, color: TKColor.color_333333)
+      ),
+    );
+  }
+
+  Widget renderUserLeft() {
+    return Row(
+      children: <Widget>[
+        GestureDetector(
+          child: TKNetworkImage(
+            imageUrl: model.headImg ?? '',
+            width: 30.px, height: 30.px,
+            borderRadius: 20.px,
+            fit: BoxFit.cover,
+            placeholder: TKImages.user_header,
+          ),
+          onTap: () {},
+        ),
+        SizedBox(width: 6.px),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(children: renderTitleItem()),
+            Text(
+              model.publishTime, 
+              style: TextStyle(fontSize: 10.px, color: TKColor.color_999999)
+            )
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget renderUserRight() {
+    return Column(
+      children: <Widget>[
+        Icon(Icons.favorite_border, size: 20.px, color: TKColor.color_999999),
+        Text(
+          '${model.cntAgree}', 
+          style: TextStyle(fontSize: 10.px, color: TKColor.color_666666)
+        )
+      ],
+    );
+  }
+
+  List<Widget> renderTitleItem() {
+    List<Widget> itemList = [];
+
+    Widget title = Text(
+      model.nickname,
+      style: TextStyle(fontSize: 14.px, color: TKColor.color_666666)
+    );
+    itemList.add(title);
+    itemList.add(SizedBox(width: 4.px));
+
+    if (userId == model.userId) {
+      Widget logo = Container(
+        padding: EdgeInsets.symmetric(horizontal: 4.px),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(2.px), color: TKColor.color_79b7f7),
+        child: Text('作者', style: TextStyle(fontSize: 9.px, color: TKColor.white)),
+      );
+      itemList.add(logo);
+    }
+
+    return itemList;
+  }
+
+
 }

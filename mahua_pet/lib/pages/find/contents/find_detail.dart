@@ -50,6 +50,23 @@ class _FindDetailState extends State<_FindDetail> {
 
   @override
   Widget build(BuildContext context) {
+    return Container(
+      child: Stack(
+        children: <Widget>[
+          Container(
+            child: renderListView(),
+          ),
+          Positioned(
+            bottom: 0,
+            child: renderBottomItem(),
+          )
+        ],
+      )
+    );
+        
+  }
+
+  Widget renderListView() {
     return SmartRefresher(
       controller: _refreshController,
       enablePullUp: true,
@@ -65,22 +82,25 @@ class _FindDetailState extends State<_FindDetail> {
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
-              (ctx, index) => CommentItem(model: _commentList[index], key: ValueKey(index)),
+              (ctx, index) => CommentItem(model: _commentList[index], userId: _model.userId, key: ValueKey(index)),
               childCount: _commentList.length
             )
           )
         ],
       ),
     );
-        // Container(
-        //   height: 57.px,
-        //   decoration: BoxDecoration(
-        //     color: TKColor.white,
-        //     border: Border(top: BorderSide(color: TKColor.color_cccccc, width: 0.5))
-        //   ),
-        // )
   }
 
+  Widget renderBottomItem() {
+    return Container(
+      height: 57.px + SizeFit.safeHeight,
+      width: SizeFit.screenWidth,
+      decoration: BoxDecoration(
+        color: TKColor.color_ff4040,
+        border: Border(top: BorderSide(color: TKColor.color_cccccc, width: 0.5))
+      ),
+    );
+  }
 
   void _onRefresh() {
     // TKToast.showLoading();
@@ -109,12 +129,21 @@ class _FindDetailState extends State<_FindDetail> {
       TKToast.dismiss();
       if (pageIndex == 1) {
         _commentList = value;
+        _refreshController.refreshCompleted();
+        if (value.length >= 10) {
+          _refreshController.loadComplete();
+        } else {
+          _refreshController.loadNoData();
+        }
       } else {
         _commentList.addAll(value);
+        if (value.length >= 10) {
+          _refreshController.loadComplete();
+        } else {
+          _refreshController.loadNoData();
+        }
       }
       setState(() {});
-      _refreshController.refreshCompleted();
-      _refreshController.loadComplete();
     }).catchError((error) {
       TKToast.dismiss();
       _refreshController.refreshCompleted();
