@@ -129,4 +129,55 @@ class FindRequest {
     }
     return comments;
   }
+
+  /// 发现--关注/取消关注
+  static Future<bool> requestFocus(bool attation, int userByid) async {
+    LoginInfo loginInfo = SharedStorage.loginInfo;
+    int isFlag = attation ? 0 : 1;
+
+    final url = HttpConfig.updateAttation + '?isFlag=$isFlag&userByid=$userByid&userId=${loginInfo.userId}';
+    final result = await HttpRequest.request(url);
+
+    if (!result.isSuccess) {
+      TKToast.showToast(result.message);
+    }
+    
+    return result.isSuccess;
+  }
+
+  /// 发现--点赞/取消点赞
+  static Future<bool> requestAgree(bool agree, int messageId) async {
+    LoginInfo loginInfo = SharedStorage.loginInfo;
+    int agreeStatus = agree ? 0 : 1;
+    
+    final url = HttpConfig.updateAgree + '?agreeStatus=$agreeStatus&messageId=$messageId&userId=${loginInfo.userId}';
+    final result = await HttpRequest.request(url);
+
+    if (!result.isSuccess) {
+      TKToast.showError(result.message);
+    }
+    
+    return result.isSuccess;
+  }
+
+  /// 发现--收藏/取消收藏
+  static Future<bool> requestCollection(bool collection, int messageId) async {
+    LoginInfo loginInfo = SharedStorage.loginInfo;
+    int state = collection ? 0 : 1;
+    
+    final url = HttpConfig.user_collection;
+    Map<String, dynamic> params = {
+      'collectionsStatus': state,
+      'messageId': messageId,
+      'token': loginInfo.token,
+      'userId': loginInfo.userId
+    };
+    final result = await HttpRequest.request(url, method: 'post', params: params);
+
+    if (!result.isSuccess) {
+      TKToast.showError(result.message);
+    }
+    
+    return result.isSuccess;
+  }
 }

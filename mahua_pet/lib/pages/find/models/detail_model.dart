@@ -28,6 +28,7 @@ class DetailModel {
         this.followStatus,
         this.cntAgree,
         this.agrees,
+        this.agreeStatus,
         this.collectionsStatus,
         this.delFlag,
         this.commentNum,
@@ -53,6 +54,7 @@ class DetailModel {
     int cntAgree;
     List<Agree> agrees;
     String collectionsStatus;
+    String agreeStatus;
     String delFlag;
     String commentNum;
     String collectionNum;
@@ -73,10 +75,11 @@ class DetailModel {
         labelName: json["labelName"] ?? '',
         labelType: json["labelType"] ?? '',
         atusers: List<dynamic>.from(json["atusers"].map((x) => x)),
-        followStatus: json["followStatus"],
+        followStatus: json["followStatus"] ?? '+关注',
         cntAgree: json["cntAgree"] ?? 0,
         agrees: List<Agree>.from(json["agrees"].map((x) => Agree.fromJson(x))),
-        collectionsStatus: json["collectionsStatus"],
+        collectionsStatus: json["collectionsStatus"] ?? '0',
+        agreeStatus: json["agreeStatus"] ?? '0',
         delFlag: json["delFlag"],
         commentNum: json["commentNum"],
         collectionNum: json["collectionNum"],

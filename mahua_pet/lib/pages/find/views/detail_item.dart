@@ -8,10 +8,13 @@ import './find_item_image.dart';
 
 
 
+
+
 class FindDetailItem extends StatelessWidget {
 
   final DetailModel model;
-  FindDetailItem(this.model);
+  final FindActionCallBack eventAction;
+  FindDetailItem(this.model, this.eventAction);
 
 
   @override
@@ -30,9 +33,6 @@ class FindDetailItem extends StatelessWidget {
           Container(height: 10.px, color: TKColor.color_f7f7f7)
         ],
       ),
-      onTap: () {
-
-      },
     );
   }
 
@@ -79,7 +79,7 @@ class FindDetailItem extends StatelessWidget {
                 fit: BoxFit.cover,
                 placeholder: TKImages.user_header,
               ),
-              onTap: () {},
+              onTap: () { eventAction(FindActionType.header); },
             ),
             SizedBox(width: 8.px),
             Column(
@@ -91,13 +91,9 @@ class FindDetailItem extends StatelessWidget {
             )
           ],
         ),
-        SmallButton(
-          title: model.followStatus == '关注' ? '已关注' : '关注',
-          disabled: model.followStatus != '关注',
-          onPressed: (){
-            if (model.followStatus != '关注') { return; }
-
-          }
+        FocusButton(
+          isSelect: model.followStatus == '关注',
+          onPressed: () => eventAction(FindActionType.attation)
         )
       ],
     );
@@ -183,7 +179,6 @@ class FindDetailItem extends StatelessWidget {
 
   Widget renderBottomItem(BuildContext context) {
     return Container(
-      // padding: EdgeInsets.symmetric(horizontal: 16.px),
       height: 40.px,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -196,15 +191,25 @@ class FindDetailItem extends StatelessWidget {
 
     List<Widget> itemList = [];
 
-    itemList.add(bottomItem(Icons.favorite_border, TKColor.color_666666, '${model.cntAgree}'));
-    itemList.add(bottomItem(Icons.star_border, TKColor.color_666666, model.collectionNum));
-    itemList.add(bottomItem(Icons.message, TKColor.color_666666, model.commentNum));
-    itemList.add(bottomItem(Icons.share, TKColor.color_666666, '${model.userId}'));
+    itemList.add(bottomItem(
+      model.agreeStatus == '1' ? Icons.favorite : Icons.favorite_border, 
+      model.agreeStatus == '1' ? TKColor.main_color : TKColor.color_666666, 
+      '${model.cntAgree}',
+      FindActionType.agree
+    ));
+    itemList.add(bottomItem(
+      model.collectionsStatus == '1' ? Icons.star : Icons.star_border, 
+      model.collectionsStatus == '1' ? TKColor.main_color : TKColor.color_666666, 
+      model.collectionNum, 
+      FindActionType.collection
+    ));
+    itemList.add(bottomItem(Icons.message, TKColor.color_666666, model.commentNum, FindActionType.comment));
+    itemList.add(bottomItem(Icons.share, TKColor.color_666666, '', FindActionType.share));
 
     return itemList;
   }
 
-  Widget bottomItem(IconData icon, Color iconColor, String number) {
+  Widget bottomItem(IconData icon, Color iconColor, String number, FindActionType type) {
     return GestureDetector(
       child: Container(
         width: 70,
@@ -219,7 +224,7 @@ class FindDetailItem extends StatelessWidget {
         ),
       ),
       onTap: () {
-
+        eventAction(type);
       },
     );
   }

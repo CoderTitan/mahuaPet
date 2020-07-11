@@ -7,24 +7,28 @@ import '../models/model_index.dart';
 class FindRecomItem extends StatelessWidget {
 
   final RecommendModel model;
-  FindRecomItem({this.model});
+  final FindActionCallBack actionCallBack;
+  FindRecomItem({this.model, this.actionCallBack, Key key}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: (SizeFit.screenWidth - 25.px) / 2,
-      decoration: BoxDecoration(
-        color: TKColor.white,
-        borderRadius: BorderRadius.circular(4.px),
+    return GestureDetector(
+      child: Container(
+        width: (SizeFit.screenWidth - 25.px) / 2,
+        decoration: BoxDecoration(
+          color: TKColor.white,
+          borderRadius: BorderRadius.circular(4.px),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            renderHeaderImage(),
+            renderOtherInfo()
+          ]
+        ),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          renderHeaderImage(),
-          renderOtherInfo()
-        ]
-      ),
+      onTap: () => actionCallBack(FindActionType.detail),
     );
   }
 
@@ -92,13 +96,16 @@ class FindRecomItem extends StatelessWidget {
     return Container(
       child: Row(
       children: <Widget>[
-        TKNetworkImage(
-          imageUrl: model.headImg,
-          width: 20.px,
-          height: 20.px,
-          borderRadius: 10.px,
-          fit: BoxFit.cover,
-          placeholder: TKImages.user_header
+        GestureDetector(
+          child: TKNetworkImage(
+            imageUrl: model.headImg,
+            width: 20.px,
+            height: 20.px,
+            borderRadius: 10.px,
+            fit: BoxFit.cover,
+            placeholder: TKImages.user_header
+          ),
+          onTap: () => actionCallBack(FindActionType.header),
         ),
         SizedBox(width: 8.px),
         Expanded(
@@ -130,24 +137,32 @@ class FindRecomItem extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        renderBottomItem(0),
-        renderBottomItem(1),
+        renderBottomItem(
+          model.agreeStatus == '1' ? Icons.favorite : Icons.favorite_border,
+          model.agreeStatus == '1' ? TKColor.main_color: TKColor.color_cccccc,
+          model.messageAgreeNum,
+          FindActionType.agree
+        ),
+        renderBottomItem(
+          Icons.remove_red_eye, TKColor.color_cccccc, 
+          model.messageReadNum, FindActionType.none, textAlign: TextAlign.right
+        ),
       ],
     );
   }
 
-  Widget renderBottomItem(int index) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Icon(index == 0 ? Icons.favorite_border : Icons.remove_red_eye, color: TKColor.color_cccccc, size: 14.px),
-        SizedBox(width: 4.px),
-        Text(
-          index == 0 ? '${model.messageAgreeNum}' : '${model.messageReadNum}', 
-          style: TextStyle(fontSize: 12.px, color: TKColor.color_cccccc),
-          textAlign: index == 0 ? TextAlign.left : TextAlign.right,
-        )
-      ],
+  Widget renderBottomItem(IconData icon, Color iconColor, String number, FindActionType type, {TextAlign textAlign = TextAlign.left}) {
+    return GestureDetector(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Icon(icon, color: iconColor, size: 14.px),
+          SizedBox(width: 4.px),
+          Text(number, style: TextStyle(fontSize: 12.px, color: TKColor.color_cccccc), textAlign: textAlign,
+          )
+        ],
+      ),
+      onTap: () => actionCallBack(type),
     );
   }
 }

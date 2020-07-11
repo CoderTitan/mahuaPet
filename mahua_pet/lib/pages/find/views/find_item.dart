@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:mahua_pet/component/network_image.dart';
-import 'package:mahua_pet/pages/find/contents/find_detail.dart';
+import 'package:mahua_pet/pages/find/contents/photo_preview.dart';
 import 'package:mahua_pet/pages/find/models/focus_post_model.dart';
+import 'package:mahua_pet/pages/find/models/model_index.dart';
 
 import 'package:mahua_pet/styles/app_style.dart';
 import 'package:mahua_pet/component/component.dart';
-import 'package:mahua_pet/utils/utils_index.dart';
+import 'package:mahua_pet/providered/provider_index.dart';
+import 'package:mahua_pet/utils/router.dart';
+
 
 import './find_item_image.dart';
 
 class FindListItem extends StatelessWidget {
 
-  final int _index;
   final FocusPostModel _model;
 
-  FindListItem(this._index, this._model, Key key): super(key: key);
+  final FocusPostModel model;
+  final FindActionCallBack findCallBack;
+  
+
+  FindListItem({this.model, this.findCallBack, Key key}): _model = model, super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +39,7 @@ class FindListItem extends StatelessWidget {
         ],
       ),
       onTap: () {
-        TKRoute.push(context, FindDetailPage(messageId: _model.messageId));
+        findCallBack(FindActionType.detail);
       },
     );
   }
@@ -69,39 +75,47 @@ class FindListItem extends StatelessWidget {
   Widget userInfoItem(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            GestureDetector(
-              child: TKNetworkImage(
-                imageUrl: _model.userInfo.headImg,
-                width: 45.px, height: 45.px,
-                borderRadius: 30.px,
-                fit: BoxFit.cover,
-              ),
-              onTap: () {},
-            ),
-            SizedBox(width: 8.px),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(_model.userInfo.nickname, style: TextStyle(fontSize: 15.px, color: TKColor.color_333333)),
-                Text(_model.createTime, style: TextStyle(fontSize: 11.px, color: TKColor.color_999999)),
-              ],
-            )
-          ],
-        ),
-        SmallButton(
-          title: _model.followStatus == '关注' ? '已关注' : '关注',
-          disabled: _model.followStatus != '关注',
-          onPressed: (){
-            if (_model.followStatus != '关注') { return; }
+      children: renderHeaderItems(),
+    );
+  }
 
-          }
+  List<Widget> renderHeaderItems() {
+    List<Widget> itemList = [];
+
+    Widget user = Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        GestureDetector(
+          child: TKNetworkImage(
+            imageUrl: _model.userInfo.headImg,
+            width: 45.px, height: 45.px,
+            borderRadius: 30.px,
+            fit: BoxFit.cover,
+          ),
+          onTap: () => findCallBack(FindActionType.header),
+        ),
+        SizedBox(width: 8.px),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(_model.userInfo.nickname, style: TextStyle(fontSize: 15.px, color: TKColor.color_333333)),
+            Text(_model.createTime, style: TextStyle(fontSize: 11.px, color: TKColor.color_999999)),
+          ],
         )
       ],
     );
+    itemList.add(user);
+
+    LoginInfo loginInfo = SharedStorage.loginInfo;
+    if (loginInfo.userId != _model.userId) {
+      Widget button = FocusButton(
+        isSelect: model.followStatus == '关注',
+        onPressed: () => findCallBack(FindActionType.attation)
+      );
+      itemList.add(button);
+    }
+
+    return itemList;
   }
 
   Widget renderTextItem(BuildContext context) {
@@ -133,11 +147,12 @@ class FindListItem extends StatelessWidget {
           height: 180.px,
           radius: 10.px,
           onPress: () {
-
+            List<String> images = [imgModel.fileUrl];
+            TKRoute.push(context, PhotoPreview(index: 0, images: [imgModel.fileUrl]));
           },
         ),
       );
-    } 
+    }
     final imageWidth = imgArray.length == 4 ? 120.px : 107.px;
     return Container(
       padding: EdgeInsets.only(top: 8.px),
@@ -145,13 +160,16 @@ class FindListItem extends StatelessWidget {
         spacing: 10.px,
         runSpacing: 10.px,
         children: imgArray.map((item) {
-          final itemIndex = imgArray.indexOf(item);
+          final itemIndex = imgArray.indexOf(item) ?? 0;
           return FindItemImage(
             imageUrl: item.fileUrl,
             width: imageWidth,
             height: imageWidth,
             radius: 4.px,
-            onPress: () {},
+            onPress: () {
+              List<String> images = imgArray.map((e) => e.fileUrl).toList();
+              TKRoute.push(context, PhotoPreview(index: itemIndex, images: images));
+            },
           );
         }).toList(),
       ),
@@ -251,15 +269,19 @@ class FindListItem extends StatelessWidget {
 
     List<Widget> itemList = [];
 
-    itemList.add(bottomItem(Icons.favorite_border, TKColor.color_666666, _model.cntAgree));
-    itemList.add(bottomItem(Icons.star_border, TKColor.color_666666, _model.cntRead));
-    itemList.add(bottomItem(Icons.message, TKColor.color_666666, _model.cntComment));
-    itemList.add(bottomItem(Icons.share, TKColor.color_666666, _model.fileCount));
+    itemList.add(bottomItem(
+      _model.agreeStatus == '1' ? Icons.favorite : Icons.favorite_border,
+      _model.agreeStatus == '1' ? TKColor.main_color : TKColor.color_666666,
+      '${_model.cntAgree}',
+      FindActionType.agree
+    ));
+    itemList.add(bottomItem(Icons.message, TKColor.color_666666, '${_model.cntComment}', FindActionType.comment));
+    itemList.add(bottomItem(Icons.share, TKColor.color_666666, '', FindActionType.share));
 
     return itemList;
   }
 
-  Widget bottomItem(IconData icon, Color iconColor, int number) {
+  Widget bottomItem(IconData icon, Color iconColor, String number, FindActionType type) {
     return GestureDetector(
       child: Container(
         width: 70,
@@ -269,13 +291,15 @@ class FindListItem extends StatelessWidget {
           children: <Widget>[
             Icon(icon, size: 20.px, color: iconColor,),
             SizedBox(width: 3.px),
-            Text('$number', style: TextStyle(fontSize: 13.px, color: TKColor.color_666666))
+            Text(number, style: TextStyle(fontSize: 13.px, color: TKColor.color_666666))
           ],
         ),
       ),
       onTap: () {
-
+        findCallBack(type);
       },
     );
   }
 }
+
+
