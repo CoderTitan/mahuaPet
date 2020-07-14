@@ -146,11 +146,11 @@ class FindRequest {
   }
 
   /// 发现--点赞/取消点赞
-  static Future<bool> requestAgree(bool agree, int messageId) async {
+  static Future<bool> requestAgree(bool agree, {int messageId, int commentId}) async {
     LoginInfo loginInfo = SharedStorage.loginInfo;
     int agreeStatus = agree ? 0 : 1;
     
-    final url = HttpConfig.updateAgree + '?agreeStatus=$agreeStatus&messageId=$messageId&userId=${loginInfo.userId}';
+    final url = HttpConfig.updateAgree + '?agreeStatus=$agreeStatus&messageId=$messageId&commentId=$commentId&userId=${loginInfo.userId}';
     final result = await HttpRequest.request(url);
 
     if (!result.isSuccess) {
@@ -177,6 +177,59 @@ class FindRequest {
     if (!result.isSuccess) {
       TKToast.showError(result.message);
     }
+    
+    return result.isSuccess;
+  }
+
+  /// 发现-评论
+  static Future<bool> requestComment(String commentInfo, int messageId) async {
+    LoginInfo loginInfo = SharedStorage.loginInfo;
+
+    final url = HttpConfig.comment_save;
+    Map<String, dynamic> params = {
+      'commentInfo': commentInfo,
+      'messageId': messageId,
+      'token': loginInfo.token,
+      'userId': loginInfo.userId
+    };
+    final result = await HttpRequest.request(url, method: 'post', params: params);
+
+    if (!result.isSuccess) {
+      TKToast.showError(result.message);
+    }
+    
+    return result.isSuccess;
+  }
+
+  /// 发现-回复评论
+  static Future<bool> replyComment(String commentInfo, int commentId, int beReplyedUserId) async {
+    LoginInfo loginInfo = SharedStorage.loginInfo;
+
+    final url = HttpConfig.comment_reply_save;
+    Map<String, dynamic> params = {
+      'beReplyedUserId': beReplyedUserId,
+      'commentInfo': commentInfo,
+      'commentId': commentId,
+      'token': loginInfo.token,
+      'replyUserId': loginInfo.userId
+    };
+    final result = await HttpRequest.request(url, method: 'post', params: params);
+
+    if (!result.isSuccess) {
+      TKToast.showError(result.message);
+    }
+    
+    return result.isSuccess;
+  }
+
+  /// 发现-删除评论
+  static Future<bool> deleteComment(int commentId) async {
+    LoginInfo loginInfo = SharedStorage.loginInfo;
+
+    final url = HttpConfig.comment_delete + '?commentId=35327&userLoginId=${loginInfo.userId}';
+    final result = await HttpRequest.request(url);
+
+    TKToast.showToast(result.message);
     
     return result.isSuccess;
   }

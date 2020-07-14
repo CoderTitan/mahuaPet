@@ -150,7 +150,7 @@ class _FindRecomPageState extends State<FindRecomPage> with AutomaticKeepAliveCl
   // 点赞
   void requestAgreeState(RecommendModel model) {
     TKToast.showLoading();
-    FindRequest.requestAgree(model.agreeStatus == '0', model.messageId).then((value) {
+    FindRequest.requestAgree(model.agreeStatus == '0', messageId: model.messageId).then((value) {
       if (value) {
         if (model.agreeStatus == '0') {
           model.messageAgreeNum = '${int.parse(model.messageAgreeNum) + 1}';

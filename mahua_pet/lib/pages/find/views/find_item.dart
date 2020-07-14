@@ -7,7 +7,7 @@ import 'package:mahua_pet/pages/find/models/model_index.dart';
 import 'package:mahua_pet/styles/app_style.dart';
 import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/providered/provider_index.dart';
-import 'package:mahua_pet/utils/router.dart';
+import 'package:mahua_pet/utils/route_util.dart';
 
 
 import './find_item_image.dart';
@@ -148,7 +148,7 @@ class FindListItem extends StatelessWidget {
           radius: 10.px,
           onPress: () {
             List<String> images = [imgModel.fileUrl];
-            TKRoute.push(context, PhotoPreview(index: 0, images: [imgModel.fileUrl]));
+            TKRoute.pushImagePreview(context, PhotoPreview(index: 0, images: [imgModel.fileUrl]));
           },
         ),
       );
@@ -162,13 +162,14 @@ class FindListItem extends StatelessWidget {
         children: imgArray.map((item) {
           final itemIndex = imgArray.indexOf(item) ?? 0;
           return FindItemImage(
+            key: ValueKey(itemIndex),
             imageUrl: item.fileUrl,
             width: imageWidth,
             height: imageWidth,
             radius: 4.px,
             onPress: () {
               List<String> images = imgArray.map((e) => e.fileUrl).toList();
-              TKRoute.push(context, PhotoPreview(index: itemIndex, images: images));
+              TKRoute.pushImagePreview(context, PhotoPreview(index: itemIndex, images: images));
             },
           );
         }).toList(),

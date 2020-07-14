@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 import 'package:mahua_pet/styles/app_style.dart';
+import 'package:mahua_pet/utils/utils_index.dart';
 
 
 class PhotoPreview extends StatefulWidget {
@@ -40,13 +42,16 @@ class _PhotoPreviewState extends State<PhotoPreview> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          renderPhotoView(context),
-          renderNavigation(context),
-          renderBottomBar(context)
-        ],
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light,
+      child: Scaffold(
+        body: Stack(
+          children: <Widget>[
+            renderPhotoView(context),
+            renderNavigation(context),
+            renderBottomBar(context)
+          ],
+        ),
       ),
     );
   }
@@ -135,14 +140,16 @@ class _PhotoPreviewState extends State<PhotoPreview> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             IconButton(icon: Icon(Icons.share, color: Colors.white), onPressed: () {
-              
+
             }),
             IconButton(icon: Icon(Icons.file_download, color: Colors.white), onPressed: () {
-
+              final image = images[_currentIndex] ?? '';
+              TKMediaUtil.saveImage(context, image);
             }),
           ],
         ),
       ),
     );
   }
+
 }

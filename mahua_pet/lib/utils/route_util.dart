@@ -52,6 +52,16 @@ class TKRoute {
   };
 
 
+  /// 图片浏览器方式
+  static pushImagePreview(BuildContext context, Widget pageRoute) {
+    Navigator.of(context).push(PageRouteBuilder(
+      // transitionDuration: Duration(seconds: 1),
+      pageBuilder: (ctx, animal1, animal2) {
+        return FadeTransition(opacity: animal1, child: pageRoute);
+      }
+    ));
+  }
+
   /// push
   static push(BuildContext context, Widget pageRoute, {RouteSettings settings}) {
     Navigator.of(context).push(MaterialPageRoute(

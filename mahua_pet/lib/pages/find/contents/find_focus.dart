@@ -283,7 +283,7 @@ class _FindFocusPageState extends State<FindFocusPage> with AutomaticKeepAliveCl
   // 点赞
   void requestAgreeState(FocusPostModel model) {
     TKToast.showLoading();
-    FindRequest.requestAgree(model.agreeStatus == '0', model.messageId).then((value) {
+    FindRequest.requestAgree(model.agreeStatus == '0', messageId: model.messageId).then((value) {
       if (value) {
         if (model.agreeStatus == '0') {
           model.cntAgree = model.cntAgree + 1;
@@ -293,10 +293,10 @@ class _FindFocusPageState extends State<FindFocusPage> with AutomaticKeepAliveCl
           TKToast.showSuccess('取消点赞成功');
         }
         _postArray.forEach((element) {
-            if (element.userId == model.userId) {
-              element.agreeStatus = model.agreeStatus == '0' ? '1' : '0';
-            }
-          });
+          if (element.userId == model.userId) {
+            element.agreeStatus = model.agreeStatus == '0' ? '1' : '0';
+          }
+        });
         setState(() { });
       }
     }).catchError((error) {

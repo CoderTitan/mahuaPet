@@ -51,7 +51,10 @@ dependencies:
   pull_to_refresh: ^1.6.0
   flutter_staggered_grid_view: ^0.3.0
   photo_view: ^0.9.2
-  image_pickers: ^1.0.7+6
+  image_picker: ^0.6.7+4
+  path_provider: ^1.6.11
+  permission_handler: ^5.0.1+1
+  image_gallery_saver: ^1.5.0
 
 
 dev_dependencies:

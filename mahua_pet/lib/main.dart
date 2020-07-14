@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:mahua_pet/providered/provider/provider_config.dart';
 import 'package:mahua_pet/providered/shared/shared_storage.dart';
 import 'package:mahua_pet/config/config_index.dart';
-import 'utils/router.dart';
+import 'utils/route_util.dart';
 import 'styles/app_style.dart';
 
 void main() {

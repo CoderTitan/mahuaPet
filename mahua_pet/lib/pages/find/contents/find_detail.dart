@@ -29,9 +29,14 @@ class _FindDetailPageState extends State<FindDetailPage> {
 
   DetailModel _model = DetailModel();
   List<CommentModel> _commentList = [];
+  CommentModel _currentComment = CommentModel();
   int _postPage = 1;
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
   bool _showLoading = false;
+
+  FocusNode _focusNode = FocusNode();
+  TextEditingController _editController = TextEditingController();
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  
 
   @override
   void initState() { 
@@ -74,7 +79,23 @@ class _FindDetailPageState extends State<FindDetailPage> {
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
-              (ctx, index) => CommentItem(model: _commentList[index], userId: _model.userId, key: ValueKey(index)),
+              (ctx, index) {
+                return CommentItem(
+                  model: _commentList[index], 
+                  userId: _model.userId, 
+                  key: ValueKey(index),
+                  actionCallBack: (type) {
+                    _currentComment = _commentList[index];
+                    if (type == FindActionType.agree) {
+                      requestCommentAgree(model: _commentList[index]);
+                    } else if (type == FindActionType.commentSelect){
+                      showCommentSelect();
+                    } else {
+                      handleItemAction(type);
+                    }
+                  },
+                );
+              },
               childCount: _commentList.length
             )
           )
@@ -105,7 +126,17 @@ class _FindDetailPageState extends State<FindDetailPage> {
                 ),
                 child: Text('快来评论小可爱吧...', style: TextStyle(fontSize: 15.px, color: TKColor.color_999999)),
               ),
-              onTap: () {},
+              onTap: () {
+                TKActionComment.showActionSheet(
+                  context,
+                  focusNode: _focusNode,
+                  textController: _editController,
+                  placehold: '快来评论小可爱吧...',
+                  submitAction: (text) {
+                    postComment(text);
+                  }
+                );
+              },
             ),
             Row(
               children: <Widget>[
@@ -155,6 +186,7 @@ class _FindDetailPageState extends State<FindDetailPage> {
     if (_showLoading) {
       TKToast.showLoading();
     }
+    _postPage = 1;
     requestFindDetail();
     requestCommentList(1);
   }
@@ -227,8 +259,34 @@ class _FindDetailPageState extends State<FindDetailPage> {
       case FindActionType.share:
         print(FindActionType.share);
         break;
+      case FindActionType.commentSelect:
+
+        break;
       default:
     }
+  }
+
+  /// 点击评论显示弹窗
+  void showCommentSelect() {
+    TKActionSheet.showActionSheet(context, rows: ['回复', '删除'], selectAction: (index, text) {
+      if (index == 0) {
+        // 开始倒计时
+        Future.delayed(Duration(seconds: 1), () { // 回复
+          TKActionComment.showActionSheet(
+            context,
+            focusNode: _focusNode,
+            textController: _editController,
+            placehold: '快来评论小可爱吧...',
+            submitAction: (text) {
+              replyComment(text);
+            }
+          );
+        });
+      } else {
+        // 删除
+        deleteComment();
+      }
+    });
   }
 
   // 关注
@@ -253,26 +311,53 @@ class _FindDetailPageState extends State<FindDetailPage> {
       });
   }
 
-  // 点赞
+  // 帖子点赞
   void requestAgreeState() {
     TKToast.showLoading();
-    FindRequest.requestAgree(_model.agreeStatus == '0', _model.messageId).then((value) {
-      if (value) {
-        if (_model.agreeStatus == '0') {
-          _model.cntAgree = _model.cntAgree + 1;
-          TKToast.showSuccess('点赞成功');
-        } else {
-          _model.cntAgree = _model.cntAgree - 1;
-          TKToast.showSuccess('取消点赞成功');
+    FindRequest.requestAgree(_model.agreeStatus == '0', messageId: _model.messageId)
+      .then((value) {
+        if (value) {
+          if (_model.agreeStatus == '0') {
+            _model.cntAgree = _model.cntAgree + 1;
+            TKToast.showSuccess('点赞成功');
+          } else {
+            _model.cntAgree = _model.cntAgree - 1;
+            TKToast.showSuccess('取消点赞成功');
+          }
+          _model.agreeStatus = _model.agreeStatus == '0' ? '1' : '0';
+          widget.actionCallBack(_model);
+          setState(() { });
         }
-        _model.agreeStatus = _model.agreeStatus == '0' ? '1' : '0';
-        widget.actionCallBack(_model);
-        setState(() { });
-      }
-    }).catchError((error) {
-      TKToast.dismiss();
-      print(error);
-    });
+      }).catchError((error) {
+        TKToast.dismiss();
+        print(error);
+      });
+  }
+
+    // 评论点赞
+  void requestCommentAgree({CommentModel model}) {
+    TKToast.showLoading();
+    FindRequest.requestAgree(model.agreeStatus == '0', commentId: model.commentId)
+      .then((value) {
+        if (value) {
+          if (model.agreeStatus == '0') {
+            model.cntAgree = model.cntAgree + 1;
+            TKToast.showSuccess('点赞成功');
+          } else {
+            model.cntAgree = model.cntAgree - 1;
+            TKToast.showSuccess('取消点赞成功');
+          }
+          _commentList.forEach((element) {
+            if (element.commentId == model.commentId) {
+              element.agreeStatus = model.agreeStatus == '0' ? '1' : '0';
+            }
+          });
+          setState(() { });
+        }
+      }).catchError((error) {
+        TKToast.dismiss();
+        print(error);
+      });
   }
 
   // 收藏
@@ -289,6 +374,60 @@ class _FindDetailPageState extends State<FindDetailPage> {
         }
         _model.collectionsStatus = _model.collectionsStatus == '0' ? '1' : '0';
         setState(() { });
+      }
+    }).catchError((error) {
+      TKToast.dismiss();
+      print(error);
+    });
+  }
+
+  // 评论内容
+  void postComment(String message) {
+    if (message == null || message.isEmpty) {
+      TKToast.showToast('内容不能为空');
+      return;
+    }
+    TKToast.showLoading();
+    FindRequest.requestComment(message, _model.messageId).then((value) {
+      
+      if (value) {
+        _editController.text = '';
+        _onRefresh();
+      }
+    }).catchError((error) {
+      TKToast.dismiss();
+      print(error);
+    });
+  }
+
+  // 评论内容
+  void replyComment(String message) {
+    if (message == null || message.isEmpty) {
+      TKToast.showToast('内容不能为空');
+      return;
+    }
+    TKToast.showLoading();
+    FindRequest.replyComment(message, _currentComment.commentId, _currentComment.userId).then((value) {
+      if (value) {
+        _editController.text = '';
+        _onRefresh();
+      }
+    }).catchError((error) {
+      TKToast.dismiss();
+      print(error);
+    });
+  }
+
+  // 删除评论内容
+  void deleteComment() {
+    TKToast.showLoading();
+    FindRequest.deleteComment(_currentComment.commentId).then((value) {
+      if (value) {
+        
+        List<CommentModel> newModels = _commentList.where((element) => element.commentId != _currentComment.commentId).toList();
+        setState(() { 
+          _commentList = newModels;
+        });
       }
     }).catchError((error) {
       TKToast.dismiss();

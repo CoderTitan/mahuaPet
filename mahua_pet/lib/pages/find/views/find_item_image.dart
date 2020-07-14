@@ -22,13 +22,16 @@ class FindItemImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: TKNetworkImage(
-        imageUrl: imageUrl,
-        width: width,
-        height: height,
-        borderRadius: radius,
-        fit: BoxFit.cover,
-        placeholder: TKImages.image_path + 'find_none_image.png',
+      child: Hero(
+        tag: imageUrl,
+        child: TKNetworkImage(
+          imageUrl: imageUrl,
+          width: width,
+          height: height,
+          borderRadius: radius,
+          fit: BoxFit.cover,
+          placeholder: TKImages.image_path + 'find_none_image.png',
+        ),
       ),
       onTap: () {
         onPress();

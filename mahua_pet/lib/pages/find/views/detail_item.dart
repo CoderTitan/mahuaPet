@@ -4,7 +4,9 @@ import '../models/model_index.dart';
 
 import 'package:mahua_pet/styles/app_style.dart';
 import 'package:mahua_pet/component/component.dart';
+import 'package:mahua_pet/utils/utils_index.dart';
 import './find_item_image.dart';
+import '../contents/photo_preview.dart';
 
 
 
@@ -139,7 +141,8 @@ class FindDetailItem extends StatelessWidget {
           height: 180.px,
           radius: 10.px,
           onPress: () {
-
+            List<String> images = imgArray.map((e) => e.fileUrl).toList();
+            TKRoute.pushImagePreview(context, PhotoPreview(index: 0, images: images));
           },
         ),
       );
@@ -157,7 +160,10 @@ class FindDetailItem extends StatelessWidget {
             width: imageWidth,
             height: imageWidth,
             radius: 4.px,
-            onPress: () {},
+            onPress: () {
+              List<String> images = imgArray.map((e) => e.fileUrl).toList();
+              TKRoute.pushImagePreview(context, PhotoPreview(index: itemIndex, images: images));
+            },
           );
         }).toList(),
       ),

@@ -53,8 +53,8 @@ class TKNetworkImage extends StatelessWidget {
         return Icon(Icons.error, size: width > height ? height : width, color: Colors.black38);
       },
       progressIndicatorBuilder: (context, url, downloadProgress) {
-        return showProgress ? CircularProgressIndicator(
-          value: downloadProgress.progress,
+        return showProgress ? Center(
+          child: CircularProgressIndicator(value: downloadProgress.progress),
         ) : null;
       },
     );

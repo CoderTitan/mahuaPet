@@ -9,7 +9,8 @@ import 'comment_reply_item.dart';
 class CommentItem extends StatelessWidget {
   final CommentModel model;
   final int userId;
-  CommentItem({this.model, this.userId, Key key}): super(key: key);
+  final FindActionCallBack actionCallBack;
+  CommentItem({this.model, this.userId, this.actionCallBack, Key key}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +54,17 @@ class CommentItem extends StatelessWidget {
   }
 
   Widget renderCommentInfo() {
-    return Container(
-      padding: EdgeInsets.only(left: 36.px, right: 20.px, top: 3.px),
-      child: Text(
-        model.commentInfo, 
-        style: TextStyle(fontSize: 14.px, color: TKColor.color_333333)
+    return GestureDetector(
+      child: Container(
+        padding: EdgeInsets.only(left: 36.px, right: 20.px, top: 3.px),
+        child: Text(
+          model.commentInfo, 
+          style: TextStyle(fontSize: 14.px, color: TKColor.color_333333)
+        ),
       ),
+      onTap: () {
+        actionCallBack(FindActionType.commentSelect);
+      },
     );
   }
 
@@ -73,7 +79,10 @@ class CommentItem extends StatelessWidget {
             fit: BoxFit.cover,
             placeholder: TKImages.user_header,
           ),
-          onTap: () {},
+          onTap: () {
+            // 直接进去就好
+            
+          },
         ),
         SizedBox(width: 6.px),
         Column(
@@ -91,14 +100,23 @@ class CommentItem extends StatelessWidget {
   }
 
   Widget renderUserRight() {
-    return Column(
-      children: <Widget>[
-        Icon(Icons.favorite_border, size: 20.px, color: TKColor.color_999999),
-        Text(
-          '${model.cntAgree}', 
-          style: TextStyle(fontSize: 10.px, color: TKColor.color_666666)
-        )
-      ],
+    return GestureDetector(
+      child: Column(
+        children: <Widget>[
+          Icon(
+            model.agreeStatus == '1' ? Icons.favorite : Icons.favorite_border, 
+            color: model.agreeStatus == '1' ? TKColor.main_color : TKColor.color_999999,
+            size: 20.px, 
+          ),
+          Text(
+            '${model.cntAgree}', 
+            style: TextStyle(fontSize: 10.px, color: TKColor.color_666666)
+          )
+        ],
+      ),
+      onTap: () {
+        actionCallBack(FindActionType.agree);
+      },
     );
   }
 

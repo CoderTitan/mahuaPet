@@ -13,6 +13,8 @@ enum FindActionType {
   attation,
   // 评论
   comment,
+  // 点击评论
+  commentSelect,
   // 分享
   share,
   // 空

@@ -3,14 +3,22 @@ import 'package:flutter/material.dart';
 
 import 'package:mahua_pet/styles/app_style.dart';
 
+
+
+typedef VoidCallBack = void Function();
+
+
+
 class ActionAlert {
   
   // 中间显示的取消/确认弹窗
-  static showActionAlert(BuildContext context, {
+  static showActionAlert({
+    @required BuildContext context, 
     String title,
     String contentStr,
     bool isSureButton = false,
     String sureTitle = '确认',
+    VoidCallBack onPress,
   }) {
     showDialog(
       context: context,
@@ -25,6 +33,7 @@ class ActionAlert {
             sureTitle: sureTitle,
             isSureButton: isSureButton,
             scrollable: false,
+            onPress: onPress,
           ),
         );
       }
@@ -39,6 +48,7 @@ class TKActionAlert extends StatelessWidget {
   final String sureTitle;
   final bool isSureButton;
   final bool scrollable;
+  final VoidCallBack onPress;
 
   TKActionAlert({
     Key key,
@@ -47,6 +57,7 @@ class TKActionAlert extends StatelessWidget {
     this.sureTitle = '确认',
     this.scrollable = false,
     this.isSureButton = false,
+    this.onPress
   });
 
   @override
@@ -151,7 +162,7 @@ class TKActionAlert extends StatelessWidget {
           color: Colors.transparent,
           child: Text(sureTitle, style: TextStyle(fontSize: 16.px, color: TKColor.main_color)),
           onPressed: () {
-
+            onPress();
           }
         ),
       ),
