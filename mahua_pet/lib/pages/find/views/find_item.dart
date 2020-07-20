@@ -3,6 +3,7 @@ import 'package:mahua_pet/component/network_image.dart';
 import 'package:mahua_pet/pages/find/contents/photo_preview.dart';
 import 'package:mahua_pet/pages/find/models/focus_post_model.dart';
 import 'package:mahua_pet/pages/find/models/model_index.dart';
+import 'package:mahua_pet/pages/find/views/find_item_video.dart';
 
 import 'package:mahua_pet/styles/app_style.dart';
 import 'package:mahua_pet/component/component.dart';
@@ -91,6 +92,7 @@ class FindListItem extends StatelessWidget {
             width: 45.px, height: 45.px,
             borderRadius: 30.px,
             fit: BoxFit.cover,
+            placeholder: TKImages.user_header,
           ),
           onTap: () => findCallBack(FindActionType.header),
         ),
@@ -131,6 +133,8 @@ class FindListItem extends StatelessWidget {
     final media = _model.fileList.first;
     if (media.fileType == '0') {
       return renderImages(context);
+    } else if (media.fileType == '1') {
+      return renderVideoItem(context);
     }
     return Container();
   }
@@ -147,7 +151,6 @@ class FindListItem extends StatelessWidget {
           height: 180.px,
           radius: 10.px,
           onPress: () {
-            List<String> images = [imgModel.fileUrl];
             TKRoute.pushImagePreview(context, PhotoPreview(index: 0, images: [imgModel.fileUrl]));
           },
         ),
@@ -174,6 +177,17 @@ class FindListItem extends StatelessWidget {
           );
         }).toList(),
       ),
+    );
+  }
+
+  Widget renderVideoItem(BuildContext context) {
+    final imgArray = _model.fileList;
+    final imgModel = imgArray.first;
+    return GestureDetector(
+      child: FindVideoItem(videoURL: imgModel.fileUrl),
+      onTap: () {
+        findCallBack(FindActionType.detail);
+      },
     );
   }
 

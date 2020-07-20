@@ -53,12 +53,12 @@ class TKPermissionUtil {
       } 
       return false;
     } else if (status == PermissionStatus.denied || status == PermissionStatus.restricted) {
-      ActionAlert.showActionAlert(
+      TKActionAlert.showAlert(
         context: context, 
         title: '温馨提示', 
-        contentStr: '请前往设置->麻花宠物中开启$typeName权限', 
-        sureTitle: '去设置',
-        onPress: () {
+        message: '请前往设置->麻花宠物中开启$typeName权限', 
+        rightTitle: '去设置',
+        rightPressed: () {
           openAppSettings();
         }
       );
@@ -70,7 +70,7 @@ class TKPermissionUtil {
   }
 
   /// 请求定位权限
-  static Future<bool> locationPermission(BuildContext context) async {
+  static Future<bool> locationPermission() async {
     var status = await Permission.locationWhenInUse.isGranted;
     if (status) {
       return true;

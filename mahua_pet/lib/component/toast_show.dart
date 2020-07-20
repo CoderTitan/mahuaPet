@@ -29,6 +29,11 @@ class TKToast {
     EasyLoading.showInfo(msg);
   }
 
+  static void showProgress(double value) {
+    setToastStyle();
+    EasyLoading.showProgress(value);
+  }
+
   static void dismiss() {
     EasyLoading.dismiss();
   }

@@ -1,6 +1,12 @@
 import 'dart:ui';
+import 'dart:io';
 
 class SizeFit {
+
+  /// 是否是安卓系统
+  static bool isAndroid = Platform.isAndroid;
+  /// 是否是iOS系统
+  static bool isIOS = Platform.isIOS;
 
   // 像素宽高
   static double physicalWidth;

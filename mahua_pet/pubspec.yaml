@@ -55,6 +55,9 @@ dependencies:
   path_provider: ^1.6.11
   permission_handler: ^5.0.1+1
   image_gallery_saver: ^1.5.0
+  video_player: ^0.10.11+2
+  device_info: ^0.4.2+4
+  location: ^3.0.2
 
 
 dev_dependencies:

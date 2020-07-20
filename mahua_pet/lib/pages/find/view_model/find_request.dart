@@ -233,4 +233,24 @@ class FindRequest {
     
     return result.isSuccess;
   }
+
+
+  /// 获取视频列表
+  static Future<List<FindVideoModel>> requestVideoList(int messageId, int pageIndex) async {
+    LoginInfo loginInfo = SharedStorage.loginInfo;
+    final url = HttpConfig.selectCurrentVideoPage + '?messageId=$messageId&orderColumn=create_time&pageIndex=$pageIndex&pageSize=10&userLoginId=${loginInfo.userId}';
+    final result = await HttpRequest.request(url);
+
+    List<FindVideoModel> videos = [];
+    if (result.isSuccess) {
+      List<dynamic> jsonArr = result.data ?? [];
+      for (var json in jsonArr) {
+        Map<String, dynamic> mapJson = json;
+        videos.add(FindVideoModel.fromJson(mapJson));
+      }
+    } else {
+      TKToast.showError(result.message);
+    }
+    return videos;
+  } 
 }

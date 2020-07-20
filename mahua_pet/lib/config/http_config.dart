@@ -97,6 +97,35 @@ class HttpConfig {
   /// 发现-关注列表: user/relation/selectMyAttention?pageIndex=1&pageSize=15&userId=136899&userLoginId=136899
   static const String selectMyAttention = 'user/relation/selectMyAttention';
 
+  /// 发现--视频列表: user/message/selectCurrentVideoPage?messageId=29801&orderColumn=create_time&pageIndex=1&pageSize=10&userLoginId=136899
+  static const String selectCurrentVideoPage = 'user/message/selectCurrentVideoPage';
+  /// 话题列表: https://gate.ieasydog.com/api/user/messageLabel/getMessageAndReportBylabel?messageLabelId=399&orderType=1&pageIndex=1&pageSize=10&userLoginId=136899
+  /// 话题列表-最热: https://gate.ieasydog.com/api/user/messageLabel/getMessageAndReportBylabel?messageLabelId=399&orderType=2&pageIndex=1&pageSize=10&userLoginId=136899
 
+
+  /**
+   * 我的部分
+   */
+  /// 个人主页--日记: user/message/selectPageList?pageIndex=1&pageSize=10&userId=530&userLoginId=136899
+
+  /// 个人主页-种草: user/trialReport/getTrialReportList?auditStatus=1&pageIndex=1&pageSize=10&userId=530&userLoginId=136899
+
+  /// 个人主页-提问: user/question/v1911/lik/selectMyQuestionList?pageIndex=1&pageSize=10&userId=530
+
+  /// 个人主页-答案: user/question/v1911/lik/selectMyAnswerList?orderType=1&pageIndex=1&pageSize=10&userId=530
+  /// 个人主页-粉丝列表: https://gate.ieasydog.com/api/user/relation/selectAttentionMeById?pageIndex=1&pageSize=10&userId=1204&userLoginId=136899
+  /// 个人主页-关注列表: https://gate.ieasydog.com/api/user/relation/selectMyAttention?pageIndex=1&pageSize=10&userId=1204&userLoginId=136899
+  /// 保存用户信息: https://gate.ieasydog.com/api/user/userinfo/save
+  /// {"sex":"M","nickname":"铲屎官06209417","userinfoId":139260}
+
+  /// 我的收藏: user/collections/getMyCollectionsByCollectionType?collectionsType=0&pageIndex=1&pageSize=10&userId=136899
+  /// 消息个数: https://gate.ieasydog.com/api/user/user/userMessageCount?userId=136899
+  /// 系统消息列表: https://gate.ieasydog.com/api/user/sysMsg/selectPageOfUser?pageIndex=1&pageSize=10&userId=136899
+  /// 系统消息详情: https://gate.ieasydog.com/api/user/messageLabel/getMessageAndReportBylabel?messageLabelId=393&orderType=1&pageIndex=1&pageSize=10&userLoginId=136899
+  /// 系统消息标题: https://gate.ieasydog.com/api/user/messageLabel/getMessageLabelTopInfo?messageLabelId=393
+  /// 消息-点赞列表: https://gate.ieasydog.com/api/user/user/selectAgreeList?pageIndex=1&pageSize=10&userId=136899
+  /// 消息-收藏列表: https://gate.ieasydog.com/api/user/user/v2006/wjt/selectCollectList?pageIndex=1&pageSize=10&userId=136899
+  /// 消息评论列表: https://gate.ieasydog.com/api/user/user/selectCommentList?pageIndex=1&pageSize=10&userId=136899
+  /// 消息@我列表: https://gate.ieasydog.com/api/user/user/selectAtUserList?pageIndex=1&pageSize=10&userId=136899
 }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
+import 'package:device_info/device_info.dart';
 
 import 'package:mahua_pet/providered/provider/provider_config.dart';
 import 'package:mahua_pet/providered/shared/shared_storage.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     SizeFit.initialize();
+    TKDeviceInfo.initialezed();
 
     return TKMainConfig(
         child: MaterialApp(

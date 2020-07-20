@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:mahua_pet/styles/app_style.dart';
 
@@ -8,173 +9,176 @@ import 'package:mahua_pet/styles/app_style.dart';
 typedef VoidCallBack = void Function();
 
 
-
-class ActionAlert {
+class TKActionAlert {
   
   // 中间显示的取消/确认弹窗
-  static showActionAlert({
+  static showAlert({
     @required BuildContext context, 
     String title,
-    String contentStr,
-    bool isSureButton = false,
-    String sureTitle = '确认',
-    VoidCallBack onPress,
+    String message,
+    String leftTitle,
+    String rightTitle,
+    VoidCallBack leftPressed,
+    VoidCallBack rightPressed,
   }) {
-    showDialog(
-      context: context,
-      builder: (ctx) {
-        return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          clipBehavior: Clip.antiAlias,
-          backgroundColor: Colors.white,
-          child: TKActionAlert(
+    if (!SizeFit.isIOS) {
+      showCupertinoDialog(
+        context: context, 
+        builder: (ctx) {
+          return _CupertinoAlert(
+            context: context,
             title: title,
-            content: contentStr,
-            sureTitle: sureTitle,
-            isSureButton: isSureButton,
-            scrollable: false,
-            onPress: onPress,
-          ),
-        );
-      }
-    );
+            message: message,
+            leftTitle: leftTitle,
+            rightTitle: rightTitle,
+            leftPressed: leftPressed,
+            rightPressed: rightPressed,
+          );
+        }
+      );
+    } else {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (ctx) {
+          return _MaterialAlert(
+            context: context,
+            title: title,
+            message: message,
+            leftTitle: leftTitle,
+            rightTitle: rightTitle,
+            leftPressed: leftPressed,
+            rightPressed: rightPressed,
+          );
+        }
+      );
+    }
   }
 }
 
-class TKActionAlert extends StatelessWidget {
+class _CupertinoAlert extends StatelessWidget {
 
   final String title;
-  final String content;
-  final String sureTitle;
-  final bool isSureButton;
-  final bool scrollable;
-  final VoidCallBack onPress;
+  final String message;
+  final String leftTitle;
+  final String rightTitle;
+  final VoidCallBack leftPressed;
+  final VoidCallBack rightPressed;
 
-  TKActionAlert({
-    Key key,
+  _CupertinoAlert({
+    @required BuildContext context,
     this.title,
-    this.content,
-    this.sureTitle = '确认',
-    this.scrollable = false,
-    this.isSureButton = false,
-    this.onPress
+    this.message,
+    this.leftTitle = '取消',
+    this.rightTitle = '确认',
+    this.leftPressed,
+    this.rightPressed
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: SizeFit.screenWidth - 70.px,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: columnChildren(context),
+    return CupertinoAlertDialog(
+      title: Text(title, style: TextStyle(fontSize: 17.px, color: TKColor.color_1a1a1a, fontWeight: FontWeight.bold)),
+      content: Container(
+        padding: EdgeInsets.only(top: 8.px),
+        child: Text(message, style: TextStyle(fontSize: 15.px, color: TKColor.color_333333)),
       ),
+      actions: renderActions(context),
     );
   }
 
-  List<Widget> columnChildren(BuildContext context) {
-    List<Widget> columnChildren;
-    if (scrollable) {
-      columnChildren = <Widget>[
-        if (title != null || content != null)
-          Flexible(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  if (title != null)
-                    renderTitle(),
-                  if (content != null)
-                    renderContent(),
-                ],
-              ),
-            ),
-          ),
-        renderActions(context),
-      ];
-    } else {
-      columnChildren = <Widget>[
-        if (title != null)
-          renderTitle(),
-        if (content != null)
-          Flexible(child: renderContent()),
-        renderActions(context),
-      ];
-    }
+  List<Widget> renderActions(BuildContext context) {
+    List<Widget> itemList = [];
 
-    return columnChildren;
-  }
+    Widget leftItem = CupertinoDialogAction(
+      textStyle: TextStyle(fontSize: 16.px, color: TKColor.color_999999),
+      child: Text(leftTitle ?? '取消'),
+      onPressed: () {
+        Navigator.of(context).pop();
+        if (leftPressed != null) {
+          leftPressed();
+        }
+      },
+    );
+    itemList.add(leftItem);
 
-  Widget renderTitle() {
-    if (title != null) {
-      return Container(
-        padding: EdgeInsets.fromLTRB(24.0, 24.0, 24.0, content == null ? 20.0 : 0.0),
-        child: Text(
-          title, 
-          textAlign: TextAlign.center, 
-          style: TextStyle(fontSize: 17.px, color: TKColor.color_333333, fontWeight: FontWeight.w500)
-        ),
-      );
-    }
-    return null;
-  }
-
-  Widget renderContent() {
-    if (content != null) {
-      return Padding(
-        padding: EdgeInsets.fromLTRB(20.0, 12.0, 20.0, 16.0),
-        child: Text(content, style: TextStyle(fontSize: 17.px, color: TKColor.color_333333))
-      );
-    }
-    return null;
-  }
-
-  Widget renderActions(BuildContext context) {
-    List<Widget> actions = [];
-    if (!isSureButton) {
-      final cancleButton = Expanded(
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: TKColor.color_e8e8e8, width: 0.5),
-            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(0))
-          ),
-          child: RaisedButton(
-            elevation: 0,
-            color: Colors.transparent,
-            child: Text('取消', style: TextStyle(fontSize: 16.px, color: TKColor.color_999999)),
-            onPressed: () {
-              Navigator.of(context).pop();
-            }
-          ),
-        ),
-      );
-      actions.add(cancleButton);
-    }
-    final sureButton = Expanded(
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: TKColor.color_e8e8e8, width: 0.5),
-          borderRadius: BorderRadius.only(bottomRight: Radius.circular(0))
-        ),
-        child: RaisedButton(
-          elevation: 0,
-          color: Colors.transparent,
-          child: Text(sureTitle, style: TextStyle(fontSize: 16.px, color: TKColor.main_color)),
-          onPressed: () {
-            onPress();
+    if (rightTitle != null) {
+      Widget item = CupertinoDialogAction(
+        textStyle: TextStyle(fontSize: 16.px, color: TKColor.main_color),
+        child: Text(rightTitle),
+        onPressed: () {
+          Navigator.of(context).pop();
+          if (leftPressed != null) {
+            rightPressed();
           }
-        ),
-      ),
-    );
-    actions.add(sureButton);
+        },
+      );
+      itemList.add(item);
+    }
 
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: actions,
-      ),
+    return itemList;
+  }
+}
+
+class _MaterialAlert extends StatelessWidget {
+
+  final String title;
+  final String message;
+  final String leftTitle;
+  final String rightTitle;
+  final VoidCallBack leftPressed;
+  final VoidCallBack rightPressed;
+
+  _MaterialAlert({
+    @required BuildContext context,
+    this.title,
+    this.message,
+    this.leftTitle = '取消',
+    this.rightTitle = '确认',
+    this.leftPressed,
+    this.rightPressed
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(title),
+      titleTextStyle: TextStyle(fontSize: 17.px, color: TKColor.color_1a1a1a, fontWeight: FontWeight.bold),
+      // titlePadding: EdgeInsets.only(top: 8.px),
+      content: Text(message),
+      contentTextStyle: TextStyle(fontSize: 15.px, color: TKColor.color_333333),
+      // contentPadding: EdgeInsets.only(top: 8.px),
+      actions: renderActions(context),
     );
+  }
+
+  List<Widget> renderActions(BuildContext context) {
+    List<Widget> itemList = [];
+
+    Widget leftItem = FlatButton(
+      child: Text(leftTitle ?? '取消', style: TextStyle(fontSize: 16.px, color: TKColor.color_999999)),
+      onPressed: () {
+        Navigator.of(context).pop();
+        if (leftPressed != null) {
+          leftPressed();
+        }
+      },
+    );
+    itemList.add(leftItem);
+
+    if (rightTitle != null) {
+      Widget item = FlatButton(
+        child: Text(rightTitle, style: TextStyle(fontSize: 16.px, color: TKColor.main_color)),
+        onPressed: () {
+          Navigator.of(context).pop();
+          if (leftPressed != null) {
+            rightPressed();
+          }
+        },
+      );
+      itemList.add(item);
+    }
+
+    return itemList;
   }
 }

@@ -56,8 +56,11 @@ class TKMediaUtil {
     final appDocDir = await getTemporaryDirectory();
     String savePath = appDocDir.path + "/temp.mp4";
 
+
     await Dio().download(imageURL, savePath, onReceiveProgress: (count, total) {
-      print((count / total * 100).toStringAsFixed(0) + "%");
+      final progress = count / total;
+      print("视频保存进度 = $progress");
+      TKToast.showProgress(progress);
     });
     final result = await ImageGallerySaver.saveFile(savePath);
 

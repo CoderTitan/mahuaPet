@@ -20,7 +20,7 @@ class TKNetworkImage extends StatelessWidget {
     Key key,
     @required String imageUrl,
     this.imageBuilder,
-    this.placeholder,
+    this.placeholder = '',
     this.width,
     this.height,
     this.fit = BoxFit.contain,
@@ -52,11 +52,11 @@ class TKNetworkImage extends StatelessWidget {
         }
         return Icon(Icons.error, size: width > height ? height : width, color: Colors.black38);
       },
-      progressIndicatorBuilder: (context, url, downloadProgress) {
-        return showProgress ? Center(
-          child: CircularProgressIndicator(value: downloadProgress.progress),
-        ) : null;
-      },
+      // progressIndicatorBuilder: (context, url, downloadProgress) {
+      //   return showProgress ? Center(
+      //     child: CircularProgressIndicator(value: downloadProgress.progress),
+      //   ) : null;
+      // },
     );
   }
 

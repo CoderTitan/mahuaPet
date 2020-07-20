@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mahua_pet/pages/home/contents/pet_add.dart';
 import 'package:mahua_pet/pages/home/contents/pet_list.dart';
 import 'package:mahua_pet/pages/home/request/home_request.dart';
-import 'package:mahua_pet/pages/home/view_model/home_view_model.dart';
 import 'package:provider/provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/styles/app_style.dart';
@@ -16,7 +14,6 @@ import 'package:mahua_pet/pages/home/contents/calendar_page.dart';
 import 'package:mahua_pet/pages/home/models/pet_model.dart';
 import './view_model/pet_view_model.dart';
 import 'views/home_swiper.dart';
-import 'views/home_list.dart';
 
 
 class HomePage extends StatelessWidget {

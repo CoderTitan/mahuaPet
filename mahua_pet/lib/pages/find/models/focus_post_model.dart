@@ -46,7 +46,7 @@ class FocusPostModel {
     String createTime;
     String ctime;
     List<FileList> fileList;
-    UserInfo userInfo;
+    FindUserInfo userInfo;
     MessageLabel messageLabel;
     List<dynamic> atusers;
     List<CommentList> commentList;
@@ -67,7 +67,7 @@ class FocusPostModel {
         createTime: json["createTime"],
         ctime: json["ctime"],
         fileList: List<FileList>.from(json["fileList"].map((x) => FileList.fromJson(x))),
-        userInfo: UserInfo.fromJson(json["userInfo"]),
+        userInfo: FindUserInfo.fromJson(json["userInfo"]),
         messageLabel: MessageLabel.fromJson(json["messageLabel"] ?? {}),
         atusers: List<dynamic>.from(json["atusers"].map((x) => x)),
         commentList: List<CommentList>.from(json["commentList"].map((x) => CommentList.fromJson(x))),
@@ -184,8 +184,8 @@ class MessageLabel {
     };
 }
 
-class UserInfo {
-    UserInfo({
+class FindUserInfo {
+    FindUserInfo({
         this.userId,
         this.headImg,
         this.nickname,
@@ -197,7 +197,7 @@ class UserInfo {
     String nickname;
     String city;
 
-    factory UserInfo.fromJson(Map<String, dynamic> json) => UserInfo(
+    factory FindUserInfo.fromJson(Map<String, dynamic> json) => FindUserInfo(
         userId: json["userId"],
         headImg: json["headImg"],
         nickname: json["nickname"],

@@ -2,14 +2,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:mahua_pet/pages/find/contents/find_detail.dart';
+import 'package:mahua_pet/pages/find/contents/find_user_page.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
 import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/utils/utils_index.dart';
 import 'package:mahua_pet/styles/app_style.dart';
+
 import '../models/model_index.dart';
 import '../views/find_item.dart';
 import '../view_model/find_request.dart';
+import 'find_detail.dart';
+import 'find_video.dart';
 
 
 
@@ -166,6 +170,7 @@ class _FindFocusPageState extends State<FindFocusPage> with AutomaticKeepAliveCl
   void handleItemAction(FindActionType type, FocusPostModel model) {
     switch (type) {
       case FindActionType.header:
+        TKRoute.push(context, FindUserPage(userId: model.userId));
         print(FindActionType.header);
         break;
       case FindActionType.attation:
@@ -184,10 +189,22 @@ class _FindFocusPageState extends State<FindFocusPage> with AutomaticKeepAliveCl
         print(FindActionType.share);
         break;
       case FindActionType.detail:
-        TKRoute.push(context, FindDetailPage(messageId: model.messageId, actionCallBack: (model) => handleDataList(model)));
+        jumpFindDetail(model);
         break;
       default:
     }
+  }
+
+  void jumpFindDetail(FocusPostModel model) {
+    final fileList = model.fileList;
+    if (fileList != null && fileList.first != null) {
+      final fileModel = fileList.first;
+      if (fileModel.fileType == '1') {
+        TKRoute.push(context, FindVideoList(model.messageId));
+        return;
+      }
+    }
+    TKRoute.push(context, FindDetailPage(messageId: model.messageId, actionCallBack: (model) => handleDataList(model)));
   }
 
   void handleDataList(DetailModel model) {

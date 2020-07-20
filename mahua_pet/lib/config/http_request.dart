@@ -85,6 +85,8 @@ class HttpRequest {
   static Map<String, dynamic> getHeader() {
     LoginInfo loginInfo = SharedStorage.loginInfo;
     ConfigInfo configInfo = SharedStorage.configInfo;
+    DeviceInfoModel deviceInfo = SharedStorage.deviceInfo;
+
     Map<String, dynamic> headers = {
       'Accept': '*/*',
       'H5Auth': '0',

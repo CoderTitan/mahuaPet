@@ -7,6 +7,7 @@ import '../view_model/find_request.dart';
 import '../models/model_index.dart';
 import '../views/comment_item.dart';
 import '../views/detail_item.dart';
+import '../views/find_bottom_tool.dart';
 
 
 
@@ -106,79 +107,24 @@ class _FindDetailPageState extends State<FindDetailPage> {
 
   Widget renderBottomItem() {
     return Container(
-      height: 57.px + SizeFit.safeHeight,
-      padding: EdgeInsets.only(bottom: SizeFit.safeHeight),
-      decoration: BoxDecoration(
-        color: TKColor.white,
-        border: Border(top: BorderSide(color: TKColor.color_cccccc, width: 0.5))
+      color: Colors.white,
+      padding: EdgeInsets.only(bottom: SizeFit.safeHeight, left: 16.px, right: 30.px),
+      child: FindBottomTool(
+        focusNode: _focusNode,
+        controller: _editController,
+        submitAction: (text) => {},
+        agreeState: _model.agreeStatus == '1',
+        collectionState: _model.collectionsStatus == '1',
+        agreeCount: '${_model.cntAgree}',
+        collectionCount: _model.collectionNum,
+        actionCallback: (type) {
+          if (type == FindActionType.agree) {
+            requestAgreeState();
+          } else if (type == FindActionType.collection) {
+            requestCollectState();
+          }
+        },
       ),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16.px),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            GestureDetector(
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 12.px, vertical: 7.px),
-                decoration: BoxDecoration(
-                  color: TKColor.color_f7f7f7,
-                  borderRadius: BorderRadius.circular(20.px)
-                ),
-                child: Text('快来评论小可爱吧...', style: TextStyle(fontSize: 15.px, color: TKColor.color_999999)),
-              ),
-              onTap: () {
-                TKActionComment.showActionSheet(
-                  context,
-                  focusNode: _focusNode,
-                  textController: _editController,
-                  placehold: '快来评论小可爱吧...',
-                  submitAction: (text) {
-                    postComment(text);
-                  }
-                );
-              },
-            ),
-            Row(
-              children: <Widget>[
-                bottomItem(
-                  _model.agreeStatus == '1' ? Icons.favorite : Icons.favorite_border, 
-                  _model.agreeStatus == '1' ? TKColor.main_color : TKColor.color_666666, 
-                  '${_model.cntAgree}', 0
-                ),
-                SizedBox(width: 30.px),
-                bottomItem(
-                  _model.collectionsStatus == '1' ? Icons.star : Icons.star_border, 
-                  _model.collectionsStatus == '1' ? TKColor.main_color : TKColor.color_666666, 
-                  _model.collectionNum, 1
-                )
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget bottomItem(IconData icon, Color iconColor, String number, int index) {
-    return GestureDetector(
-      child: Container(
-        // width: 70,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(icon, size: 20.px, color: iconColor,),
-            Text('$number', style: TextStyle(fontSize: 13.px, color: TKColor.color_666666))
-          ],
-        ),
-      ),
-      onTap: () {
-        if (index == 0) {
-          requestAgreeState();
-        } else if (index == 1) {
-          requestCollectState();
-        }
-      },
     );
   }
 

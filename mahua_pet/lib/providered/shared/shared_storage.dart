@@ -11,6 +11,7 @@ class SharedStorage {
   static ConfigInfo configInfo = ConfigInfo();
   static LoginInfo loginInfo = LoginInfo();
   static UserData userData = UserData();
+  static DeviceInfoModel deviceInfo = DeviceInfoModel();
 
 
   //初始化全局信息，会在APP启动时执行
@@ -22,6 +23,7 @@ class SharedStorage {
     var _configInfo = _prefs.getString('configInfo');
     var _loginInfo = _prefs.getString('loginInfo');
     var _userData = _prefs.getString('userData');
+    var _deviceInfo = _prefs.getString('deviceInfo');
 
     if (_configInfo != null && _configInfo != 'null') {
       try {
@@ -47,22 +49,33 @@ class SharedStorage {
         print('SharedStorage - userData, error = $error');
       }
     }
+    if (_deviceInfo != null && _deviceInfo != 'null') {
+      try {
+        deviceInfo = DeviceInfoModel.fromJson(jsonDecode(_deviceInfo));
+        print('deviceInfo = ${deviceInfo.toJson()}');
+      } catch (error) {
+        print('SharedStorage - deviceInfo, error = $error');
+      }
+    }
   }
 
   // 持久化ConfigInfo信息
   static saveConfigInfo() {
     _prefs.setString("configInfo", jsonEncode(configInfo?.toJson()));
-  }
-      
+  }  
 
   // 持久化LoginInfo信息
   static saveLoginInfo() {
     _prefs.setString("loginInfo", jsonEncode(loginInfo?.toJson()));
   }
-      
 
   // 持久化UserData信息
   static saveUserData() {
     _prefs.setString("userData", jsonEncode(userData?.toJson()));
+  }
+
+  // 持久化UserData信息
+  static saveDeviceInfo() {
+    _prefs.setString("deviceInfo", jsonEncode(deviceInfo?.toJson()));
   }
 }

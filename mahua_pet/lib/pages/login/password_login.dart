@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:mahua_pet/pages/home/request/home_request.dart';
 import 'package:mahua_pet/providered/model/model_index.dart';
 import 'package:provider/provider.dart';
 
@@ -169,10 +170,12 @@ class _PasswordContentState extends State<PasswordContent> {
       .then((value) {
         if (value.isSuccess) {
           Map<String, dynamic> result = value.data;
+
           UserProvider userModel = Provider.of<UserProvider>(context, listen: false);
           userModel.loginInfo = LoginInfo.fromJson(result);
           UserProvider.config('APP首页', userModel.loginInfo.token, userModel.loginInfo.userId);
           UserProvider.user(userModel.loginInfo.userId);
+
           TKRoute.popToRoutePage(context);
           TKToast.showSuccess('登录成功');
         } else {

@@ -18,6 +18,8 @@ class UserInfo {
         this.hxPassword,
         this.headImg,
         this.nickname,
+        this.sex,
+        this.intro,
         this.coin,
         this.accountBalance,
         this.province,
@@ -47,6 +49,8 @@ class UserInfo {
     String hxPassword;
     String headImg;
     String nickname;
+    String sex;
+    String intro;
     int coin;
     double accountBalance;
     String province;
@@ -76,12 +80,14 @@ class UserInfo {
         accid: json["accid"],
         accToken: json["accToken"],
         hxPassword: json["hxPassword"],
-        headImg: json["headImg"],
-        nickname: json["nickname"],
+        headImg: json["headImg"] ?? '',
+        nickname: json["nickname"] ?? '',
+        sex: json["sex"] ?? '',
+        intro: json["intro"] ?? '',
         coin: json["coin"],
         accountBalance: json["accountBalance"],
         province: json["province"],
-        city: json["city"],
+        city: json["city"] ?? '',
         deviceNo: json["deviceNo"],
         inviteCode: json["inviteCode"],
         starRankId: json["starRankId"],
@@ -99,12 +105,6 @@ class UserInfo {
         isFlag: json["isFlag"],
         delFlag: json["delFlag"],
       );
-    }
-
-    factory UserInfo.cleanShared() {
-      // 清除缓存的用户信息数据
-
-      return UserInfo();
     }
 
     Map<String, dynamic> toJson() => {

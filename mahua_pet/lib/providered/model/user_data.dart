@@ -109,8 +109,8 @@ class TargetRule {
     int ruleId;
     String level;
     int growthValue;
-    DateTime createTime;
-    DateTime delTime;
+    String createTime;
+    String delTime;
     String isFlag;
     String delFlag;
 
@@ -118,8 +118,8 @@ class TargetRule {
         ruleId: json["ruleId"],
         level: json["level"],
         growthValue: json["growthValue"],
-        createTime: DateTime.parse(json["createTime"]),
-        delTime: DateTime.parse(json["delTime"]),
+        createTime: json["createTime"],
+        delTime: json["delTime"],
         isFlag: json["isFlag"],
         delFlag: json["delFlag"],
     );
@@ -128,8 +128,8 @@ class TargetRule {
         "ruleId": ruleId,
         "level": level,
         "growthValue": growthValue,
-        "createTime": createTime?.toIso8601String(),
-        "delTime": delTime?.toIso8601String(),
+        "createTime": createTime,
+        "delTime": delTime,
         "isFlag": isFlag,
         "delFlag": delFlag,
     };
@@ -161,8 +161,8 @@ class User {
     String registerChannel;
     String registerType;
     String platformType;
-    DateTime createTime;
-    DateTime modifyTime;
+    String createTime;
+    String modifyTime;
     String isFlag;
     String delFlag;
 
@@ -176,8 +176,8 @@ class User {
         registerChannel: json["registerChannel"],
         registerType: json["registerType"],
         platformType: json["platformType"],
-        createTime: DateTime.parse(json["createTime"]),
-        modifyTime: DateTime.parse(json["modifyTime"]),
+        createTime: json["createTime"],
+        modifyTime: json["modifyTime"],
         isFlag: json["isFlag"],
         delFlag: json["delFlag"],
     );
@@ -192,8 +192,8 @@ class User {
         "registerChannel": registerChannel,
         "registerType": registerType,
         "platformType": platformType,
-        "createTime": createTime?.toIso8601String(),
-        "modifyTime": modifyTime?.toIso8601String(),
+        "createTime": createTime,
+        "modifyTime": modifyTime,
         "isFlag": isFlag,
         "delFlag": delFlag,
     };

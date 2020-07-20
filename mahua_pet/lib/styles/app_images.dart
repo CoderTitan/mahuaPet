@@ -5,6 +5,9 @@ class TKImages {
 
   /// 占位头像
   static const user_header = 'resource/images/user_header.png';
+  /// 空数据占位图
+  static const empty_data = 'resource/images/empty_data.png';
+  
 
   // tabbar
   static const tabbar_home_select = 'resource/images/tabbar_home_select.png';
