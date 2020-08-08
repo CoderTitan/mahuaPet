@@ -18,7 +18,7 @@ class HomeRequest {
     LoginInfo loginInfo = SharedStorage.loginInfo;
     final url = '${HttpConfig.selectUserId}?userId=${loginInfo.userId}';
     
-    HttpRequest.request(url).then((value) {
+    TKRequest.requestData(url).then((value) {
       List<PetModel> pets = [];
       if (value.isSuccess) {
         if (value.data != null) {
@@ -39,7 +39,7 @@ class HomeRequest {
   // 获取轮播图
   static void requestHomeSwiper(BuildContext context) {
     final url = '${HttpConfig.selectPageList}?locationName=2&locationPage=1';
-    HttpRequest.request(url).then((value) {
+    TKRequest.requestData(url).then((value) {
       List<SwiperModel> swipers = [];
       if (value.isSuccess) {
         Map<String, dynamic> maps = value.data ?? {};

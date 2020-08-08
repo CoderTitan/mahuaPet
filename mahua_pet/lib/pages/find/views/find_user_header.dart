@@ -42,7 +42,7 @@ class FindUserHeaer extends StatelessWidget {
                 TKNetworkImage(
                   imageUrl: _userInfo.headImg ?? '',
                   width: 70.px, height: 70.px,
-                  borderRadius: 40.px,
+                  boxRadius: 40.px,
                   borderColor: TKColor.white,
                   borderWidth: 2.px,
                   placeholder: TKImages.user_header,

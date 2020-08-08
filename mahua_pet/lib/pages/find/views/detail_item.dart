@@ -77,7 +77,7 @@ class FindDetailItem extends StatelessWidget {
               child: TKNetworkImage(
                 imageUrl: model.headImg ?? '',
                 width: 45.px, height: 45.px,
-                borderRadius: 30.px,
+                boxRadius: 30.px,
                 fit: BoxFit.cover,
                 placeholder: TKImages.user_header,
               ),

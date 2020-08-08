@@ -25,4 +25,8 @@ class HomeViewModel extends ChangeNotifier {
   List<SwiperModel> get swiperArray {
     return _swiperArray;
   }
+
+  HomeViewModel() {
+    counter = counter + 1;
+  }
 }

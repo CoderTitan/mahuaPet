@@ -16,7 +16,7 @@ class FocusButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10.px, vertical: 3.px),
+        padding: EdgeInsets.symmetric(horizontal: 10.px),
         decoration: BoxDecoration(
           color: isSelect ? TKColor.color_ffea9e_33 : TKColor.main_color,
           borderRadius: BorderRadius.circular(20.px),

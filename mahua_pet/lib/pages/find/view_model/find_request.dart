@@ -5,44 +5,39 @@ import 'package:mahua_pet/config/config_index.dart';
 import 'package:mahua_pet/providered/provider_index.dart';
 
 import '../models/model_index.dart';
+import 'find_url.dart';
 
 class FindRequest {
   
   /// 发现-关注-推荐关注
-  static Future<List<FocusModel>> requestRecomFocus() async {
+  static Future requestRecomFocus() async {
     LoginInfo loginInfo = SharedStorage.loginInfo;
-    final url = HttpConfig.selectNotRelation + '?pageIndex=1&pageSize=3&userLoginId=${loginInfo.userId}';
+    final url = FindURL.selectNotRelation + '?pageIndex=1&pageSize=3&userLoginId=${loginInfo.userId}';
 
-    final result = await HttpRequest.request(url);
+    ResponseData response = await TKRequest.requestData(url);
     List<FocusModel> focus = [];
-    if (result.isSuccess) {
-      if (result.data != null && result.data['records'] != null) {
-        List<dynamic> jsonArr = result.data['records'] ?? [];
-        for (var json in jsonArr) {
-          Map<String, dynamic> mapJson = json;
-          focus.add(FocusModel.fromJson(mapJson));
-        }
+    if (response.isSuccess) {
+      if (response.data != null && response.data['records'] != null) {
+        final records = response.data['records'] ?? [];
+        focus = records.map<FocusModel>((item) => FocusModel.fromJson(item)).toList();
       }
     } else {
-      TKToast.showError(result.message);
+      TKToast.showError(response.message);
     }
     return focus;
   }
 
   /// 发现-关注-动态列表
-  static Future<List<FocusPostModel>> requestFocusPostList(int pageIndex) async {
+  static Future requestFocusPostList(int pageIndex) async {
     LoginInfo loginInfo = SharedStorage.loginInfo;
-    final url = HttpConfig.user_selectNotRelation + '?listType=2&pageIndex=$pageIndex&pageSize=10&total=388&userLoginId=${loginInfo.userId}';
-    final result = await HttpRequest.request(url);
+    final url = FindURL.user_selectNotRelation + '?listType=2&pageIndex=$pageIndex&pageSize=10&total=388&userLoginId=${loginInfo.userId}';
+    ResponseData result = await TKRequest.requestData(url);
 
     List<FocusPostModel> focus = [];
     if (result.isSuccess) {
       if (result.data != null && result.data['records'] != null) {
         List<dynamic> jsonArr = result.data['records'] ?? [];
-        for (var json in jsonArr) {
-          Map<String, dynamic> mapJson = json;
-          focus.add(FocusPostModel.fromJson(mapJson));
-        }
+        focus = jsonArr.map<FocusPostModel>((item) => FocusPostModel.fromJson(item)).toList();
       }
     } else {
       TKToast.showError(result.message);
@@ -51,18 +46,15 @@ class FindRequest {
   }
 
   /// 发现, 推荐---轮播图
-  static Future<List<FindTopicModel>> requestTopicList() async {
-    final url = HttpConfig.selectMessageLabelList + '?pageIndex=1&pageSize=10';
-    final result = await HttpRequest.request(url);
+  static Future requestTopicList() async {
+    final url = FindURL.selectMessageLabelList + '?pageIndex=1&pageSize=10';
+    ResponseData result = await TKRequest.requestData(url);
 
     List<FindTopicModel> focus = [];
     if (result.isSuccess) {
       if (result.data != null && result.data['records'] != null) {
         List<dynamic> jsonArr = result.data['records'] ?? [];
-        for (var json in jsonArr) {
-          Map<String, dynamic> mapJson = json;
-          focus.add(FindTopicModel.fromJson(mapJson));
-        }
+        focus = jsonArr.map<FindTopicModel>((item) => FindTopicModel.fromJson(item)).toList();
       }
     } else {
       TKToast.showError(result.message);
@@ -71,19 +63,16 @@ class FindRequest {
   }
 
   /// 发现-推荐: 瀑布流列表
-  static Future<List<RecommendModel>> requestRecommendList(int pageIndex) async {
+  static Future requestRecommendList(int pageIndex) async {
     LoginInfo loginInfo = SharedStorage.loginInfo;
-    final url = HttpConfig.selectMessageRecommendList + '?messageTotal=8022&pageIndex=$pageIndex&reportTotal=483&userLoginId=${loginInfo.userId}';
-    final result = await HttpRequest.request(url);
+    final url = FindURL.selectMessageRecommendList + '?messageTotal=8871&pageIndex=$pageIndex&reportTotal=26&userLoginId=${loginInfo.userId}';
+    ResponseData result = await TKRequest.requestData(url);
     
     List<RecommendModel> focus = [];
     if (result.isSuccess) {
       if (result.data != null && result.data['messageList'] != null) {
         List<dynamic> jsonArr = result.data['messageList'] ?? [];
-        for (var json in jsonArr) {
-          Map<String, dynamic> mapJson = json;
-          focus.add(RecommendModel.fromJson(mapJson));
-        }
+        focus = jsonArr.map<RecommendModel>((item) => RecommendModel.fromJson(item)).toList();
       }
     } else {
       TKToast.showError(result.message);
@@ -94,8 +83,8 @@ class FindRequest {
   /// 发现- 动态详情
   static Future<DetailModel> requestFindDetail(int messageId) async {
     LoginInfo loginInfo = SharedStorage.loginInfo;
-    final url = HttpConfig.find_detail + '?messageId=$messageId&userId=${loginInfo.userId}';
-    final result = await HttpRequest.request(url);
+    final url = FindURL.find_detail + '?messageId=$messageId&userId=${loginInfo.userId}';
+    final result = await TKRequest.requestData(url);
     
     DetailModel model = DetailModel();
     if (result.isSuccess) {
@@ -112,8 +101,8 @@ class FindRequest {
   /// 发现-动态详情-评论列表
   static Future<List<CommentModel>> requestCommentList(int messageId, int pageIndex) async {
     LoginInfo loginInfo = SharedStorage.loginInfo;
-    final url = HttpConfig.selectCommentPage + '?messageId=$messageId&pageIndex=$pageIndex&pageSize=10&replySize=5&userId=${loginInfo.userId}&userLoginId=${loginInfo.userId}';
-    final result = await HttpRequest.request(url);
+    final url = FindURL.selectCommentPage + '?messageId=$messageId&pageIndex=$pageIndex&pageSize=10&replySize=5&userId=${loginInfo.userId}&userLoginId=${loginInfo.userId}';
+    final result = await TKRequest.requestData(url);
     
     List<CommentModel> comments = [];
     if (result.isSuccess) {
@@ -135,8 +124,8 @@ class FindRequest {
     LoginInfo loginInfo = SharedStorage.loginInfo;
     int isFlag = attation ? 0 : 1;
 
-    final url = HttpConfig.updateAttation + '?isFlag=$isFlag&userByid=$userByid&userId=${loginInfo.userId}';
-    final result = await HttpRequest.request(url);
+    final url = FindURL.updateAttation + '?isFlag=$isFlag&userByid=$userByid&userId=${loginInfo.userId}';
+    ResponseData result = await TKRequest.requestData(url);
 
     if (!result.isSuccess) {
       TKToast.showToast(result.message);
@@ -150,8 +139,8 @@ class FindRequest {
     LoginInfo loginInfo = SharedStorage.loginInfo;
     int agreeStatus = agree ? 0 : 1;
     
-    final url = HttpConfig.updateAgree + '?agreeStatus=$agreeStatus&messageId=$messageId&commentId=$commentId&userId=${loginInfo.userId}';
-    final result = await HttpRequest.request(url);
+    final url = FindURL.updateAgree + '?agreeStatus=$agreeStatus&messageId=$messageId&commentId=$commentId&userId=${loginInfo.userId}';
+    final result = await TKRequest.requestData(url);
 
     if (!result.isSuccess) {
       TKToast.showError(result.message);
@@ -165,14 +154,14 @@ class FindRequest {
     LoginInfo loginInfo = SharedStorage.loginInfo;
     int state = collection ? 0 : 1;
     
-    final url = HttpConfig.user_collection;
+    final url = FindURL.user_collection;
     Map<String, dynamic> params = {
       'collectionsStatus': state,
       'messageId': messageId,
       'token': loginInfo.token,
       'userId': loginInfo.userId
     };
-    final result = await HttpRequest.request(url, method: 'post', params: params);
+    final result = await TKRequest.requestData(url, method: 'post', params: params);
 
     if (!result.isSuccess) {
       TKToast.showError(result.message);
@@ -185,14 +174,14 @@ class FindRequest {
   static Future<bool> requestComment(String commentInfo, int messageId) async {
     LoginInfo loginInfo = SharedStorage.loginInfo;
 
-    final url = HttpConfig.comment_save;
+    final url = FindURL.comment_save;
     Map<String, dynamic> params = {
       'commentInfo': commentInfo,
       'messageId': messageId,
       'token': loginInfo.token,
       'userId': loginInfo.userId
     };
-    final result = await HttpRequest.request(url, method: 'post', params: params);
+    final result = await TKRequest.requestData(url, method: 'post', params: params);
 
     if (!result.isSuccess) {
       TKToast.showError(result.message);
@@ -205,7 +194,7 @@ class FindRequest {
   static Future<bool> replyComment(String commentInfo, int commentId, int beReplyedUserId) async {
     LoginInfo loginInfo = SharedStorage.loginInfo;
 
-    final url = HttpConfig.comment_reply_save;
+    final url = FindURL.comment_reply_save;
     Map<String, dynamic> params = {
       'beReplyedUserId': beReplyedUserId,
       'commentInfo': commentInfo,
@@ -213,7 +202,7 @@ class FindRequest {
       'token': loginInfo.token,
       'replyUserId': loginInfo.userId
     };
-    final result = await HttpRequest.request(url, method: 'post', params: params);
+    final result = await TKRequest.requestData(url, method: 'post', params: params);
 
     if (!result.isSuccess) {
       TKToast.showError(result.message);
@@ -226,8 +215,8 @@ class FindRequest {
   static Future<bool> deleteComment(int commentId) async {
     LoginInfo loginInfo = SharedStorage.loginInfo;
 
-    final url = HttpConfig.comment_delete + '?commentId=35327&userLoginId=${loginInfo.userId}';
-    final result = await HttpRequest.request(url);
+    final url = FindURL.comment_delete + '?commentId=35327&userLoginId=${loginInfo.userId}';
+    final result = await TKRequest.requestData(url);
 
     TKToast.showToast(result.message);
     
@@ -238,8 +227,8 @@ class FindRequest {
   /// 获取视频列表
   static Future<List<FindVideoModel>> requestVideoList(int messageId, int pageIndex) async {
     LoginInfo loginInfo = SharedStorage.loginInfo;
-    final url = HttpConfig.selectCurrentVideoPage + '?messageId=$messageId&orderColumn=create_time&pageIndex=$pageIndex&pageSize=10&userLoginId=${loginInfo.userId}';
-    final result = await HttpRequest.request(url);
+    final url = FindURL.selectCurrentVideoPage + '?messageId=$messageId&orderColumn=create_time&pageIndex=$pageIndex&pageSize=10&userLoginId=${loginInfo.userId}';
+    final result = await TKRequest.requestData(url);
 
     List<FindVideoModel> videos = [];
     if (result.isSuccess) {

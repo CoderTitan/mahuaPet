@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:mahua_pet/providered/provider_index.dart';
+import 'package:mahua_pet/config/config_index.dart';
 import 'package:mahua_pet/pages/home/models/pet_model.dart';
 
 
@@ -39,5 +41,27 @@ class PetViewModel extends ChangeNotifier {
   set currentModel(PetModel petModel) {
     _currentModel = petModel;
     notifyListeners();
+  }
+
+  // 获取宠物列表
+  void requestPetList() {
+    LoginInfo loginInfo = SharedStorage.loginInfo;
+    final url = '${HttpConfig.selectUserId}?userId=${loginInfo.userId}';
+    
+    TKRequest.requestData(url).then((value) {
+      List<PetModel> pets = [];
+      if (value.isSuccess) {
+        if (value.data != null) {
+          List<dynamic> jsonArr = value.data ?? [];
+          for (var json in jsonArr) {
+            Map<String, dynamic> mapJson = json;
+            pets.add(PetModel.fromJson(mapJson));
+          }
+        }
+        petList = pets;
+      }
+    }).catchError((error) {
+      print(error);
+    });
   }
 }

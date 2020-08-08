@@ -7,10 +7,13 @@ import 'package:mahua_pet/providered/provider_index.dart';
 
 import '../views/find_user_header.dart';
 
+typedef FindUserPageCallBack = void Function(String focusState);
+
 class FindUserPage extends StatefulWidget {
 
   final int userId;
-  FindUserPage({this.userId});
+  final FindUserPageCallBack actionCallBack;
+  FindUserPage({this.userId, this.actionCallBack});
 
   @override
   _FindUserPageState createState() => _FindUserPageState();

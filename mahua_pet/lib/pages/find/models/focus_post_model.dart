@@ -3,6 +3,7 @@
 //     final focusPostModel = focusPostModelFromJson(jsonString);
 
 import 'dart:convert';
+import 'comment_model.dart';
 
 FocusPostModel focusPostModelFromJson(String str) => FocusPostModel.fromJson(json.decode(str));
 
@@ -49,7 +50,7 @@ class FocusPostModel {
     FindUserInfo userInfo;
     MessageLabel messageLabel;
     List<dynamic> atusers;
-    List<CommentList> commentList;
+    List<CommentModel> commentList;
 
     factory FocusPostModel.fromJson(Map<String, dynamic> json) => FocusPostModel(
         messageId: json["messageId"],
@@ -70,7 +71,7 @@ class FocusPostModel {
         userInfo: FindUserInfo.fromJson(json["userInfo"]),
         messageLabel: MessageLabel.fromJson(json["messageLabel"] ?? {}),
         atusers: List<dynamic>.from(json["atusers"].map((x) => x)),
-        commentList: List<CommentList>.from(json["commentList"].map((x) => CommentList.fromJson(x))),
+        commentList: List<CommentModel>.from(json["commentList"].map((x) => CommentModel.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -96,41 +97,6 @@ class FocusPostModel {
     };
 }
 
-class CommentList {
-    CommentList({
-        this.commentId,
-        this.commentInfo,
-        this.userId,
-        this.messageId,
-        this.nickname,
-        this.atUsers,
-    });
-
-    int commentId;
-    String commentInfo;
-    int userId;
-    int messageId;
-    String nickname;
-    List<dynamic> atUsers;
-
-    factory CommentList.fromJson(Map<String, dynamic> json) => CommentList(
-        commentId: json["commentId"],
-        commentInfo: json["commentInfo"],
-        userId: json["userId"],
-        messageId: json["messageId"],
-        nickname: json["nickname"],
-        atUsers: List<dynamic>.from(json["atUsers"].map((x) => x)),
-    );
-
-    Map<String, dynamic> toJson() => {
-        "commentId": commentId,
-        "commentInfo": commentInfo,
-        "userId": userId,
-        "messageId": messageId,
-        "nickname": nickname,
-        "atUsers": List<dynamic>.from(atUsers.map((x) => x)),
-    };
-}
 
 class FileList {
     FileList({

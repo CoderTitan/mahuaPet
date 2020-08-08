@@ -4,6 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/styles/app_style.dart';
 
+
+
+/// 加载中
+class ViewStateBusyWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: CircularProgressIndicator());
+  }
+}
+
+
+/// 无数据
 class EmptyContent extends StatelessWidget {
 
   final String image;
@@ -55,5 +67,28 @@ class EmptyContent extends StatelessWidget {
     }
 
     return itemList;
+  }
+}
+
+
+class ErrorView extends StatelessWidget {
+  final String image;
+  final String title;
+
+  ErrorView({
+    this.image = TKImages.empty_data, 
+    this.title = '请求失败, 请稍后再试'
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          Image.asset(image, fit: BoxFit.contain, width: 130.px, height: 90.px),
+          Text(title, style: TextStyle(fontSize: 16.px, color: TKColor.color_999999), textAlign: TextAlign.center)
+        ],
+      ),
+    );
   }
 }

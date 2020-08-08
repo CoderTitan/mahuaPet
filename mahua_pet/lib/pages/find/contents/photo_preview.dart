@@ -45,12 +45,15 @@ class _PhotoPreviewState extends State<PhotoPreview> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle.light,
       child: Scaffold(
-        body: Stack(
-          children: <Widget>[
-            renderPhotoView(context),
-            renderNavigation(context),
-            renderBottomBar(context)
-          ],
+        body: Hero(
+          tag: UniqueKey(),
+          child: Stack(
+            children: <Widget>[
+              renderPhotoView(context),
+              renderNavigation(context),
+              renderBottomBar(context)
+            ],
+          ),
         ),
       ),
     );
@@ -60,6 +63,7 @@ class _PhotoPreviewState extends State<PhotoPreview> {
     return Container(
       width: SizeFit.screenWidth,
       height: SizeFit.screenHeight,
+      color: Colors.black,
       child: PhotoViewGallery.builder(
         builder: (ctx, index) {
           return PhotoViewGalleryPageOptions(

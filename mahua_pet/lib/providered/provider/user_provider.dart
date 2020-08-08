@@ -1,6 +1,6 @@
 
 import 'package:flutter/cupertino.dart';
-import 'package:mahua_pet/config/point_request.dart';
+import 'package:mahua_pet/config/http_refresh/point_request.dart';
 import 'package:mahua_pet/providered/model/config_info.dart';
 import 'package:mahua_pet/providered/model/model_index.dart';
 import '../model/user_data.dart';

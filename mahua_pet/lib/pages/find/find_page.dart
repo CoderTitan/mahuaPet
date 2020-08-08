@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mahua_pet/pages/find/contents/find_focus.dart';
-import 'package:mahua_pet/pages/find/contents/find_nearby.dart';
+import 'package:mahua_pet/pages/find/contents/find_topic.dart';
 import 'package:mahua_pet/pages/find/contents/find_recom.dart';
 
 import 'package:mahua_pet/styles/app_style.dart';
@@ -13,8 +13,8 @@ class FindPage extends StatefulWidget {
 
 class _FindPageState extends State<FindPage> with SingleTickerProviderStateMixin {
 
-  List<String> tabs = ['关注', '推荐', '附近'];
-  List<Widget> tabViews = [FindFocusPage(), FindRecomPage(), FindNearbyPage()];
+  List<String> tabs = ['关注', '推荐', '话题'];
+  List<Widget> tabViews = [FindFocusPage(), FindRecomPage(), FindTopicPage()];
   TabController _tabController ;
 
   @override

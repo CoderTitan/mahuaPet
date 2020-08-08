@@ -51,11 +51,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// Future<void> main() async {
-//       WidgetsFlutterBinding.ensureInitialized();
-//       SharedPreferences prefs = await SharedPreferences.getInstance();
-//       var email = prefs.getString('email');
-//       print(email);
-//       runApp(MaterialApp(home: email == null ? Login() : Home()));
-//     }

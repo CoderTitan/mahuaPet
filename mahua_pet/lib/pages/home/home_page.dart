@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:mahua_pet/pages/home/contents/pet_add.dart';
 import 'package:mahua_pet/pages/home/contents/pet_list.dart';
 import 'package:mahua_pet/pages/home/request/home_request.dart';
+import 'package:mahua_pet/pages/home/view_model/home_view_model.dart';
+import 'package:mahua_pet/providered/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'package:mahua_pet/component/component.dart';
@@ -83,6 +85,21 @@ class _HomeContentState extends State<HomeContent> {
               Navigator.of(context).pushNamed(CalendarPage.routeName);
             }
           ),
+          Selector<HomeViewModel, HomeViewModel>(
+            builder: (ctx, homeVM, child) {
+              return IconButton(icon: child, onPressed: () {
+                homeVM.counter += 1;
+              });
+            }, 
+            selector: (ctx, homeVM) => homeVM,
+            child: Icon(Icons.add),
+          ),
+          Consumer<HomeViewModel>(builder: (ctx, homeVM, child) {
+            final counter = homeVM.counter;
+            return Container(
+              child: Text('$counter'),
+            );
+          })
         ],
       ),
     );
@@ -132,7 +149,7 @@ class _HomeContentState extends State<HomeContent> {
   }
 
   Widget initAnimalInfo(BuildContext context) {
-    return Consumer<PetViewModel>(builder: (ctx, petVM, chiild) {
+    return Consumer2<UserProvider, PetViewModel>(builder: (ctx, userVM, petVM, chiild) {
       final model = petVM.currentModel;
       final isLogin = FuncUtils.isLogin();
       final isPet = petVM.petList.length > 0;
@@ -150,7 +167,7 @@ class _HomeContentState extends State<HomeContent> {
                 width: 70.px, height: 70.px,
                 borderColor: Colors.white,
                 borderWidth: 2,
-                borderRadius: 35.px,
+                boxRadius: 40.px,
                 showProgress: true,
                 fit: BoxFit.cover,
                 placeholder: '${TKImages.image_path}animal_icon.png',

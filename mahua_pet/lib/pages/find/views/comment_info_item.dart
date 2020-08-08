@@ -79,7 +79,7 @@ class _CommentInfoItemState extends State<CommentInfoItem> {
           child: TKNetworkImage(
             imageUrl: (isComment ? comment.headImg : reply.headImg) ?? '',
             width: 30.px, height: 30.px,
-            borderRadius: 20.px,
+            boxRadius: 20.px,
             fit: BoxFit.cover,
             placeholder: TKImages.user_header,
           ),

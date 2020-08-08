@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/config/config_index.dart';
-import 'package:mahua_pet/config/http_request.dart';
 import 'package:mahua_pet/pages/home/models/pet_model.dart';
 import 'package:mahua_pet/providered/provider_index.dart';
 import 'package:mahua_pet/styles/app_style.dart';
@@ -210,7 +209,7 @@ class _PetAddContentState extends State<PetAddContent> {
           TKNetworkImage(
             width: 73.px,
             height: 73.px,
-            borderRadius: 50.px,
+            boxRadius: 50.px,
             fit: BoxFit.cover,
             imageUrl: animalIcon,
             placeholder: '${TKImages.image_path}animal_moren_icon.png',
@@ -266,7 +265,7 @@ class _PetAddContentState extends State<PetAddContent> {
       "petBreed": _petBreed
     };
     TKToast.showLoading();
-    HttpRequest.request(HttpConfig.pet_save, method: 'post', params: params)
+    TKRequest.requestData(HttpConfig.pet_save, method: 'post', params: params)
       .then((value) {
         if (value.isSuccess) {
           // PetViewModel();

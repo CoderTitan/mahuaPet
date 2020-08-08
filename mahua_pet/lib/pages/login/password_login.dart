@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:mahua_pet/pages/home/request/home_request.dart';
+import 'package:mahua_pet/pages/home/view_model/home_view_model.dart';
+import 'package:mahua_pet/pages/home/view_model/pet_view_model.dart';
 import 'package:mahua_pet/providered/model/model_index.dart';
 import 'package:provider/provider.dart';
 
@@ -154,25 +156,34 @@ class _PasswordContentState extends State<PasswordContent> {
   }
 
   Widget loginButton(BuildContext context) {
-    return LargeButton(
-      title: '登录',
-      disabled: _disabled,
-      onPressed: () {
-        loginAction(context);
-      }
+    return Selector<PetViewModel, PetViewModel>(
+      selector: (ctx, petVM) => petVM,
+      shouldRebuild: (pre, next) => pre != next,
+      builder: (ctx, petVM, child) {
+        return LargeButton(
+          title: '登录',
+          disabled: _disabled,
+          onPressed: () {
+            loginAction(petVM);
+          }
+        );
+      }, 
     );
   }
 
-  void loginAction(BuildContext context) {
+  void loginAction(PetViewModel petVM) {
     TKToast.showLoading();
     final params = {'username': _account, 'password': _password, 'type': 'password', 'token': ''};
-    HttpRequest.request(HttpConfig.applogin, method: 'post', params: params)
+    TKRequest.requestData(HttpConfig.applogin, method: 'post', params: params)
       .then((value) {
         if (value.isSuccess) {
           Map<String, dynamic> result = value.data;
 
           UserProvider userModel = Provider.of<UserProvider>(context, listen: false);
           userModel.loginInfo = LoginInfo.fromJson(result);
+
+          petVM.requestPetList();
+
           UserProvider.config('APP首页', userModel.loginInfo.token, userModel.loginInfo.userId);
           UserProvider.user(userModel.loginInfo.userId);
 

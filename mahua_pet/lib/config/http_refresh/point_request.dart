@@ -1,10 +1,6 @@
 
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import 'package:mahua_pet/providered/model/model_index.dart';
 import 'package:mahua_pet/providered/provider_index.dart';
-
 import 'http_request.dart';
 import 'http_config.dart';
 
@@ -17,7 +13,7 @@ class PointRequest {
     int userId
   ) async {
     final params = {'eventName': eventName, 'token': token, 'userId': '$userId'};
-    final value = await HttpRequest.request(HttpConfig.putEventBase, method: 'post', params: params);
+    final value = await TKRequest.requestData(HttpConfig.putEventBase, method: 'post', params: params);
     if (value.isSuccess) {
       if (value.data == null) {
         return ConfigInfo();
@@ -31,7 +27,7 @@ class PointRequest {
   // 请求用户相关信息
   static Future<UserData> requestUser(int userId) async {
     final url = '${HttpConfig.userIndex}?userId=$userId';
-    final value = await HttpRequest.request(url);
+    final value = await TKRequest.requestData(url);
     if (value.isSuccess) {
       if (value.data == null) {
         return UserData();

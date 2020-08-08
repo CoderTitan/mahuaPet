@@ -28,7 +28,7 @@ class FindDetailPage extends StatefulWidget {
 
 class _FindDetailPageState extends State<FindDetailPage> {
 
-  DetailModel _model = DetailModel();
+  DetailModel _model;
   List<CommentModel> _commentList = [];
   CommentModel _currentComment = CommentModel();
   int _postPage = 1;
@@ -53,9 +53,7 @@ class _FindDetailPageState extends State<FindDetailPage> {
       body: Container(
         child: Column(
           children: <Widget>[
-            Expanded(
-              child: renderListView(),
-            ),
+            renderListView(),
             renderBottomItem()
           ],
         )
@@ -64,48 +62,70 @@ class _FindDetailPageState extends State<FindDetailPage> {
   }
 
   Widget renderListView() {
-
-    return SmartRefresher(
-      controller: _refreshController,
-      enablePullUp: true,
-      onRefresh: _onRefresh,
-      onLoading: _onLoading,
-      child: CustomScrollView(
-        slivers: <Widget>[
-          SliverPadding(
-            padding: EdgeInsets.only(top: 10.px),
-            sliver: SliverToBoxAdapter(
-              child: FindDetailItem(_model, (type) => handleItemAction(type)),
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (ctx, index) {
-                return CommentItem(
-                  model: _commentList[index], 
-                  userId: _model.userId, 
-                  key: ValueKey(index),
-                  actionCallBack: (type) {
-                    _currentComment = _commentList[index];
-                    if (type == FindActionType.agree) {
-                      requestCommentAgree(model: _commentList[index]);
-                    } else if (type == FindActionType.commentSelect){
-                      showCommentSelect();
-                    } else {
-                      handleItemAction(type);
-                    }
-                  },
-                );
-              },
-              childCount: _commentList.length
-            )
-          )
-        ],
+    return Expanded(
+      child: SmartRefresher(
+        controller: _refreshController,
+        enablePullUp: true,
+        onRefresh: _onRefresh,
+        onLoading: _onLoading,
+        child: CustomScrollView(
+          slivers: <Widget>[
+            renderDetail(),
+            
+          ],
+        ),
       ),
     );
   }
 
+  Widget renderDetail() {
+    if (_model == null) {
+      return SliverToBoxAdapter(
+        child: ErrorView(),
+      );
+    }
+    return SliverPadding(
+      padding: EdgeInsets.only(top: 10.px),
+      sliver: SliverToBoxAdapter(
+        child: FindDetailItem(_model, (type) => handleItemAction(type)),
+      ),
+    );
+  }
+
+  Widget renderCommentList() {
+    if (_commentList.length == 0) {
+      return SliverToBoxAdapter(
+        child: EmptyContent(),
+      );
+    }
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (ctx, index) {
+          return CommentItem(
+            model: _commentList[index], 
+            userId: _model.userId, 
+            key: ValueKey(index),
+            actionCallBack: (type) {
+              _currentComment = _commentList[index];
+              if (type == FindActionType.agree) {
+                requestCommentAgree(model: _commentList[index]);
+              } else if (type == FindActionType.commentSelect){
+                showCommentSelect();
+              } else {
+                handleItemAction(type);
+              }
+            },
+          );
+        },
+        childCount: _commentList.length
+      )
+    );
+  }
+
   Widget renderBottomItem() {
+    if (_model == null) {
+      return Container();
+    }
     return Container(
       color: Colors.white,
       padding: EdgeInsets.only(bottom: SizeFit.safeHeight, left: 16.px, right: 30.px),
@@ -127,6 +147,8 @@ class _FindDetailPageState extends State<FindDetailPage> {
       ),
     );
   }
+
+  
 
   void _onRefresh() {
     if (_showLoading) {
@@ -248,6 +270,7 @@ class _FindDetailPageState extends State<FindDetailPage> {
             TKToast.showSuccess('取消关注成功');
           }
           _model.followStatus = _model.followStatus == '关注' ? '+关注' : '关注';
+          _model.commentList = _commentList;
           widget.actionCallBack(_model);
           setState(() { });
         }

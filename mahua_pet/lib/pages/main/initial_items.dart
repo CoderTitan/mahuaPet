@@ -1,8 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:mahua_pet/pages/college/college_page.dart';
 import 'package:mahua_pet/pages/home/home_page.dart';
 import 'package:mahua_pet/pages/find/find_page.dart';
-import 'package:mahua_pet/pages/college/college_page.dart';
 import 'package:mahua_pet/pages/mine/mine_page.dart';
 
 import 'package:mahua_pet/styles/app_images.dart';
@@ -11,7 +11,7 @@ import 'package:mahua_pet/styles/app_images.dart';
 final List<Widget> pageList = [
   HomePage(),
   FindPage(),
-  CollegePage(),
+  Container(),
   CollegePage(),
   MinePage()
 ];
@@ -33,7 +33,7 @@ final List<BottomNavigationBarItem> itemList = [
     icon: Image.asset(TKImages.tabbar_add, fit: BoxFit.contain),
   ),
   BottomNavigationBarItem(
-    title: Text("学院"),
+    title: Text("话题"),
     activeIcon: Image.asset(TKImages.tabbar_school_select, fit: BoxFit.contain),
     icon: Image.asset(TKImages.tabbar_school_unselect, fit: BoxFit.contain)
   ),

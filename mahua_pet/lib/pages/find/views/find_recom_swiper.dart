@@ -64,7 +64,6 @@ class _FindTopicSwiperState extends State<FindTopicSwiper> {
             width: SizeFit.screenWidth - 16.px,
             height: 130.px,
             fit: BoxFit.cover,
-            borderRadius: 4,
             placeholder: TKImages.image_path + 'find_swiper_banner.png',
           ),
           Positioned(

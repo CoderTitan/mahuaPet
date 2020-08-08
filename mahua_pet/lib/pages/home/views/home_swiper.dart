@@ -77,7 +77,6 @@ class _HomeSwiperState extends State<HomeSwiper> {
           width: SizeFit.screenWidth - 32.px,
           height: 100.px,
           fit: BoxFit.cover,
-          borderRadius: 4,
           placeholder: TKImages.image_path + 'find_swiper_banner.png',
         ),
       ),

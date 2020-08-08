@@ -69,7 +69,7 @@ class _CommentReplyItemState extends State<CommentReplyItem> {
       child: TKNetworkImage(
         imageUrl: model.headImg ?? '',
         width: 18.px, height: 18.px,
-        borderRadius: 10.px,
+        boxRadius: 10.px,
         fit: BoxFit.cover,
         placeholder: TKImages.user_header,
       ),

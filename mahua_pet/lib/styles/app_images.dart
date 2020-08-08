@@ -1,5 +1,10 @@
 
 class TKImages {
+
+  static String asset(String url) {
+    return image_path + url + '.png';
+  }
+
   // 所有的图片路径
   static const image_path = 'resource/images/';
 
@@ -7,7 +12,9 @@ class TKImages {
   static const user_header = 'resource/images/user_header.png';
   /// 空数据占位图
   static const empty_data = 'resource/images/empty_data.png';
-  
+  /// 显示图片展位图
+  static const image_empty = 'resource/images/find_empty_img.png';
+  static const video_empty = 'resource/images/find_none_image.png';
 
   // tabbar
   static const tabbar_home_select = 'resource/images/tabbar_home_select.png';

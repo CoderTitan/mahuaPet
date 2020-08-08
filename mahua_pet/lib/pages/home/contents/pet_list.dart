@@ -98,7 +98,7 @@ class _PetListContentState extends State<PetListContent> {
                   child: TKNetworkImage(
                     imageUrl: model.petImg,
                     width: 40.px, height: 40.px,
-                    borderRadius: 20.px,
+                    boxRadius: 20.px,
                     fit: BoxFit.cover,
                     placeholder: '${TKImages.image_path}animal_icon.png',
                   ),

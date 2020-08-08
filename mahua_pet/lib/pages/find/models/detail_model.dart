@@ -3,6 +3,9 @@
 //     final detailModel = detailModelFromJson(jsonString);
 
 import 'dart:convert';
+import 'package:mahua_pet/pages/find/models/focus_post_model.dart';
+
+import 'comment_model.dart';
 
 DetailModel detailModelFromJson(String str) => DetailModel.fromJson(json.decode(str));
 
@@ -58,6 +61,7 @@ class DetailModel {
     String delFlag;
     String commentNum;
     String collectionNum;
+    List<CommentModel> commentList;
 
     factory DetailModel.fromJson(Map<String, dynamic> json) => DetailModel(
         messageId: json["messageId"],
