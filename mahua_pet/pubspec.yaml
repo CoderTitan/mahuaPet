@@ -37,12 +37,14 @@ dependencies:
   # drag_list: flutter拖动排序元素.
   # flutter_speed_dial: flutter可展开选项的浮动按钮.
   # flutter_custom_clippers: flutter将widget裁剪成各种自定义形状
+  # flutter_custom_dialog: 对全局弹窗的功能封装
 
 
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
   dio: ^3.0.9
   provider: ^4.1.3
+  flutter_redux: ^0.6.0
   shared_preferences: ^0.5.7+3
   flutter_easyloading: ^1.1.4
   table_calendar: ^2.2.3
@@ -59,6 +61,7 @@ dependencies:
   device_info: ^0.4.2+4
   location: ^3.0.2
   shimmer: ^1.1.1
+  bot_toast: ^3.0.3
 
 
 dev_dependencies:

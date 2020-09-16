@@ -4,7 +4,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/styles/app_style.dart';
+import 'package:mahua_pet/utils/utils_index.dart';
 import '../models/find_topic_model.dart';
+import '../contents/find_swiper_content.dart';
 
 
 
@@ -57,38 +59,43 @@ class _FindTopicSwiperState extends State<FindTopicSwiper> {
 
   List<Widget> renderItems() {
     return widget.topics.map((item) => Container(
-      child: Stack(
-        children: <Widget>[
-          TKNetworkImage(
-            imageUrl: item.labelImg,
-            width: SizeFit.screenWidth - 16.px,
-            height: 130.px,
-            fit: BoxFit.cover,
-            placeholder: TKImages.image_path + 'find_swiper_banner.png',
-          ),
-          Positioned(
-            left: 0, right: 0, top: 0, bottom: 0,
-            child: Container(decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Colors.black26)), 
-          ),
-          Positioned(
-            left: 8.px, right: 8.px, top: 8.px,
-            child: Container(
-              child: Text(item.labelName, style: TextStyle(fontSize: 13.px, color: TKColor.white), textAlign: TextAlign.center),
+      child: GestureDetector(
+        child: Stack(
+          children: <Widget>[
+            TKNetworkImage(
+              imageUrl: item.labelImg,
+              width: SizeFit.screenWidth - 16.px,
+              height: 130.px,
+              fit: BoxFit.cover,
+              placeholder: TKImages.image_path + 'find_swiper_banner.png',
             ),
-          ),
-          Positioned(
-            left: 8.px, right: 8.px, bottom: 0.px,
-            child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  renderBottomItem(0, item),
-                  renderBottomItem(1, item),
-                ],
-              )
+            Positioned(
+              left: 0, right: 0, top: 0, bottom: 0,
+              child: Container(decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Colors.black26)), 
             ),
-          ),
-        ],
+            Positioned(
+              left: 8.px, right: 8.px, top: 8.px,
+              child: Container(
+                child: Text(item.labelName, style: TextStyle(fontSize: 13.px, color: TKColor.white), textAlign: TextAlign.center),
+              ),
+            ),
+            Positioned(
+              left: 8.px, right: 8.px, bottom: 0.px,
+              child: Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    renderBottomItem(0, item),
+                    renderBottomItem(1, item),
+                  ],
+                )
+              ),
+            ),
+          ],
+        ),
+        onTap: () {
+          TKRoute.push(context, FindSwiperPage(model: item));
+        },
       ),
     )).toList();
   }

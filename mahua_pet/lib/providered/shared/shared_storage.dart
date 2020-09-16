@@ -15,7 +15,7 @@ class SharedStorage {
 
 
   //初始化全局信息，会在APP启动时执行
-  static Future init() async {
+  static Future initData() async {
     _prefs = await SharedPreferences.getInstance();
     print(_prefs);
 

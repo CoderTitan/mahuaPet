@@ -39,13 +39,13 @@ class TKRequest extends BaseHttp {
 class ApiInterceptor extends InterceptorsWrapper {
   @override
   Future onRequest(RequestOptions options) async {
-    // debugPrint('url--> ${options.baseUrl}${options.path}' + ' queryParameters: ${options.queryParameters}');
+    debugPrint('url--> ${options.baseUrl}${options.path}' + ' queryParameters: ${options.queryParameters}');
     return options;
   }
 
   @override
   Future onResponse(Response response) {
-    // print('response = ${response.data}');
+    print('response = ${response.data}');
     ResponseData respData = ResponseData.fromJson(response.data);
     if (respData.isSuccess) {
       response.data = respData;

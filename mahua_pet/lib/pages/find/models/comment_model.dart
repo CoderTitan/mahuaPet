@@ -20,7 +20,6 @@ class CommentModel {
         this.cntReply,
         this.userLoginId,
         this.commentReplyVOs,
-        this.atusers,
         this.petDays,
         this.authorUserId,
         this.cntAgree,
@@ -37,28 +36,26 @@ class CommentModel {
     int cntReply;
     int userLoginId;
     List<CommentReplyVo> commentReplyVOs;
-    List<dynamic> atusers;
     String petDays;
     int authorUserId;
     int cntAgree;
     String agreeStatus;
 
     factory CommentModel.fromJson(Map<String, dynamic> json) => CommentModel(
-        commentId: json["commentId"],
-        commentInfo: json["commentInfo"],
-        userId: json["userId"],
-        nickname: json["nickname"],
-        headImg: json["headImg"],
-        replySize: json["replySize"],
-        publishTime: json["publishTime"],
-        cntReply: json["cntReply"],
-        userLoginId: json["userLoginId"],
+        commentId: json["commentId"] ?? 0,
+        commentInfo: json["commentInfo"] ?? '',
+        userId: json["userId"] ?? 0,
+        nickname: json["nickname"] ?? '',
+        headImg: json["headImg"] ?? '',
+        replySize: json["replySize"] ?? 0,
+        publishTime: json["publishTime"] ?? '',
+        cntReply: json["cntReply"] ?? 0,
+        userLoginId: json["userLoginId"] ?? 0,
         commentReplyVOs: List<CommentReplyVo>.from((json["commentReplyVOs"] ?? []).map((x) => CommentReplyVo.fromJson(x))) ?? [],
-        atusers: List<dynamic>.from(json["atusers"].map((x) => x)),
-        petDays: json["petDays"],
-        authorUserId: json["authorUserId"],
-        cntAgree: json["cntAgree"],
-        agreeStatus: json["agreeStatus"],
+        petDays: json["petDays"] ?? '',
+        authorUserId: json["authorUserId"] ?? 0,
+        cntAgree: json["cntAgree"] ?? 0,
+        agreeStatus: json["agreeStatus"] ?? '',
     );
 
     Map<String, dynamic> toJson() => {
@@ -72,7 +69,6 @@ class CommentModel {
         "cntReply": cntReply,
         "userLoginId": userLoginId,
         "commentReplyVOs": List<dynamic>.from(commentReplyVOs.map((x) => x.toJson())),
-        "atusers": List<dynamic>.from(atusers.map((x) => x)),
         "petDays": petDays,
         "authorUserId": authorUserId,
         "cntAgree": cntAgree,

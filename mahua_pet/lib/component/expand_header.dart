@@ -3,6 +3,8 @@
  */
 
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mahua_pet/styles/app_style.dart';
@@ -127,5 +129,35 @@ class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
         ],
       ),
     );
+  }
+}
+
+
+
+class SliverScaleHeaderDelegate extends SliverPersistentHeaderDelegate {
+  final double minHeight;
+  final double maxHeight;
+  final Widget child;
+
+  SliverScaleHeaderDelegate({
+    @required this.minHeight,
+    @required this.maxHeight,
+    @required this.child,
+  });
+
+  @override
+  double get minExtent => minHeight;
+
+  @override
+  double get maxExtent => max(minHeight, maxHeight);
+
+  @override
+  bool shouldRebuild(SliverScaleHeaderDelegate oldDelegate) {
+    return maxHeight != oldDelegate.maxHeight || minHeight != oldDelegate.minHeight || child != oldDelegate.child;
+  }
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return SizedBox.expand(child: child);
   }
 }

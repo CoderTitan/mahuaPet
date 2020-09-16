@@ -3,6 +3,7 @@ import 'package:mahua_pet/component/component.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:mahua_pet/styles/app_style.dart';
+import 'package:mahua_pet/providered/provider_index.dart';
 import '../view_model/find_request.dart';
 import '../models/model_index.dart';
 import '../views/comment_item.dart';
@@ -71,7 +72,7 @@ class _FindDetailPageState extends State<FindDetailPage> {
         child: CustomScrollView(
           slivers: <Widget>[
             renderDetail(),
-            
+            renderCommentList()
           ],
         ),
       ),
@@ -81,7 +82,7 @@ class _FindDetailPageState extends State<FindDetailPage> {
   Widget renderDetail() {
     if (_model == null) {
       return SliverToBoxAdapter(
-        child: ErrorView(),
+        child: Container(),
       );
     }
     return SliverPadding(
@@ -110,7 +111,15 @@ class _FindDetailPageState extends State<FindDetailPage> {
               if (type == FindActionType.agree) {
                 requestCommentAgree(model: _commentList[index]);
               } else if (type == FindActionType.commentSelect){
-                showCommentSelect();
+                final model = _commentList[index];
+                LoginInfo loginInfo = SharedStorage.loginInfo;
+                if (model.userId == loginInfo.userId) {
+                  showCommentSelect();
+                } else {
+                  showCommentItem((text) {
+                    replyComment(text);
+                  });
+                }
               } else {
                 handleItemAction(type);
               }
@@ -132,7 +141,9 @@ class _FindDetailPageState extends State<FindDetailPage> {
       child: FindBottomTool(
         focusNode: _focusNode,
         controller: _editController,
-        submitAction: (text) => {},
+        submitAction: (text) => {
+          postComment(text)
+        },
         agreeState: _model.agreeStatus == '1',
         collectionState: _model.collectionsStatus == '1',
         agreeCount: '${_model.cntAgree}',
@@ -147,7 +158,6 @@ class _FindDetailPageState extends State<FindDetailPage> {
       ),
     );
   }
-
   
 
   void _onRefresh() {
@@ -184,6 +194,8 @@ class _FindDetailPageState extends State<FindDetailPage> {
       _showLoading = true;
       if (pageIndex == 1) {
         _commentList = value;
+        _model.commentList = value;
+        widget.actionCallBack(_model);
         _refreshController.refreshCompleted();
         if (value.length >= 10) {
           _refreshController.loadComplete();
@@ -222,16 +234,30 @@ class _FindDetailPageState extends State<FindDetailPage> {
         requestCollectState();
         break;
       case FindActionType.comment:
-        print(FindActionType.comment);
+        showCommentItem((text) {
+          postComment(text);
+        });
         break;
       case FindActionType.share:
         print(FindActionType.share);
         break;
       case FindActionType.commentSelect:
-
         break;
       default:
     }
+  }
+
+  /// 回复/评论
+  void showCommentItem(void Function(String) action) {
+    TKActionComment.showActionSheet(
+      context,
+      focusNode: _focusNode,
+      textController: _editController,
+      placehold: '快来评论小可爱吧...',
+      submitAction: (text) {
+        action(text);
+      }
+    );
   }
 
   /// 点击评论显示弹窗
@@ -240,15 +266,9 @@ class _FindDetailPageState extends State<FindDetailPage> {
       if (index == 0) {
         // 开始倒计时
         Future.delayed(Duration(seconds: 1), () { // 回复
-          TKActionComment.showActionSheet(
-            context,
-            focusNode: _focusNode,
-            textController: _editController,
-            placehold: '快来评论小可爱吧...',
-            submitAction: (text) {
-              replyComment(text);
-            }
-          );
+          showCommentItem((text) {
+            replyComment(text);
+          });
         });
       } else {
         // 删除
@@ -358,7 +378,6 @@ class _FindDetailPageState extends State<FindDetailPage> {
     }
     TKToast.showLoading();
     FindRequest.requestComment(message, _model.messageId).then((value) {
-      
       if (value) {
         _editController.text = '';
         _onRefresh();
@@ -397,6 +416,8 @@ class _FindDetailPageState extends State<FindDetailPage> {
         setState(() { 
           _commentList = newModels;
         });
+        _model.commentList = newModels;
+        widget.actionCallBack(_model);
       }
     }).catchError((error) {
       TKToast.dismiss();

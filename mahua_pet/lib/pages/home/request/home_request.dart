@@ -7,7 +7,7 @@ import 'package:mahua_pet/pages/home/view_model/home_view_model.dart';
 import 'package:mahua_pet/pages/home/view_model/pet_view_model.dart';
 import 'package:mahua_pet/providered/provider_index.dart';
 import 'package:provider/provider.dart';
-import '../models/pet_model.dart';
+import '../../../redux/models/pet_model.dart';
 
 
 

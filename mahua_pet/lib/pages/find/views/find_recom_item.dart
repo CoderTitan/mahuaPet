@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:mahua_pet/redux/tk_store.dart';
 
 import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/pages/find/view_model/view_model_index.dart';
@@ -17,45 +19,49 @@ class FindRecomItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ConsumerProvider<FindRecomItemProvider>(
-      model: FindRecomItemProvider(),
-      builder: (_, itemVM, child) {
-        return GestureDetector(
-          child: Container(
-            width: (SizeFit.screenWidth - 25.px) / 2,
-            decoration: BoxDecoration(
-              color: TKColor.white,
-              borderRadius: BorderRadius.circular(4.px),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                renderHeaderImage(itemVM),
-                renderOtherInfo(itemVM)
-              ]
-            ),
-          ),
-          onTap: () {
-            jumpFindDetail(context, itemVM);
+    return StoreBuilder<TKState>(
+      builder: (ctx, store) {
+        return ConsumerProvider<FindRecomItemProvider>(
+          model: FindRecomItemProvider(),
+          builder: (_, itemVM, child) {
+            return GestureDetector(
+              child: Container(
+                width: (SizeFit.screenWidth - 25.px) / 2,
+                decoration: BoxDecoration(
+                  color: TKColor.whiteColor(store.state.isNightModal),
+                  borderRadius: BorderRadius.circular(4.px),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    renderHeaderImage(itemVM),
+                    renderOtherInfo(itemVM, store.state)
+                  ]
+                ),
+              ),
+              onTap: () {
+                jumpFindDetail(context, itemVM);
+              },
+            );
           },
         );
       },
     );
   }
 
-  Widget renderOtherInfo(FindRecomItemProvider itemVM) {
+  Widget renderOtherInfo(FindRecomItemProvider itemVM, TKState state) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 4.px, vertical: 8.px),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: renderChildren(itemVM)
+        children: renderChildren(itemVM, state)
       ),
     );
   }
 
-  List<Widget> renderChildren(FindRecomItemProvider itemVM) {
+  List<Widget> renderChildren(FindRecomItemProvider itemVM, TKState state) {
     final model = itemVM.recomModel ?? recomModel;
     List<Widget> itemList = [];
 
@@ -89,7 +95,7 @@ class FindRecomItem extends StatelessWidget {
           boxRadius: 4.px,
           fit: BoxFit.cover,
           showProgress: true,
-          placeholder: TKImages.image_path + 'find_none_image.png',
+          placeholder: TKImages.image_empty,
         ),
         Positioned(
           child: Container(
@@ -173,7 +179,7 @@ class FindRecomItem extends StatelessWidget {
         children: <Widget>[
           Icon(icon, color: iconColor, size: 14.px),
           SizedBox(width: 4.px),
-          Text(number, style: TextStyle(fontSize: 12.px, color: TKColor.color_cccccc), textAlign: textAlign,
+          Text(number ?? '', style: TextStyle(fontSize: 12.px, color: TKColor.color_cccccc), textAlign: textAlign,
           )
         ],
       ),

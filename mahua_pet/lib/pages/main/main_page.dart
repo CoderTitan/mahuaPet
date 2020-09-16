@@ -1,7 +1,10 @@
 
 import 'package:flutter/material.dart';
-import 'initial_items.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:mahua_pet/redux/redux_index.dart';
 import 'package:mahua_pet/styles/app_colors.dart';
+
+import 'initial_items.dart';
 
 class MainPage extends StatefulWidget {
 
@@ -14,34 +17,37 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
 
-  int _currentIndex = 1;
+  int _currentIndex = 4;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: pageList,
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: itemList,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _currentIndex,
-        selectedFontSize: 10,
-        unselectedFontSize: 10,
-        selectedItemColor: TKColor.main_color,
-        unselectedItemColor: Colors.black38,
-        selectedIconTheme: IconThemeData(size: 24),
-        unselectedIconTheme: IconThemeData(size: 24),
-        selectedLabelStyle: TextStyle(fontSize: 10, color: TKColor.main_color),
-        unselectedLabelStyle: TextStyle(fontSize: 10, color: TKColor.main_color),
-        onTap: (index) {
-          if (index == 2) { return; }
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-      ),
+    return StoreBuilder<TKState>(
+      builder: (ctx, store) {
+        return Scaffold(
+          body: IndexedStack(
+            index: _currentIndex,
+            children: pageList,
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: TKColor.whiteColor(store.state.isNightModal),
+            items: itemList(store),
+            type: BottomNavigationBarType.fixed,
+            currentIndex: _currentIndex,
+            selectedFontSize: 10,
+            unselectedFontSize: 10,
+            selectedItemColor: store.state.isNightModal ? TKColor.white : store.state.themeData.primaryColor,
+            unselectedItemColor: TKColor.grayColor(store.state.isNightModal),
+            selectedIconTheme: IconThemeData(size: 24, color: store.state.isNightModal ? TKColor.white : store.state.themeData.primaryColor),
+            unselectedIconTheme: IconThemeData(size: 24, color: TKColor.grayColor(store.state.isNightModal)),
+            onTap: (index) {
+              if (index == 2) { return; }
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+          ),
+        );
+      },
     );
   }
 }

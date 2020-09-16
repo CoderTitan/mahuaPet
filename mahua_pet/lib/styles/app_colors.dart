@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class TKColor {
   
-  static const int _mainValue = 0xFFF5CA2B;
 
   static const white = Colors.white;
+  static const black = Colors.black;
 
   // Color
   static const color_ffea9e = Color(0xFFffea9e);
@@ -36,8 +36,58 @@ class TKColor {
   static const color_6f6f6f = Color(0xFF6f6f6f);
   static const color_b6b6b6 = Color(0xFFb6b6b6);
 
+  static const color_eeeeee = Color(0xFFEEEEEE);
+  static const color_2b364d = Color(0xFF2B364D);
+  static const color_f1f1f1 = Color(0xFFF1F1F1);
+  static const color_151b26 = Color(0xFF151B26);
 
-  // MaterialColor
+  static const color_5d5d5d = Color(0xFF5D5D5D);
+  static const color_edf2fa = Color(0xFFEDF2FA);
+  static const color_868686 = Color(0xFF868686);
+  static const color_a2acbf = Color(0xFFA2ACBF);
+  static const color_c6c6c6 = Color(0xFFC6C6C6);
+  static const color_424e66 = Color(0xFF424E66);
+
+  /// 浅色背景
+  static Color backColor(bool isNight) {
+    return isNight ? color_151b26 : color_f1f1f1;
+  }
+
+  /// 背景颜色
+  static Color whiteColor(bool isNight) {
+    return isNight ? black_color : white;
+  }
+
+  /// 分隔线颜色
+  static Color lineColor(bool isNight) {
+    return isNight ? color_2b364d : color_eeeeee;
+  }
+    
+  /// 间隙颜色
+  static Color marginColor(bool isNight) {
+    return isNight ? color_151b26 : color_f1f1f1;
+  }
+  
+  /// 黑色字体颜色
+  static Color blackColor(bool isNight) {
+    return isNight ? color_edf2fa : color_5d5d5d;
+  }
+
+  /// 中浅色字体颜色
+  static Color grayColor(bool isNight) {
+    return isNight ? color_a2acbf : color_868686;
+  }
+
+  /// 浅色字体颜色
+  static Color lightGray(bool isNight) {
+    return isNight ? color_424e66 : color_c6c6c6;
+  }
+
+
+  /// MaterialColor
+  static const int _mainValue = 0xFFF5CA2B;
+  static const int _blackValue = 0xFF19202D;
+
   static const MaterialColor main_color = MaterialColor(
     _mainValue,
     <int, Color>{
@@ -52,6 +102,22 @@ class TKColor {
       700: Color(0xFFF57C00),
       800: Color(0xFFEF6C00),
       900: Color(0xFFE65100),
+    },
+  );
+
+  static const MaterialColor black_color = MaterialColor(
+    _blackValue,
+    const <int, Color>{
+      50: const Color(_blackValue),
+      100: const Color(_blackValue),
+      200: const Color(_blackValue),
+      300: const Color(_blackValue),
+      400: const Color(_blackValue),
+      500: const Color(_blackValue),
+      600: const Color(_blackValue),
+      700: const Color(_blackValue),
+      800: const Color(_blackValue),
+      900: const Color(_blackValue),
     },
   );
 }

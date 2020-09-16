@@ -27,7 +27,7 @@ class TKNetworkImage extends StatelessWidget {
     this.placeholder = TKImages.image_empty,
     this.width,
     this.height,
-    this.fit = BoxFit.contain,
+    this.fit = BoxFit.cover,
     this.borderRadius,
     this.boxRadius = 4,
     this.borderWidth = 0.0,
@@ -89,7 +89,7 @@ class TKNetworkImage extends StatelessWidget {
       Stack(
         children: <Widget>[
           Image.asset(placeholder, width: width, height: height, fit: BoxFit.cover),
-          Positioned(child: Center(child: CupertinoActivityIndicator(radius: min(16, width / 3))))
+          Positioned(child: Center(child: CupertinoActivityIndicator(radius: min(12, width / 3))))
         ],
       ) :
       CupertinoActivityIndicator(radius: min(16, width / 3))

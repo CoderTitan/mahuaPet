@@ -11,9 +11,10 @@ import '../view_model/find_request.dart';
 class FindVideoPlay extends StatefulWidget {
 
   final FindVideoModel videoModel;
+  final bool canPlay;
   final FindActionCallBack actionCallback;
 
-  FindVideoPlay({Key key, this.videoModel, this.actionCallback}): super(key: key);
+  FindVideoPlay({Key key, this.canPlay, this.videoModel, this.actionCallback}): super(key: key);
 
   @override
   _FindVideoPlayState createState() => _FindVideoPlayState();
@@ -36,7 +37,6 @@ class _FindVideoPlayState extends State<FindVideoPlay> {
 
   @override
   void initState() {
-    super.initState();
 
     _videoController = VideoPlayerController.network(widget.videoModel.fileUrl);
     _videoController.setLooping(true);
@@ -46,22 +46,26 @@ class _FindVideoPlayState extends State<FindVideoPlay> {
       _totalTime = _videoController.value.duration.inSeconds;
       setState(() {});
     });
+
+    super.initState();
   }
 
   @override
   void didUpdateWidget(FindVideoPlay oldWidget) {
     if (oldWidget.videoModel != widget.videoModel) {
-      _videoChanged();
+      
     }
+    _videoChanged();
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   void dispose() {
-    super.dispose();
 
     _videoController.dispose();
     _videoController.removeListener(_videoListener);
+
+    super.dispose();
   }
 
   @override
@@ -96,8 +100,9 @@ class _FindVideoPlayState extends State<FindVideoPlay> {
         color: Colors.black,
         child: Center(
           child: Stack(
+            alignment: AlignmentDirectional.center,
             children: <Widget>[
-              _videoController.value.initialized ? videoItem: indicator,
+              _videoController.value.initialized ? videoItem : indicator,
               Positioned(
                 child: _isPlaying ? Container() : Center(
                   child: Image.asset(TKImages.image_path + 'video_play.png', width: 55.px, height: 55.px)
@@ -122,9 +127,9 @@ class _FindVideoPlayState extends State<FindVideoPlay> {
 
   Widget renderBottomBar(BuildContext context) {
     return Positioned(
-      bottom: SizeFit.safeHeight,
+      bottom: 0,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 16.px),
+        padding: EdgeInsets.fromLTRB(15.px, 0, 16.px, SizeFit.safeHeight),
         width: SizeFit.screenWidth,
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -135,6 +140,7 @@ class _FindVideoPlayState extends State<FindVideoPlay> {
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             renderUserInfo(),
             renderMessage(),
@@ -274,10 +280,6 @@ class _FindVideoPlayState extends State<FindVideoPlay> {
           } else {
             TKToast.showSuccess('取消关注成功');
           }
-          // List<FocusPostModel> newModels = _postArray.where((element) => element.userId != model.userId).toList();
-          // setState(() { 
-          //   _postArray = newModels;
-          // });
         }
       }).catchError((error) {
         TKToast.dismiss();

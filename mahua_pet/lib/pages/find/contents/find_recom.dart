@@ -1,7 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:mahua_pet/providered/provider/consume_provider.dart';
+import 'package:mahua_pet/redux/redux_index.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:mahua_pet/styles/app_style.dart';
 import 'package:mahua_pet/utils/utils_index.dart';
@@ -27,27 +29,31 @@ class _FindRecomPageState extends State<FindRecomPage> with AutomaticKeepAliveCl
 
   @override
   Widget build(BuildContext context) {
-    return ConsumerProvider<FindRecommendProvider>(
-      model: FindRecommendProvider(),
-      onModelReady: (recomVM) {
-        recomVM.initDatas();
-      },
-      builder: (_, recomVM, child) {
-        _recommendVM = recomVM;
-        return SmartRefresher(
-          controller: recomVM.refreshController,
-          enablePullUp: FuncUtils.isLogin(),
-          onRefresh: () {
-            recomVM.refreshData();
-            recomVM.showErrorMessage(context);
+    return StoreBuilder<TKState>(
+      builder: (ctx, store) {
+        return ConsumerProvider<FindRecommendProvider>(
+          model: FindRecommendProvider(),
+          onModelReady: (recomVM) {
+            recomVM.initDatas();
           },
-          onLoading: recomVM.loadMoreData,
-          child: CustomScrollView(
-            slivers: <Widget>[
-              renderTopicItems(),
-              renderPullList(),
-            ],
-          )
+          builder: (_, recomVM, child) {
+            _recommendVM = recomVM;
+            return SmartRefresher(
+              controller: recomVM.refreshController,
+              enablePullUp: FuncUtils.isLogin(),
+              onRefresh: () {
+                recomVM.refreshData();
+                recomVM.showErrorMessage(context);
+              },
+              onLoading: recomVM.loadMoreData,
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  renderTopicItems(),
+                  renderPullList(),
+                ],
+              )
+            );
+          },
         );
       },
     );

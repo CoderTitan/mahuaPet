@@ -13,7 +13,7 @@ import 'package:mahua_pet/styles/app_style.dart';
 import 'package:mahua_pet/utils/utils_index.dart';
 
 import 'package:mahua_pet/pages/home/contents/calendar_page.dart';
-import 'package:mahua_pet/pages/home/models/pet_model.dart';
+import 'package:mahua_pet/redux/models/pet_model.dart';
 import './view_model/pet_view_model.dart';
 import 'views/home_swiper.dart';
 

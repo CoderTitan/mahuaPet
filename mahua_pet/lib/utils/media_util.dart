@@ -59,7 +59,6 @@ class TKMediaUtil {
 
     await Dio().download(imageURL, savePath, onReceiveProgress: (count, total) {
       final progress = count / total;
-      print("视频保存进度 = $progress");
       TKToast.showProgress(progress);
     });
     final result = await ImageGallerySaver.saveFile(savePath);

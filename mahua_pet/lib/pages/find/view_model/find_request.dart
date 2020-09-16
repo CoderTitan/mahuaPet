@@ -80,6 +80,24 @@ class FindRequest {
     return focus;
   }
 
+  /// 热门讨论-最新最热
+  static Future requestTolkList(int labelId, int orderType, int pageIndex) async {
+    LoginInfo loginInfo = SharedStorage.loginInfo;
+    final url = FindURL.getMessageBylabel + '?messageLabelId=$labelId&orderType=$orderType&pageIndex=$pageIndex&pageSize=10&userLoginId=${loginInfo.userId}';
+    ResponseData result = await TKRequest.requestData(url);
+    
+    List<RecommendModel> focus = [];
+    if (result.isSuccess) {
+      if (result.data != null && result.data['records'] != null) {
+        List<dynamic> jsonArr = result.data['records'] ?? [];
+        focus = jsonArr.map<RecommendModel>((item) => RecommendModel.fromJson(item)).toList();
+      }
+    } else {
+      TKToast.showError(result.message);
+    }
+    return focus;
+  }
+
   /// 发现- 动态详情
   static Future<DetailModel> requestFindDetail(int messageId) async {
     LoginInfo loginInfo = SharedStorage.loginInfo;

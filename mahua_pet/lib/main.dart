@@ -1,31 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
-import 'package:device_info/device_info.dart';
 
-import 'package:mahua_pet/providered/provider/provider_config.dart';
 import 'package:mahua_pet/providered/shared/shared_storage.dart';
 import 'package:mahua_pet/config/config_index.dart';
-import 'utils/route_util.dart';
 import 'styles/app_style.dart';
+import 'redux_app.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  SharedStorage.init().then((value) {
-    runApp(
-      MultiProvider(
-        providers: ProviderConfig.providers,
-        child: MyApp(),
-      )
-    );
+  SharedStorage.initData().then((value) {
+    runApp(MyApp());
   }).catchError((error) {
-    runApp(
-        MultiProvider(
-          providers: ProviderConfig.providers,
-          child: MyApp(),
-        )
-    );
+    print(error);
   });
 }
 
@@ -37,17 +24,8 @@ class MyApp extends StatelessWidget {
 
     SizeFit.initialize();
     TKDeviceInfo.initialezed();
+    
 
-    return TKMainConfig(
-        child: MaterialApp(
-          title: '麻花宠物',
-          theme: TKTheme.lightTheme,
-          initialRoute: TKRoute.initialRoute,
-          onGenerateRoute: TKRoute.generateRoute,
-          onUnknownRoute: TKRoute.unknownRoute,
-          routes: TKRoute.routeList,
-          debugShowCheckedModeBanner: false,
-        ),
-    );
+    return FlutterReduxApp();
   }
 }

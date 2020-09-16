@@ -51,8 +51,10 @@ class FindURL {
 
   /// 发现--视频列表: user/message/selectCurrentVideoPage?messageId=29801&orderColumn=create_time&pageIndex=1&pageSize=10&userLoginId=136899
   static const String selectCurrentVideoPage = 'user/message/selectCurrentVideoPage';
-  /// 话题列表: https://gate.ieasydog.com/api/user/messageLabel/getMessageAndReportBylabel?messageLabelId=399&orderType=1&pageIndex=1&pageSize=10&userLoginId=136899
-  /// 话题列表-最热: https://gate.ieasydog.com/api/user/messageLabel/getMessageAndReportBylabel?messageLabelId=399&orderType=2&pageIndex=1&pageSize=10&userLoginId=136899
+  
+  /// 话题讨论: user/messageLabel/getMessageAndReportBylabel?messageLabelId=399&orderType=1&pageIndex=1&pageSize=10&userLoginId=136899
+  /// orderType: 热门1, 最新2
+  static const String getMessageBylabel = 'user/messageLabel/getMessageAndReportBylabel';
 
 
 }

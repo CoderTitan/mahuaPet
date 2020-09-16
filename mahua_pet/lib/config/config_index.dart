@@ -7,4 +7,5 @@ export 'http_refresh/http_data.dart';
 export 'http_refresh/point_request.dart';
 export 'device_info.dart';
 export 'location_config.dart';
+export 'commonn_config.dart';
 

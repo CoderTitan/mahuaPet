@@ -97,7 +97,6 @@ class FocusPostModel {
     };
 }
 
-
 class FileList {
     FileList({
         this.fileId,

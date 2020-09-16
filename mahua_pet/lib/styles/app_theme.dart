@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-
-import 'package:mahua_pet/styles/app_style.dart';
+import 'app_colors.dart';
 
 class TKTheme {
 
@@ -21,13 +20,11 @@ class TKTheme {
   static const double overline = 13;
 
 
-  // 2. 普通模式
-  static const Color lightTextColor = Colors.red;
-
-  static final ThemeData lightTheme = ThemeData(
-    primarySwatch: TKColor.main_color,
+  /// app主题配置
+  static ThemeData appTheme({bool isNight = false, MaterialColor color = TKColor.main_color}) => ThemeData(
+    primarySwatch: color,
     splashColor: Colors.transparent,
-    canvasColor: TKColor.color_f7f7f7,
+    canvasColor: TKColor.backColor(isNight),
     textTheme: TextTheme(
       headline1: TextStyle(fontSize: headline1),
       headline2: TextStyle(fontSize: headline2),
@@ -44,25 +41,4 @@ class TKTheme {
     ),
   );
 
-
-  // 3.暗黑模式
-  static const Color darkTextColor = Colors.green;
-  static final ThemeData darkTheme = ThemeData(
-    primarySwatch: Colors.orange,
-    canvasColor: Color.fromRGBO(252, 252, 252, 1),
-    textTheme: TextTheme(
-      headline1: TextStyle(fontSize: headline1),
-      headline2: TextStyle(fontSize: headline2),
-      headline3: TextStyle(fontSize: headline3),
-      headline4: TextStyle(fontSize: headline4),
-      headline5: TextStyle(fontSize: headline5),
-      headline6: TextStyle(fontSize: headline6),
-      subtitle1: TextStyle(fontSize: subtitle1),
-      subtitle2: TextStyle(fontSize: subtitle2),
-      bodyText1: TextStyle(fontSize: bodyText1),
-      bodyText2: TextStyle(fontSize: bodyText2),
-      button: TextStyle(fontSize: button),
-      overline: TextStyle(fontSize: overline),
-    ),
-  );
 }

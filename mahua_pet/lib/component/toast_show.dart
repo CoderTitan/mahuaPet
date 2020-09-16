@@ -29,9 +29,9 @@ class TKToast {
     EasyLoading.showInfo(msg);
   }
 
-  static void showProgress(double value) {
+  static void showProgress(double value, {String status = '正在保存...'}) {
     setToastStyle();
-    EasyLoading.showProgress(value);
+    EasyLoading.showProgress(value, status: status);
   }
 
   static void dismiss() {

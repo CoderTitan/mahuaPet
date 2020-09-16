@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:mahua_pet/providered/provider_index.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:mahua_pet/component/component.dart';
+import 'package:mahua_pet/redux/redux_index.dart';
 import 'package:mahua_pet/styles/app_style.dart';
 import 'package:mahua_pet/utils/func_utils.dart';
-import 'package:provider/provider.dart';
-import 'mine_view_model.dart';
+import 'package:mahua_pet/config/config_index.dart';
 
-import 'package:cached_network_image/cached_network_image.dart';
 
 
 class MinePage extends StatefulWidget {
@@ -17,53 +20,321 @@ class MinePage extends StatefulWidget {
 }
 
 class _MinePageState extends State<MinePage> {
+
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
+
+  @override
+  void initState() { 
+    super.initState();
+    
+    // Store<TKState> store = StoreProvider.of(navigator.context);
+    // FetchUserInfoAction.loadPetList(store);
+    // FetchUserInfoAction.loadUserData(store).then((value) {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('我的')),
-        body: Container(
-        child: Column(
-          children: <Widget>[
-            RaisedButton(
-              elevation: 16,
-              child: Text('退出登录'),
-              onPressed: (){  
-                FuncUtils.loginOut(context);
-              }
-            ),
-            SizedBox(height: 30.px,),
-            GestureDetector(
-              child: Hero(
-                tag: 'mine-hero-png', 
-                child: Image.network('https://titanjun.oss-cn-hangzhou.aliyuncs.com/flutter/flutter_scroll.png', width: 100, height: 100,)
-              ),
-              onTap: () {
-                showPhoto(context);
+    return StoreBuilder<TKState>(
+      builder: (ctx, store) {
+        return Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            title: Text('我的'),
+            centerTitle: true,
+            actions: renderActionns(),
+          ),
+          body: Container(
+            color: TKColor.marginColor(store.state.isNightModal),
+            child: SmartRefresher(
+              controller: _refreshController,
+              enablePullUp: false,
+              enablePullDown: true,
+              onRefresh: () {
+                FetchUserInfoAction.loadPetList(store);
+                FetchUserInfoAction.loadUserData(store).then((value) {
+                  _refreshController.refreshCompleted();
+                });
               },
-            )
-          ],
-        )
+              child: CustomScrollView(
+                slivers: [
+                  renderHeaderItem(store),
+                  renderMiddleInfo(store),
+                  renderAnimalTitle(store),
+                  renderAnimalList(store),
+                  renderMineList(context, store)
+                ],
+              ),
+            ),
+          )
+        );
+      },
+    );
+  }
+
+  List<Widget> renderActionns() {
+    List<Widget> actions = [];
+
+    Widget message = IconButton(icon: Icon(Icons.notifications_active), onPressed: () {
+
+    });
+    actions.add(message);
+
+    Widget settinng = IconButton(icon: Icon(Icons.settings), onPressed: () {
+
+    });
+    actions.add(settinng);
+
+    return actions;
+  }
+
+  Widget renderHeaderItem(Store store) {
+    UserInfoModel userModel = store.state.userInfo ?? UserInfoModel();
+    Userinfo userInfo = userModel.userinfo ?? Userinfo();
+    return SliverToBoxAdapter(
+      child: Stack(
+        children: [
+          Container(
+            width: SizeFit.screenWidth,
+            height: 110.px,
+            child: ColorFiltered(
+              colorFilter: ColorFilter.mode(store.state.themeData.primaryColor, BlendMode.srcOver),
+              child: Image.asset(TKImages.asset('home_back'), fit: BoxFit.cover),
+            ),
+          ),
+          GestureDetector(
+            child: Container(
+              color: Colors.transparent,
+              padding: EdgeInsets.fromLTRB(16.px, 16.px, 8.px, 16.px),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Row(
+                      children: [
+                        TKNetworkImage(
+                          imageUrl: userInfo.headImg ?? '',
+                          width: 70.px,
+                          height: 70.px,
+                          boxRadius: 40.px,
+                          borderColor: Colors.white,
+                          borderWidth: 2.px,
+                        ),
+                        SizedBox(width: 10.px),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                userInfo.nickname ?? '',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(fontSize: 16.px, color: TKColor.white, fontWeight: FontWeight.bold)
+                              ),
+                              SizedBox(height: 3.px),
+                              Text(userInfo.intro ?? '', maxLines: 2, style: TextStyle(fontSize: 13.px, color: TKColor.white)),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Icon(Icons.keyboard_arrow_right, size: 30.px, color: TKColor.white)
+                ],
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
 
-  void showPhoto(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (ctx) {
-        return Scaffold(
-          body: Center(
-            child: Hero(
-              tag: 'mine-hero-png', 
-              child: Image.network('https://titanjun.oss-cn-hangzhou.aliyuncs.com/flutter/flutter_scroll.png', width: 200, height: 200,)
-            ),
-          ),
-        );
-      })
+  Widget renderMiddleInfo(Store store) {
+    UserInfoModel userModel = store.state.userInfo ?? UserInfoModel();
+
+    final titles = ['获赞', '粉丝', '关注'];
+    final numbers = [userModel.agreeCount, userModel.fansCount, userModel.followCount];
+    return SliverToBoxAdapter(
+      child: Container(
+        margin: EdgeInsets.all(16.px),
+        height: 100.px,
+        decoration: BoxDecoration(
+          color: TKColor.whiteColor(store.state.isNightModal),
+          borderRadius: BorderRadius.circular(10.px),
+          boxShadow: [
+            BoxShadow(color: Colors.black12, offset: Offset(3.0, 3.0), blurRadius: 4.0),
+            BoxShadow(color: Colors.black12, offset: Offset(-1.0, -1.0), blurRadius: 4.0)
+          ] 
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: titles.map((e) {
+            final index = titles.indexOf(e);
+            final number = numbers[index];
+            return GestureDetector(
+              child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('$number', style: TextStyle(fontSize: 20.px, color: TKColor.blackColor(store.state.isNightModal), fontWeight: FontWeight.bold)),
+                    SizedBox(height: 4.px),
+                    Text(e, style: TextStyle(fontSize: 14.px, color: TKColor.blackColor(store.state.isNightModal))),
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      )
     );
   }
+
+  Widget renderAnimalTitle(Store store) {
+    List<PetModel> petList = store.state.petList ?? [];
+    if (petList.length == 0) {
+      return SliverToBoxAdapter(
+        child: Container(),
+      );
+    }
+    return SliverToBoxAdapter(
+      child: Container(
+        width: SizeFit.screenWidth,
+        padding: EdgeInsets.symmetric(horizontal: 16.px, vertical: 10.px),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('我的宠物', style: TextStyle(fontSize: 15.px, color: TKColor.blackColor(store.state.isNightModal))),
+            GestureDetector(
+              child: Row(
+                children: [
+                  Text('全部', style: TextStyle(fontSize: 14.px, color: TKColor.grayColor(store.state.isNightModal))),
+                  Icon(Icons.keyboard_arrow_right, color: TKColor.grayColor(store.state.isNightModal), size: 18.px)
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget renderAnimalList(Store store) {
+    List<PetModel> petList = store.state.petList ?? [];
+    if (petList.length == 0) {
+      return SliverToBoxAdapter(
+        child: Container(),
+      );
+    }
+    return SliverToBoxAdapter(
+      child: SingleChildScrollView(
+        padding: EdgeInsets.only(right: 15.px),
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: petList.map((e) {
+            return renderAnimalItem(store, e);
+          }).toList(),
+        ),
+      ),
+    );
+  }
+
+  Widget renderAnimalItem(Store store, PetModel petModel) {
+    return Card(
+      elevation: 0.px,
+      color: Colors.transparent,
+      margin: EdgeInsets.only(left: 16.px, bottom: 8.px),
+      child: Container(
+        padding: EdgeInsets.all(10.px),
+        decoration: BoxDecoration(
+          color: TKColor.whiteColor(store.state.isNightModal),
+          borderRadius: BorderRadius.circular(8.px)
+        ),
+        child: Row(
+          children: [
+            TKNetworkImage(
+              imageUrl: petModel.petImg ?? '',
+              width: 50.px, 
+              height: 50.px,
+              boxRadius: 40.px,
+            ),
+            SizedBox(width: 8.px),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  petModel.petName ?? '', 
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: 16.px, color: TKColor.blackColor(store.state.isNightModal), fontWeight: FontWeight.bold)
+                ),
+                SizedBox(height: 3.px),
+                Text(petModel.age ?? '', maxLines: 2, style: TextStyle(fontSize: 13.px, color: TKColor.grayColor(store.state.isNightModal))),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget renderMineList(BuildContext context, Store store) {
+    final titles = ['设置主题', '设置语言', 'Tools'];
+    return SliverToBoxAdapter(
+      child: Container(
+        margin: EdgeInsets.all(16.px),
+        decoration: BoxDecoration(
+          color: TKColor.whiteColor(store.state.isNightModal),
+          borderRadius: BorderRadius.circular(10)
+        ),
+        child: Column(
+          children: titles.map((e) {
+            final index = titles.indexOf(e);
+            final isLast = index == titles.length - 1;
+            return GestureDetector(
+              child: Container(
+                height: 56.px,
+                padding: EdgeInsets.symmetric(horizontal: 8.px),
+                decoration: BoxDecoration(
+                  border: Border(bottom: BorderSide(color: TKColor.lineColor(store.state.isNightModal), width: isLast ? 0.001 : 1))
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(e, style: TextStyle(fontSize: 16.px, color: TKColor.blackColor(store.state.isNightModal))),
+                    Icon(Icons.keyboard_arrow_right, color: TKColor.lineColor(store.state.isNightModal), size: 18.px),
+                  ],
+                ),
+              ),
+              onTap: () {
+                if (index == 0) {
+                  showThemeDialog(context, store);
+                } else if (index == 1) {
+                  
+                } else {
+                  
+                }
+              },
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+
+  void showThemeDialog(BuildContext context, Store store) {
+    final titles = [
+      '默认主题',
+      '主题1',
+      '主题2',
+      '主题3',
+      '主题4',
+      '主题5',
+      '主题6',
+    ];
+    final colors = TKCommonConfig.getThemeColors();
+    TKActionAlert.showCommitOptionDialog(context, colors, (index) { 
+      FuncUtils.setThemeData(store, index);
+      SharedUtils.setInt(ShareConstant.themeColorIndex, index);
+    }, titleList: titles, isNight: store.state.isNightModal);
+  }
 }
-
-
-
-
 

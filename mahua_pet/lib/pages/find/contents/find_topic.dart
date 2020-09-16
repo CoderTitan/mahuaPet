@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:mahua_pet/pages/find/topic/contents/hot_topic.dart';
 import 'package:mahua_pet/pages/find/views/hot_topic_item.dart';
 import 'package:mahua_pet/pages/find/views/question_item.dart';
 import 'package:mahua_pet/pages/find/views/skele_topic.dart';
@@ -10,6 +11,7 @@ import 'package:mahua_pet/utils/utils_index.dart';
 import 'package:mahua_pet/providered/provider_index.dart';
 import '../view_model/topic_page_provide.dart';
 import '../models/model_index.dart';
+import '../topic/contents/question_page.dart';
 
 class FindTopicPage extends StatefulWidget {
   @override
@@ -92,7 +94,9 @@ class _FindTopicPageState extends State<FindTopicPage> with AutomaticKeepAliveCl
                   ],
                 ),
               ),
-              onTap: () {},
+              onTap: () {
+                TKRoute.push(context, HotTopic());
+              },
             ),
             SizedBox(height: 8.px),
             SingleChildScrollView(
@@ -115,20 +119,8 @@ class _FindTopicPageState extends State<FindTopicPage> with AutomaticKeepAliveCl
   Widget renderListTitle() {
     return SliverToBoxAdapter(
       child: Container(
-        height: 50.px,
-        padding: EdgeInsets.only(left: 16.px, right: 4.px),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text('热门讨论', style: TextStyle(fontSize: 20.px, color: TKColor.color_1a1a1a, fontWeight: FontWeight.w700)),
-            Row(
-              children: <Widget>[
-                Text('更多', style: TextStyle(fontSize: 13.px, color: TKColor.color_666666)),
-                Icon(Icons.keyboard_arrow_right, color: TKColor.color_999999)
-              ],
-            )
-          ]
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 16.px, vertical: 10.px),
+        child: Text('热门讨论', style: TextStyle(fontSize: 20.px, color: TKColor.color_1a1a1a, fontWeight: FontWeight.w700)),
       ),
     );
   }
@@ -144,7 +136,12 @@ class _FindTopicPageState extends State<FindTopicPage> with AutomaticKeepAliveCl
       delegate: SliverChildBuilderDelegate(
         (ctx, index) {
           QuestionModel model = topicVM.list[index];
-          return QuestionItem(key: ValueKey(index), model: model);
+          return GestureDetector(
+            child: QuestionItem(key: ValueKey(index), model: model),
+            onTap: () {
+              TKRoute.push(context, QuestionPage(model: model));
+            },
+          );
         },
         childCount: topicVM.list.length,
       ),

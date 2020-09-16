@@ -54,6 +54,69 @@ class TKActionAlert {
       );
     }
   }
+
+  /// 列表List
+  static Future<Null> showCommitOptionDialog(
+    BuildContext context,
+    List<Color> colorList,
+    ValueChanged<int> onTap, {
+    double width = 250.0,
+    bool isNight = false,
+    List<String> titleList,
+  }) {
+    return showTKDialog(
+      context: context,
+      builder: (ctx) {
+        return Center(
+          child: Container(
+            width: width,
+            height: colorList.length * 44.px + 8.px,
+            padding: EdgeInsets.all(4.px),
+            margin: EdgeInsets.all(20.px),
+            decoration: BoxDecoration(
+              color: TKColor.whiteColor(isNight),
+              borderRadius: BorderRadius.circular(4.px)
+            ),
+            child: ListView.builder(
+              itemCount: colorList.length,
+              itemBuilder: (ctx, index) {
+                final title = titleList != null ? titleList[index] ?? '' : '';
+                return RaisedButton(
+                  textColor: Colors.white,
+                  color: colorList[index],
+                  child: Text(title, style: TextStyle(fontSize: 14.px, color: Colors.white)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    onTap(index);
+                  },
+                );
+              },
+            ),
+          ),
+        );
+      }
+    );
+  }
+
+  ///弹出 dialog
+  static Future<T> showTKDialog<T>({
+    @required BuildContext context,
+    bool barrierDismissible = true,
+    WidgetBuilder builder,
+  }) {
+    return showDialog<T>(
+      context: context,
+      barrierDismissible: barrierDismissible,
+      builder: (context) {
+        return MediaQuery(
+          ///不受系统字体缩放影响
+          data: MediaQueryData.fromWindow(WidgetsBinding.instance.window)
+              .copyWith(textScaleFactor: 1),
+          child: SafeArea(child: builder(context))
+        );
+      }
+    );
+  }
 }
 
 class _CupertinoAlert extends StatelessWidget {

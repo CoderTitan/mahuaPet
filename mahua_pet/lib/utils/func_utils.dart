@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:mahua_pet/pages/home/view_model/pet_view_model.dart';
+import 'package:mahua_pet/styles/app_style.dart';
+import 'package:redux/redux.dart';
 import 'package:provider/provider.dart';
 
 import 'package:mahua_pet/component/component.dart';
+import 'package:mahua_pet/config/config_index.dart';
+import 'package:mahua_pet/redux/redux_index.dart';
 import 'package:mahua_pet/providered/provider_index.dart';
-import 'package:mahua_pet/providered/model/model_index.dart';
 
+import 'package:mahua_pet/pages/home/view_model/pet_view_model.dart';
 import 'package:mahua_pet/pages/login/login.dart';
-import 'package:mahua_pet/utils/utils_index.dart';
+
+import 'route_util.dart';
+
 
 class FuncUtils {
 
@@ -39,8 +44,6 @@ class FuncUtils {
     TKRoute.popRoot(context);
   }
 
-  
-  
   // 格式化手机号, 添加空格
   static String formatPhone(account) {
     String phoneStr = account.toString().replaceAll(' ', '');
@@ -77,5 +80,27 @@ class FuncUtils {
       return true;
     } 
     return isOtherTelphone.hasMatch(account);
+  }
+
+  /// 设置当前主题
+  static setThemeData(Store store, int index) {
+    ThemeData themeData = getThemeData(index);
+    store.dispatch(RefreshThemeDataAction(themeData));
+    store.dispatch(RefreshNightModalAction(index == 1));
+  } 
+  
+  /// 获取当前主题
+  static getThemeData(int index) {
+    List<MaterialColor> colorList = TKCommonConfig.getThemeColors();
+    return TKTheme.appTheme(isNight: index == 1, color: colorList[index]);
+  }
+
+  /// 获取当前主题
+  static initThemeData(Store store) async {
+    ///读取主题
+    int themeIndex = await SharedUtils.getInt(ShareConstant.themeColorIndex);
+    if (themeIndex != null) {
+      setThemeData(store, themeIndex);
+    }
   }
 }

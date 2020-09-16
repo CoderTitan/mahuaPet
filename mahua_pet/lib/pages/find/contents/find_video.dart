@@ -81,9 +81,14 @@ class _FindVideoListState extends State<FindVideoList> {
             return Container();
           }
           final model = _videoArray[index];
-          return FindVideoPlay(key: ValueKey(index), videoModel: model, actionCallback: (type) {
-            
-          });
+          return FindVideoPlay(
+            key: ValueKey(index), 
+            canPlay: index == _currentIndex, 
+            videoModel: model, 
+            actionCallback: (type) {
+              
+            }
+          );
         },
       ),
     );
@@ -109,7 +114,7 @@ class _FindVideoListState extends State<FindVideoList> {
             IconButton(icon: Icon(Icons.arrow_back_ios, color: Colors.white), onPressed: () {
               Navigator.of(context).pop();
             }),
-            IconButton(icon: Icon(Icons.more_horiz, color: Colors.white), onPressed: () => _saveVideo(context)),
+            IconButton(icon: Icon(Icons.file_download, color: Colors.white), onPressed: () => _saveVideo(context)),
           ],
         ),
       ),

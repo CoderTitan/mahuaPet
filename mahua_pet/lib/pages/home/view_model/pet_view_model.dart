@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:mahua_pet/providered/provider_index.dart';
 import 'package:mahua_pet/config/config_index.dart';
-import 'package:mahua_pet/pages/home/models/pet_model.dart';
+import 'package:mahua_pet/redux/models/pet_model.dart';
 
 
 class PetViewModel extends ChangeNotifier {

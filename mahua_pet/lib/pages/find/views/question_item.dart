@@ -5,7 +5,6 @@ import 'package:mahua_pet/pages/find/models/hot_question.dart';
 import 'package:mahua_pet/styles/app_style.dart';
 import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/providered/provider_index.dart';
-
 import '../view_model/topic_state_provider.dart';
 
 class QuestionItem extends StatelessWidget {
@@ -22,7 +21,7 @@ class QuestionItem extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 16.px),
       decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: TKColor.color_f7f7f7))
+        border: Border(top: BorderSide(color: TKColor.color_e8e8e8))
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,21 +38,21 @@ class QuestionItem extends StatelessWidget {
   }
 
   Widget renderTItle() {
-    return Text(model.title, style: TextStyle(fontSize: 20.px, color: TKColor.color_1a1a1a, fontWeight: FontWeight.w500));
+    return Text(model.title ?? '', style: TextStyle(fontSize: 20.px, color: TKColor.color_1a1a1a, fontWeight: FontWeight.w500));
   }
 
   Widget renderUserInfo() {
     Widget item = Row(
       children: <Widget>[
         TKNetworkImage(
-          imageUrl: model.headImg,
+          imageUrl: model.headImg ?? '',
           placeholder: TKImages.user_header,
           width: 16.px, height: 16.px,
           boxRadius: 10.px,
           fit: BoxFit.cover,
         ),
         SizedBox(width: 4.px),
-        Text(model.nickname, style: TextStyle(fontSize: 14.px, color: TKColor.color_999999)),
+        Text(model.nickname ?? '', style: TextStyle(fontSize: 14.px, color: TKColor.color_999999)),
         SizedBox(width: 4.px),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 6.px, vertical: 1.px),
@@ -62,7 +61,7 @@ class QuestionItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(15),
             border: Border.all(color: TKColor.main_color)
           ),
-          child: Text(model.tribeName, style: TextStyle(fontSize: 8.px, color: TKColor.main_color)),
+          child: Text(model.tribeName ?? '', style: TextStyle(fontSize: 8.px, color: TKColor.main_color)),
         )
       ],
     );
@@ -74,20 +73,21 @@ class QuestionItem extends StatelessWidget {
       children: <Widget>[
         Expanded(
           child: Text(
-            model.firstAnswer, 
+            model.firstAnswer ?? '', 
             maxLines: 3, 
             overflow: TextOverflow.ellipsis, 
             style: TextStyle(fontSize: 16.px, color: TKColor.color_666666, height: 1.5)
           ),
         ),
         SizedBox(width: 10.px),
+        model.firstFile != null && model.firstFile.length > 0 ?
         TKNetworkImage(
           imageUrl: model.firstFile,
           placeholder: TKImages.image_empty,
           width: 95.px, height: 70.px,
           boxRadius: 5.px,
           fit: BoxFit.cover,
-        ),
+        ) : Container(),
       ],
     );
     return item;
@@ -130,7 +130,7 @@ class QuestionItem extends StatelessWidget {
       children: <Widget>[
         Icon(icon, color: color, size: 18.px),
         SizedBox(width: 4.px),
-        Text('$number', style: TextStyle(fontSize: 14.px, color: TKColor.color_666666))
+        Text('${number == 'null' ? '0' : number}', style: TextStyle(fontSize: 14.px, color: TKColor.color_666666))
       ],
     );
   }
