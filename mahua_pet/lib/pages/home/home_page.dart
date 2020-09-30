@@ -1,20 +1,16 @@
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:mahua_pet/pages/home/contents/pet_add.dart';
 import 'package:mahua_pet/pages/home/contents/pet_list.dart';
-import 'package:mahua_pet/pages/home/request/home_request.dart';
 import 'package:mahua_pet/pages/home/view_model/home_view_model.dart';
-import 'package:mahua_pet/providered/provider/user_provider.dart';
-import 'package:provider/provider.dart';
-
+import 'package:mahua_pet/redux/redux_index.dart';
 import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/styles/app_style.dart';
 import 'package:mahua_pet/utils/utils_index.dart';
-
 import 'package:mahua_pet/pages/home/contents/calendar_page.dart';
 import 'package:mahua_pet/redux/models/pet_model.dart';
-import './view_model/pet_view_model.dart';
 import 'views/home_swiper.dart';
 
 
@@ -22,7 +18,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: TKColor.color_f7f7f7,
       height: SizeFit.screenHeight,
       child: HomeContent(),
     );
@@ -43,26 +38,28 @@ class _HomeContentState extends State<HomeContent> {
     super.initState();
 
     if (FuncUtils.isLogin()) {
-      HomeRequest.requestPetList(context);
-      HomeRequest.requestHomeSwiper(context);
+
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      scrollDirection: Axis.vertical,
-      slivers: <Widget>[
-        renderHeader(context),
-        SliverToBoxAdapter(
-          child: HomeSwiper(),
-        ),
-        // HomeList()
-      ],
+    return StoreBuilder<TKState>(
+      builder: (ctx, store) {
+        return CustomScrollView(
+          scrollDirection: Axis.vertical,
+          slivers: <Widget>[
+            renderHeader(context, store),
+            SliverToBoxAdapter(
+              child: HomeSwiper(),
+            ),
+          ],
+        );
+      },
     );
   }
 
-  Widget renderHeader(BuildContext context) {
+  Widget renderHeader(BuildContext context, Store store) {
     return SliverToBoxAdapter(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -71,50 +68,40 @@ class _HomeContentState extends State<HomeContent> {
             height: 250.px + SizeFit.statusHeight,
             child: Stack(
               children: <Widget>[
-                initBackImage(),
-                initRightSelect(context),
-                initAnimalInfo(context),
-                initAnimalLifes(context)
+                initBackImage(store),
+                initRightSelect(context, store),
+                initAnimalInfo(context, store),
+                initAnimalLifes(context, store)
               ],
             ),
           ),
           IconButton(
             iconSize: 18.px,
-            icon: Image.asset('${TKImages.image_path}calendar.png'), 
+            icon: Image.asset('${TKImages.image_path}calendar.png', color: TKColor.grayColor(store.state.isNightModal),), 
             onPressed: () {
               Navigator.of(context).pushNamed(CalendarPage.routeName);
             }
           ),
-          Selector<HomeViewModel, HomeViewModel>(
-            builder: (ctx, homeVM, child) {
-              return IconButton(icon: child, onPressed: () {
-                homeVM.counter += 1;
-              });
-            }, 
-            selector: (ctx, homeVM) => homeVM,
-            child: Icon(Icons.add),
-          ),
-          Consumer<HomeViewModel>(builder: (ctx, homeVM, child) {
-            final counter = homeVM.counter;
-            return Container(
-              child: Text('$counter'),
-            );
-          })
         ],
       ),
     );
   }
 
-  Widget initBackImage() {
-    return Image.asset(
-      '${TKImages.image_path}home_back.png', 
-      width: SizeFit.screenWidth, 
-      height: 200.px + SizeFit.statusHeight, 
-      fit: BoxFit.fill
+  Widget initBackImage(Store store) {
+    return Container(
+      width: SizeFit.screenWidth,
+      height: 200.px + SizeFit.statusHeight,
+      child: ColorFiltered(
+        colorFilter: ColorFilter.mode(store.state.themeData.primaryColor, BlendMode.srcOver),
+        child: Image.asset(TKImages.asset('home_back'), fit: BoxFit.fill),
+      ),
     );
   }
 
-  Widget initRightSelect(BuildContext context) {
+  Widget initRightSelect(BuildContext context, Store store) {
+    final isLogin = store.state.isLogin ?? false;
+    List petList = store.state.petList ?? [];
+    final rightText = isLogin ? (petList.length > 0 ? '选择宠物' : '添加宠物') : '添加宠物';
     return Positioned(
       right: 15.px,
       top: 10.px + SizeFit.statusHeight,
@@ -130,63 +117,60 @@ class _HomeContentState extends State<HomeContent> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Selector<PetViewModel, List<PetModel>>(
-                  selector: (ctx, petVM) => petVM.petList,
-                  shouldRebuild: (previous, next) => !listEquals(previous, next),
-                  builder: (ctx, pets, child) {
-                    String _selectTitle = pets.length > 0 ? '选择宠物' : '添加宠物';
-                    return Text(_selectTitle, style: TextStyle(fontSize: 14.px, color: TKColor.color_333333));
-                  }, 
-                ),
+                Text(rightText, style: TextStyle(fontSize: 14.px, color: TKColor.color_333333)),
                 Icon(Icons.keyboard_arrow_right, size: 24, color: TKColor.color_1a1a1a)
               ],
             ),
           ),
         ),
-        onTap: () => selectAnimal(context),
+        onTap: () => selectAnimal(context, store),
       )
     );
   }
 
-  Widget initAnimalInfo(BuildContext context) {
-    return Consumer2<UserProvider, PetViewModel>(builder: (ctx, userVM, petVM, chiild) {
-      final model = petVM.currentModel;
-      final isLogin = FuncUtils.isLogin();
-      final isPet = petVM.petList.length > 0;
-      final animalIcon = isLogin ? (isPet ? model.petImg : '') : '';
+  Widget initAnimalInfo(BuildContext context, Store store) {
+    List<PetModel> petList = store.state.petList ?? []; 
+    PetModel model = store.state.currentPet ?? petList.first;
+    final isLogin = store.state.isLogin;
+    final isPet = petList.length > 0;
+    final animalIcon = isLogin ? (model != null ? (model.petImg ?? '') : '') : '';
 
-      return Positioned(
-        left: 20.px,
-        top: 90.px,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            GestureDetector(
-              child: TKNetworkImage(
-                imageUrl: animalIcon,
-                width: 70.px, height: 70.px,
-                borderColor: Colors.white,
-                borderWidth: 2,
-                boxRadius: 40.px,
-                showProgress: true,
-                fit: BoxFit.cover,
-                placeholder: '${TKImages.image_path}animal_icon.png',
-              ),
-              onTap: () => animalHeaderClick(context, isPet, model)
+    return Positioned(
+      left: 20.px,
+      top: 90.px,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          GestureDetector(
+            child: TKNetworkImage(
+              imageUrl: animalIcon,
+              width: 70.px, height: 70.px,
+              borderColor: Colors.white,
+              borderWidth: 2,
+              boxRadius: 40.px,
+              showProgress: true,
+              fit: BoxFit.cover,
+              placeholder: '${TKImages.image_path}animal_icon.png',
             ),
-            SizedBox(width: 16.px),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: animalInfoList(model, isPet),
-            )
-          ],
-        ),
-      );
-    });
+            onTap: () => animalHeaderClick(context, isPet, model)
+          ),
+          SizedBox(width: 16.px),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: animalInfoList(store),
+          )
+        ],
+      ),
+    );
   }
 
-  List<Widget> animalInfoList(PetModel model, bool isPet) {
-    final isLogin = FuncUtils.isLogin();
+  List<Widget> animalInfoList(Store store) {
+    bool isNight = store.state.isNightModal;
+    List<PetModel> petList = store.state.petList ?? []; 
+    PetModel model = store.state.currentPet ?? petList.first;
+    final isLogin = store.state.isLogin;
+    final isPet = petList.length > 0;
+
     final animalName = isLogin ? (isPet ? model.petName : '未添加宠物') : '未登录';
     final animalBreed = isLogin ? (isPet ? model.petBreed : '') : '';
     final animalSex = isLogin ? (isPet ? model.sex : '') : '';
@@ -196,24 +180,24 @@ class _HomeContentState extends State<HomeContent> {
     final animalInfo = animalAge.length > 0 || animalBreed.length > 0 || animalWeight.length > 0 ? '$animalAge|$animalBreed|${animalWeight}KG' : '';
 
     List<Widget> lists = [];
-    Text title = Text.rich(TextSpan(children: titleTexts(animalName, animalSex)));
+    Text title = Text.rich(TextSpan(children: titleTexts(animalName, animalSex, isNight)));
     lists.add(title);
     if (animalDay.length > 0) {
       lists.add(SizedBox(height: 2.px));
-      lists.add(Text(animalDay, style: TextStyle(fontSize: 13.px, color: TKColor.color_333333, height: 1.3)));
+      lists.add(Text(animalDay, style: TextStyle(fontSize: 13.px, color: TKColor.blackColor(isNight), height: 1.3)));
     }
     if (animalInfo.length > 0) {
-      lists.add(Text(animalInfo, style: TextStyle(fontSize: 13.px, color: TKColor.color_333333, height: 1.3)));
+      lists.add(Text(animalInfo, style: TextStyle(fontSize: 13.px, color: TKColor.blackColor(isNight), height: 1.3)));
     }
     return lists;
   }
 
-  List<InlineSpan> titleTexts(String name, String sex) {
+  List<InlineSpan> titleTexts(String name, String sex, bool isNight) {
     List<InlineSpan> lists = [];
     WidgetSpan title = WidgetSpan(
       child: Text(
         name, 
-        style: TextStyle(fontSize: 18.px, color: TKColor.color_333333, fontWeight: FontWeight.w600, height: 1.3)
+        style: TextStyle(fontSize: 18.px, color: TKColor.blackColor(isNight), fontWeight: FontWeight.w600, height: 1.3)
       ),
       alignment: PlaceholderAlignment.middle
     );
@@ -231,7 +215,9 @@ class _HomeContentState extends State<HomeContent> {
     return lists;
   }
 
-  Widget initAnimalLifes(BuildContext context) {
+  Widget initAnimalLifes(BuildContext context, Store store) {
+    bool isNight = store.state.isNightModal;
+
     final titles = ['日常打卡', '提醒吧', '健康管理', '体重记录', '相册'];
     final images = ['home_record.png', 'home_warn.png', 'home_fit.png', 'home_weight.png', 'home_album.png'];
     return Positioned(
@@ -242,11 +228,11 @@ class _HomeContentState extends State<HomeContent> {
         height: 100.px,
         padding: EdgeInsets.symmetric(horizontal: 10.px),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: TKColor.whiteColor(isNight),
           borderRadius: BorderRadius.all(Radius.circular(12.px)),
           boxShadow: [
-            BoxShadow(color: TKColor.color_b6b6b6, offset: Offset(-2, -2), blurRadius: 5.px),
-            BoxShadow(color: TKColor.color_b6b6b6, offset: Offset(2, 2), blurRadius: 5.px),
+            BoxShadow(color: TKColor.marginColor(isNight), offset: Offset(-2, -2), blurRadius: 5.px),
+            BoxShadow(color: TKColor.marginColor(isNight), offset: Offset(2, 2), blurRadius: 5.px),
           ]
         ),
         child: ListView.builder(
@@ -262,7 +248,7 @@ class _HomeContentState extends State<HomeContent> {
                   children: <Widget>[
                     Image.asset('${TKImages.image_path}${images[index]}', width: 38.px, height: 38.px, fit: BoxFit.contain),
                     SizedBox(height: 8.px),
-                    Text(titles[index], style: TextStyle(fontSize: 13.px, color: TKColor.color_333333)),
+                    Text(titles[index], style: TextStyle(fontSize: 13.px, color: TKColor.blackColor(isNight))),
                   ],
                 ),
               ),
@@ -274,16 +260,18 @@ class _HomeContentState extends State<HomeContent> {
     );
   }
 
-  void selectAnimal(BuildContext context) {
-    final isLogin = FuncUtils.isLogin();
+  
+
+  void selectAnimal(BuildContext context, Store store) {
+    List<PetModel> petList = store.state.petList ?? []; 
+    final isLogin = store.state.isLogin;
+
     if (!isLogin) {
       FuncUtils.jumpLogin(context);
       return;
     }
 
-    PetViewModel petVM = Provider.of<PetViewModel>(context, listen: false);
-
-    if (petVM.petList.length > 0) {
+    if (petList.length > 0) {
       Navigator.of(context).pushNamed(PetListPage.routeName);
     } else {
       TKRoute.push(context, PetAddPage(isAdd: true, model: null));

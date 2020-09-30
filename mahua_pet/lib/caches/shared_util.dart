@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedUtils {
+  /// 添加/获取本地缓存
   static Future<bool> setBool(String key, bool value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.setBool(key, value);
@@ -39,5 +40,12 @@ class SharedUtils {
   static Future<String> getString(String key) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(key) ?? '';
+  }
+
+
+  /// 清除本地缓存
+  static remove(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove(key);
   }
 }

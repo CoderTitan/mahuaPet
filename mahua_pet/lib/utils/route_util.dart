@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:mahua_pet/pages/welcome/welcome_page.dart';
+import 'package:mahua_pet/pages/welcome/launch_page.dart';
 import 'package:mahua_pet/pages/main/main_page.dart';
 
 // 登录
@@ -17,10 +19,17 @@ import 'package:mahua_pet/pages/home/contents/pet_list.dart';
 
 class TKRoute {
   // 初始路由
+  static final String welcomeRoute = WelcomePage.routerName;
+  static final String launchRoute = LaunchPage.routerName;
   static final String initialRoute = MainPage.routerName;
 
   // 路由列表
   static final Map<String, WidgetBuilder> routeList = {
+    // 启动页和引导页
+    WelcomePage.routerName: (ctx) => WelcomePage(),
+    LaunchPage.routerName: (ctx) => LaunchPage(),
+
+    // 主路由
     MainPage.routerName: (ctx) => MainPage(),
 
     // 登录
@@ -70,12 +79,17 @@ class TKRoute {
     ));
   }
 
-  // 返回到根路由
+  /// 跳转到main
+  static pushMainRoot(BuildContext context) {
+    Navigator.of(context).pushReplacementNamed(MainPage.routerName);
+  }
+
+  /// 返回到根路由
   static popRoot(BuildContext context) {
     Navigator.of(context).popUntil(ModalRoute.withName('/'));
   }
 
-  // 登录返回到指定路由
+  /// 登录返回到指定路由
   static popToRoutePage(BuildContext context) {
     final routeName = ModalRoute.of(context).settings.arguments;
     if (routeName == '/') {

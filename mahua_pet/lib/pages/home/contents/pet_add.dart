@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/config/config_index.dart';
 import 'package:mahua_pet/redux/models/pet_model.dart';
-import 'package:mahua_pet/providered/provider_index.dart';
+import 'package:mahua_pet/caches/caches_index.dart';
 import 'package:mahua_pet/styles/app_style.dart';
 
 class PetAddPage extends StatelessWidget {

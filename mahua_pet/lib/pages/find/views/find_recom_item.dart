@@ -65,19 +65,19 @@ class FindRecomItem extends StatelessWidget {
     final model = itemVM.recomModel ?? recomModel;
     List<Widget> itemList = [];
 
-    itemList.add(renderUserInfo(model));
+    itemList.add(renderUserInfo(model, state));
     if (model.labelName != null && model.labelName.length > 0) {
       itemList.add(SizedBox(height: 4.px));
-      itemList.add(renderTopicItem(model));
+      itemList.add(renderTopicItem(model, state));
     }
     
     if (model.messageInfo != null && model.messageInfo.length > 0) {
       itemList.add(SizedBox(height: 4.px));
-      itemList.add(renderMessageItem(model));
+      itemList.add(renderMessageItem(model, state));
     }
 
     itemList.add(SizedBox(height: 4.px));
-    itemList.add(renderNumberItem(model));
+    itemList.add(renderNumberItem(model, state));
 
     return itemList;
   }
@@ -113,7 +113,7 @@ class FindRecomItem extends StatelessWidget {
     );
   }
 
-  Widget renderUserInfo(RecommendModel model) {
+  Widget renderUserInfo(RecommendModel model, TKState state) {
     return Container(
       child: Row(
       children: <Widget>[
@@ -130,56 +130,76 @@ class FindRecomItem extends StatelessWidget {
         ),
         SizedBox(width: 8.px),
         Expanded(
-          child: Text(model.nickname, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 14.px, color: TKColor.color_333333)),
+          child: Text(
+            model.nickname, maxLines: 1, 
+            overflow: TextOverflow.ellipsis, 
+            style: TextStyle(fontSize: 14.px, color: TKColor.blackColor(state.isNightModal))
+          ),
         )
       ],
     ),
     );
   }
 
-  Widget renderTopicItem(RecommendModel model) {
+  Widget renderTopicItem(RecommendModel model, TKState state) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 4.px, vertical: 2.px),
       decoration: BoxDecoration(
-        color: TKColor.main_color[25],
+        color: TKColor.marginColor(state.isNightModal),
         borderRadius: BorderRadius.circular(2.px),
       ),
-      child: Text('#' + model.labelName, style: TextStyle(fontSize: 10.px, color: TKColor.main_color)),
+      child: Text(
+        '#' + model.labelName, 
+        style: TextStyle(
+          fontSize: 10.px, 
+          color: state.isNightModal? TKColor.color_edf2fa : state.themeData.primaryColor
+        )
+      ),
     );
   }
 
-  Widget renderMessageItem(RecommendModel model) {
+  Widget renderMessageItem(RecommendModel model, TKState state) {
     return Container(
-      child: Text(model.messageInfo, maxLines: 3, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.px, color: TKColor.color_666666)),
+      child: Text(
+        model.messageInfo, 
+        maxLines: 3, 
+        overflow: TextOverflow.ellipsis, 
+        style: TextStyle(fontSize: 12.px, color: TKColor.grayColor(state.isNightModal))
+      ),
     );
   }
 
-  Widget renderNumberItem(RecommendModel model) {
+  Widget renderNumberItem(RecommendModel model, TKState state) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         renderBottomItem(
           model.agreeStatus == '1' ? Icons.favorite : Icons.favorite_border,
-          model.agreeStatus == '1' ? TKColor.main_color: TKColor.color_cccccc,
+          model.agreeStatus == '1' ? (state.isNightModal? TKColor.color_edf2fa : state.themeData.primaryColor) : TKColor.lightGray(state.isNightModal),
           model.messageAgreeNum,
-          FindActionType.agree
+          FindActionType.agree,
+          state,
         ),
         renderBottomItem(
-          Icons.remove_red_eye, TKColor.color_cccccc, 
-          model.messageReadNum, FindActionType.none, textAlign: TextAlign.right
+          Icons.remove_red_eye, 
+          TKColor.lightGray(state.isNightModal), 
+          model.messageReadNum, 
+          FindActionType.none, 
+          state, 
+          textAlign: TextAlign.right,
         ),
       ],
     );
   }
 
-  Widget renderBottomItem(IconData icon, Color iconColor, String number, FindActionType type, {TextAlign textAlign = TextAlign.left}) {
+  Widget renderBottomItem(IconData icon, Color iconColor, String number, FindActionType type, TKState state, {TextAlign textAlign = TextAlign.left}) {
     return GestureDetector(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Icon(icon, color: iconColor, size: 14.px),
           SizedBox(width: 4.px),
-          Text(number ?? '', style: TextStyle(fontSize: 12.px, color: TKColor.color_cccccc), textAlign: textAlign,
+          Text(number ?? '', style: TextStyle(fontSize: 12.px, color: TKColor.lightGray(state.isNightModal)), textAlign: textAlign,
           )
         ],
       ),

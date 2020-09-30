@@ -21,7 +21,7 @@ class TKActionAlert {
     VoidCallBack leftPressed,
     VoidCallBack rightPressed,
   }) {
-    if (!SizeFit.isIOS) {
+    if (SizeFit.isIOS) {
       showCupertinoDialog(
         context: context, 
         builder: (ctx) {
@@ -130,8 +130,8 @@ class _CupertinoAlert extends StatelessWidget {
 
   _CupertinoAlert({
     @required BuildContext context,
-    this.title,
-    this.message,
+    this.title = '',
+    this.message = '',
     this.leftTitle = '取消',
     this.rightTitle = '确认',
     this.leftPressed,
@@ -141,10 +141,10 @@ class _CupertinoAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoAlertDialog(
-      title: Text(title, style: TextStyle(fontSize: 17.px, color: TKColor.color_1a1a1a, fontWeight: FontWeight.bold)),
+      title: Text(title ?? '', style: TextStyle(fontSize: 17.px, color: TKColor.color_1a1a1a, fontWeight: FontWeight.bold)),
       content: Container(
         padding: EdgeInsets.only(top: 8.px),
-        child: Text(message, style: TextStyle(fontSize: 15.px, color: TKColor.color_333333)),
+        child: Text(message ?? '', style: TextStyle(fontSize: 15.px, color: TKColor.color_333333)),
       ),
       actions: renderActions(context),
     );
@@ -171,7 +171,7 @@ class _CupertinoAlert extends StatelessWidget {
         child: Text(rightTitle),
         onPressed: () {
           Navigator.of(context).pop();
-          if (leftPressed != null) {
+          if (rightPressed != null) {
             rightPressed();
           }
         },
@@ -194,8 +194,8 @@ class _MaterialAlert extends StatelessWidget {
 
   _MaterialAlert({
     @required BuildContext context,
-    this.title,
-    this.message,
+    this.title = '',
+    this.message = '',
     this.leftTitle = '取消',
     this.rightTitle = '确认',
     this.leftPressed,
@@ -205,10 +205,10 @@ class _MaterialAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(title),
+      title: Text(title ?? ''),
       titleTextStyle: TextStyle(fontSize: 17.px, color: TKColor.color_1a1a1a, fontWeight: FontWeight.bold),
       // titlePadding: EdgeInsets.only(top: 8.px),
-      content: Text(message),
+      content: Text(message ?? ''),
       contentTextStyle: TextStyle(fontSize: 15.px, color: TKColor.color_333333),
       // contentPadding: EdgeInsets.only(top: 8.px),
       actions: renderActions(context),

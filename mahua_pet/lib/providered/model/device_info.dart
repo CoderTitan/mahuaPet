@@ -34,7 +34,7 @@ class DeviceInfoModel {
         modelType: json["modelType"] ?? '',
         localizedModel: json["localizedModel"] ?? '',
         mobileUid: json["mobileUID"] ?? '',
-        isPhysicalDevice: json["isPhysicalDevice"] ?? '',
+        isPhysicalDevice: json["isPhysicalDevice"] ?? false,
     );
 
     Map<String, dynamic> toJson() => {

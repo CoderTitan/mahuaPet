@@ -1,6 +1,7 @@
 
 import 'package:redux/redux.dart';
 import 'package:mahua_pet/providered/provider_index.dart';
+import 'package:mahua_pet/caches/caches_index.dart';
 import 'package:mahua_pet/config/config_index.dart';
 
 import '../models/model_index.dart';
@@ -10,15 +11,16 @@ import '../reducer/reducer_index.dart';
 class FetchUserInfoAction {
   /// 获取用户信息
   static Future loadUserData(Store store) async {
-    LoginInfo loginInfo = SharedStorage.loginInfo;
+    LoginInfo loginInfo = store.state.loginInfo;
     final url = HttpConfig.userIndex;
     final httpURL = url + '?userId=${loginInfo.userId}';
 
     ResponseData response = await TKRequest.getRequest(httpURL);
-    UserInfoModel userInfo = UserInfoModel();
+    UserData userInfo = UserData();
     if (response.isSuccess) {
       if (response.data != null) {
-        userInfo = UserInfoModel.fromJson(response.data);
+        userInfo = UserData.fromJson(response.data);
+        SharedStorage.userData = userInfo;
       }
       store.dispatch(UpdateUserInfo(userInfo));
     } 

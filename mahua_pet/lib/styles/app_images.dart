@@ -1,8 +1,8 @@
 
 class TKImages {
 
-  static String asset(String url) {
-    return image_path + url + '.png';
+  static String asset(String path) {
+    return image_path + path + '.png';
   }
 
   // 所有的图片路径

@@ -9,6 +9,8 @@ import 'package:mahua_pet/styles/app_style.dart';
 import 'package:mahua_pet/redux/redux_index.dart';
 import 'package:mahua_pet/utils/utils_index.dart';
 import 'package:mahua_pet/config/config_index.dart';
+import 'package:mahua_pet/caches/caches_index.dart';
+
 
 
 class FlutterReduxApp extends StatefulWidget {
@@ -17,18 +19,25 @@ class FlutterReduxApp extends StatefulWidget {
 }
 
 class _FlutterReduxAppState extends State<FlutterReduxApp> with NavigatorObserver {
+
   
   /// 初始化state
   final store = Store<TKState>(
     appReducer,
+    // 拦截器
+    middleware: middleware,
+    // 初始化
     initialState: TKState(
-      themeData: ThemeData(primarySwatch: TKColor.main_color)
+      themeData: FuncUtils.getThemeData(0),
+      isNightModal: false,
+      isLogin: false,
     ),
   );
 
   @override
   void initState() {
     super.initState();
+
 
     Future.delayed(Duration(seconds: 0), () {
       /*
@@ -45,17 +54,17 @@ class _FlutterReduxAppState extends State<FlutterReduxApp> with NavigatorObserve
   
   @override
   Widget build(BuildContext context) {
+    final isWelcome = SharedStorage.showWelcome;
     return StoreProvider(
       store: store,
       child: StoreBuilder<TKState>(
         builder: (context, store) {
           store.state.platformLocale = WidgetsBinding.instance.window.locale;
-          FuncUtils.initThemeData(store);
           return TKMainConfig(
             child: MaterialApp(
               title: '麻花宠物',
               theme: store.state.themeData,
-              initialRoute: TKRoute.initialRoute,
+              initialRoute: isWelcome ? TKRoute.launchRoute : TKRoute.welcomeRoute,
               onGenerateRoute: TKRoute.generateRoute,
               onUnknownRoute: TKRoute.unknownRoute,
               routes: TKRoute.routeList,

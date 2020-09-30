@@ -53,7 +53,7 @@ class UserData {
     int validCouponCount;
 
     factory UserData.fromJson(Map<String, dynamic> json) => UserData(
-        user: User.fromJson(json["user"]),
+        user: User.fromJson(json["user"] ?? {}),
         userinfo: UserInfo.fromJson(json["userinfo"]),
         userlevel: UserLevel.fromJson(json["userlevel"]),
         usermedalList: List<dynamic>.from(json["usermedalList"].map((x) => x)),

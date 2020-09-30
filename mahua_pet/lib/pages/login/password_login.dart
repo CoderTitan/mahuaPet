@@ -1,57 +1,31 @@
 
 import 'package:flutter/material.dart';
-import 'package:mahua_pet/pages/home/request/home_request.dart';
-import 'package:mahua_pet/pages/home/view_model/home_view_model.dart';
-import 'package:mahua_pet/pages/home/view_model/pet_view_model.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:mahua_pet/providered/model/model_index.dart';
-import 'package:provider/provider.dart';
+import 'package:mahua_pet/redux/redux_index.dart';
+// import 'package:provider/provider.dart';
 
 
 import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/config/config_index.dart';
 import 'package:mahua_pet/pages/login/register.dart';
 import 'package:mahua_pet/providered/provider_index.dart';
+import 'package:mahua_pet/redux/redux_index.dart';
 
 import 'package:mahua_pet/styles/app_style.dart';
 import 'package:mahua_pet/utils/utils_index.dart';
 import 'views/login_input.dart';
 
 
-class PasswordPage extends StatelessWidget {
-
+class PasswordPage extends StatefulWidget {
   static const routeName = '/psd_login';
-
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('登录'),
-        elevation: 0,
-      ),
-      body: Container(
-         height: double.infinity,
-        child: Stack(
-          children: <Widget>[
-            Image.asset(
-              '${TKImages.image_path}login_logo.png', 
-              width: SizeFit.screenWidth, 
-              height: 155.px, 
-              fit: BoxFit.contain
-            ),
-            PasswordContent()
-          ],
-        ),
-      ),
-    );
-  }
+  _PasswordPageState createState() => _PasswordPageState();
 }
 
-class PasswordContent extends StatefulWidget {
-  @override
-  _PasswordContentState createState() => _PasswordContentState();
-}
+class _PasswordPageState extends State<PasswordPage> {
 
-class _PasswordContentState extends State<PasswordContent> {
   TextEditingController _accountController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
@@ -62,8 +36,34 @@ class _PasswordContentState extends State<PasswordContent> {
   String _account = '';
   String _password = '';
 
+
   @override
   Widget build(BuildContext context) {
+    return StoreBuilder<TKState>(builder: (ctx, store) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('登录'),
+          elevation: 0,
+        ),
+        body: Container(
+          height: double.infinity,
+          child: Stack(
+            children: <Widget>[
+              Image.asset(
+                '${TKImages.image_path}login_logo.png', 
+                width: SizeFit.screenWidth, 
+                height: 155.px, 
+                fit: BoxFit.contain
+              ),
+              renderPasswordContent(context, store)
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+  Widget renderPasswordContent(BuildContext context, Store store) {
     return Positioned(
       top: 105.px,
       child: Container(
@@ -83,7 +83,7 @@ class _PasswordContentState extends State<PasswordContent> {
             SizedBox(height: 15.px),
             registerWidget(),
             SizedBox(height: 30.px),
-            loginButton(context),
+            loginButton(context, store),
           ],
         ),
       ),
@@ -155,23 +155,17 @@ class _PasswordContentState extends State<PasswordContent> {
     );
   }
 
-  Widget loginButton(BuildContext context) {
-    return Selector<PetViewModel, PetViewModel>(
-      selector: (ctx, petVM) => petVM,
-      shouldRebuild: (pre, next) => pre != next,
-      builder: (ctx, petVM, child) {
-        return LargeButton(
-          title: '登录',
-          disabled: _disabled,
-          onPressed: () {
-            loginAction(petVM);
-          }
-        );
-      }, 
+  Widget loginButton(BuildContext context, Store store) {
+    return LargeButton(
+      title: '登录',
+      disabled: _disabled,
+      onPressed: () {
+        loginAction(store);
+      }
     );
   }
 
-  void loginAction(PetViewModel petVM) {
+  void loginAction(Store store) {
     TKToast.showLoading();
     final params = {'username': _account, 'password': _password, 'type': 'password', 'token': ''};
     TKRequest.requestData(HttpConfig.applogin, method: 'post', params: params)
@@ -179,16 +173,9 @@ class _PasswordContentState extends State<PasswordContent> {
         if (value.isSuccess) {
           Map<String, dynamic> result = value.data;
 
-          UserProvider userModel = Provider.of<UserProvider>(context, listen: false);
-          userModel.loginInfo = LoginInfo.fromJson(result);
-
-          petVM.requestPetList();
-
-          UserProvider.config('APP首页', userModel.loginInfo.token, userModel.loginInfo.userId);
-          UserProvider.user(userModel.loginInfo.userId);
-
-          TKRoute.popToRoutePage(context);
-          TKToast.showSuccess('登录成功');
+          LoginInfo loginInfo = LoginInfo.fromJson(result);
+          store.dispatch(LoginSuccessAction(context, loginInfo));
+          
         } else {
           TKToast.showError(value.message);
         }

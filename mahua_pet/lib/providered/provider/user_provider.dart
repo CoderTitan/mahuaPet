@@ -1,10 +1,11 @@
 
 import 'package:flutter/cupertino.dart';
+import 'package:mahua_pet/caches/caches_index.dart';
 import 'package:mahua_pet/config/http_refresh/point_request.dart';
 import 'package:mahua_pet/providered/model/config_info.dart';
 import 'package:mahua_pet/providered/model/model_index.dart';
 import '../model/user_data.dart';
-import '../shared/shared_storage.dart';
+
 
 class UserProvider extends ChangeNotifier {
 
@@ -29,7 +30,6 @@ class UserProvider extends ChangeNotifier {
 
   set configInfo(ConfigInfo configInfo) {
     SharedStorage.configInfo = configInfo;
-    SharedStorage.saveConfigInfo();
     notifyListeners();
   }
 
@@ -39,13 +39,11 @@ class UserProvider extends ChangeNotifier {
       SharedStorage.loginInfo?.lastUserId = loginInfo?.userId;
       SharedStorage.loginInfo = loginInfo;
     }
-    SharedStorage.saveLoginInfo();
     notifyListeners();
   }
 
   set userData(UserData userData) {
     SharedStorage.userData = userData;
-    SharedStorage.saveUserData();
     notifyListeners();
   } 
 

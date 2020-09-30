@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:device_info/device_info.dart';
 import 'package:mahua_pet/providered/provider_index.dart';
+import 'package:mahua_pet/caches/caches_index.dart';
 
 
 class TKDeviceInfo {

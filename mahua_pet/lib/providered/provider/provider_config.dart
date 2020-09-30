@@ -6,7 +6,6 @@ import 'package:mahua_pet/pages/home/view_model/home_view_model.dart';
 import 'package:mahua_pet/pages/home/view_model/pet_view_model.dart';
 
 import 'package:mahua_pet/pages/find/view_model/topic_page_provide.dart';
-import 'package:mahua_pet/pages/mine/mine_view_model.dart';
 import 'user_provider.dart';
 
 
@@ -17,6 +16,5 @@ class ProviderConfig {
     ChangeNotifierProvider(create: (ctx) => HomeViewModel()),
     ChangeNotifierProvider(create: (ctx) => UserProvider()),
     ChangeNotifierProvider(create: (ctx) => TopicPageProvider()),
-    ChangeNotifierProvider(create: (ctx) => MineViewModel()),
   ];
 }

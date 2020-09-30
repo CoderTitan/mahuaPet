@@ -16,8 +16,6 @@ class LoginInfo {
         this.registerChannel,
         this.registerType,
         this.platformType,
-        this.createTime,
-        this.modifyTime,
         this.isFlag,
         this.delFlag,
         this.token,
@@ -40,8 +38,6 @@ class LoginInfo {
     String registerChannel;
     String registerType;
     String platformType;
-    DateTime createTime;
-    DateTime modifyTime;
     String isFlag;
     String delFlag;
     String token;
@@ -63,8 +59,6 @@ class LoginInfo {
       registerChannel: json["registerChannel"],
       registerType: json["registerType"],
       platformType: json["platformType"],
-      createTime: DateTime.parse(json["createTime"]),
-      modifyTime: DateTime.parse(json["modifyTime"]),
       isFlag: json["isFlag"],
       delFlag: json["delFlag"],
       token: json["token"],
@@ -86,8 +80,6 @@ class LoginInfo {
         "registerChannel": registerChannel,
         "registerType": registerType,
         "platformType": platformType,
-        "createTime": createTime?.toIso8601String(),
-        "modifyTime": modifyTime?.toIso8601String(),
         "isFlag": isFlag,
         "delFlag": delFlag,
         "token": token,

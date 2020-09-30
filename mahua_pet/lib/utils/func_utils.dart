@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:mahua_pet/styles/app_style.dart';
 import 'package:redux/redux.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +8,7 @@ import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/config/config_index.dart';
 import 'package:mahua_pet/redux/redux_index.dart';
 import 'package:mahua_pet/providered/provider_index.dart';
+import 'package:mahua_pet/caches/caches_index.dart';
 
 import 'package:mahua_pet/pages/home/view_model/pet_view_model.dart';
 import 'package:mahua_pet/pages/login/login.dart';
@@ -39,6 +41,19 @@ class FuncUtils {
 
     PetViewModel petVM = Provider.of<PetViewModel>(context, listen: false);
     petVM.petList = [];
+
+    TKToast.showSuccess('退出登录成功');
+    TKRoute.popRoot(context);
+  }
+
+  // 退出登录
+  static void loginOutAction(BuildContext context) {
+    Store<TKState> store = StoreProvider.of(context);
+
+    store.dispatch(LogoutAction(context));
+    store.dispatch(LoginStatusAction(false));
+    store.dispatch(UpdatePetList([]));
+    store.dispatch(UpdateCurrentPet(PetModel()));
 
     TKToast.showSuccess('退出登录成功');
     TKRoute.popRoot(context);

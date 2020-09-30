@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:mahua_pet/pages/welcome/welcome_page.dart';
 import 'package:mahua_pet/providered/provider_index.dart';
+import 'package:mahua_pet/utils/utils_index.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:mahua_pet/caches/caches_index.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:mahua_pet/component/component.dart';
@@ -9,6 +12,7 @@ import 'package:mahua_pet/redux/redux_index.dart';
 import 'package:mahua_pet/styles/app_style.dart';
 import 'package:mahua_pet/utils/func_utils.dart';
 import 'package:mahua_pet/config/config_index.dart';
+import './contents/setting_page.dart';
 
 
 
@@ -27,21 +31,19 @@ class _MinePageState extends State<MinePage> {
   void initState() { 
     super.initState();
     
-    // Store<TKState> store = StoreProvider.of(navigator.context);
-    // FetchUserInfoAction.loadPetList(store);
-    // FetchUserInfoAction.loadUserData(store).then((value) {});
   }
 
   @override
   Widget build(BuildContext context) {
     return StoreBuilder<TKState>(
       builder: (ctx, store) {
+        final isLogin = store.state.isLogin ?? false;
         return Scaffold(
           appBar: AppBar(
             elevation: 0,
             title: Text('我的'),
             centerTitle: true,
-            actions: renderActionns(),
+            actions: renderActionns(store),
           ),
           body: Container(
             color: TKColor.marginColor(store.state.isNightModal),
@@ -50,6 +52,10 @@ class _MinePageState extends State<MinePage> {
               enablePullUp: false,
               enablePullDown: true,
               onRefresh: () {
+                if (!isLogin) {
+                  _refreshController.refreshCompleted();
+                  return;
+                }
                 FetchUserInfoAction.loadPetList(store);
                 FetchUserInfoAction.loadUserData(store).then((value) {
                   _refreshController.refreshCompleted();
@@ -71,7 +77,8 @@ class _MinePageState extends State<MinePage> {
     );
   }
 
-  List<Widget> renderActionns() {
+  List<Widget> renderActionns(Store store) {
+    bool isLogin = store.state.isLogin ?? false;
     List<Widget> actions = [];
 
     Widget message = IconButton(icon: Icon(Icons.notifications_active), onPressed: () {
@@ -80,7 +87,11 @@ class _MinePageState extends State<MinePage> {
     actions.add(message);
 
     Widget settinng = IconButton(icon: Icon(Icons.settings), onPressed: () {
-
+      if (isLogin) {
+        TKRoute.push(context, SettingPage());
+      } else {
+        FuncUtils.jumpLogin(context);
+      }
     });
     actions.add(settinng);
 
@@ -88,8 +99,12 @@ class _MinePageState extends State<MinePage> {
   }
 
   Widget renderHeaderItem(Store store) {
-    UserInfoModel userModel = store.state.userInfo ?? UserInfoModel();
-    Userinfo userInfo = userModel.userinfo ?? Userinfo();
+    bool isLogin = store.state.isLogin ?? false;
+    UserData userModel = store.state.userData ?? UserData();
+    UserInfo userInfo = userModel.userinfo ?? UserInfo();
+    String headerImg = isLogin ? userInfo.headImg ?? '' : '';
+    String nickName = isLogin ? userInfo.nickname ?? '' : '未登录';
+    String userIntro = isLogin ? userInfo.intro ?? '' : '';
     return SliverToBoxAdapter(
       child: Stack(
         children: [
@@ -111,7 +126,7 @@ class _MinePageState extends State<MinePage> {
                     child: Row(
                       children: [
                         TKNetworkImage(
-                          imageUrl: userInfo.headImg ?? '',
+                          imageUrl: headerImg,
                           width: 70.px,
                           height: 70.px,
                           boxRadius: 40.px,
@@ -124,13 +139,13 @@ class _MinePageState extends State<MinePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                userInfo.nickname ?? '',
+                                nickName,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(fontSize: 16.px, color: TKColor.white, fontWeight: FontWeight.bold)
                               ),
-                              SizedBox(height: 3.px),
-                              Text(userInfo.intro ?? '', maxLines: 2, style: TextStyle(fontSize: 13.px, color: TKColor.white)),
+                              SizedBox(height: isLogin ? 3.px : 0),
+                              isLogin ? Text(userIntro, maxLines: 2, style: TextStyle(fontSize: 13.px, color: TKColor.white)) : Container(),
                             ],
                           ),
                         )
@@ -141,6 +156,13 @@ class _MinePageState extends State<MinePage> {
                 ],
               ),
             ),
+            onTap: () {
+              if (isLogin) {
+                TKRoute.push(context, SettingPage());
+              } else {
+                FuncUtils.jumpLogin(context);
+              }
+            },
           )
         ],
       ),
@@ -148,7 +170,12 @@ class _MinePageState extends State<MinePage> {
   }
 
   Widget renderMiddleInfo(Store store) {
-    UserInfoModel userModel = store.state.userInfo ?? UserInfoModel();
+    bool isLogin = store.state.isLogin ?? false;
+    UserData userModel = store.state.userData ?? UserData();
+
+    if (!isLogin) {
+      return SliverToBoxAdapter(child: Container());
+    }
 
     final titles = ['获赞', '粉丝', '关注'];
     final numbers = [userModel.agreeCount, userModel.fansCount, userModel.followCount];
@@ -310,7 +337,7 @@ class _MinePageState extends State<MinePage> {
                 } else if (index == 1) {
                   
                 } else {
-                  
+                  TKRoute.push(context, WelcomePage());
                 }
               },
             );
