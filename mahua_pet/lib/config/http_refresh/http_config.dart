@@ -43,7 +43,17 @@ class HttpConfig {
    */
   /// 轮播图: discover/advertUnit/selectPageList?locationName=2&locationPage=1
   static const String selectPageList = 'discover/advertUnit/selectPageList';
+
+  /// 首页种草列表: auditStatus=1&pageIndex=1&pageSize=10&userLoginId=136899
+  static const String getTrialReportList = 'user/trialReport/getTrialReportList';
+
+  /// 首页推荐列表: messageTotal=0&pageIndex=1&reportTotal=0&thirtyPieces=1&userLoginId=136899
+  static const String selectMessageRecommendList = 'user/message/selectMessageRecommendList';
+
   
+
+
+
   /**
    * 我的部分
    */

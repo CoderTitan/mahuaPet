@@ -18,6 +18,9 @@ import 'route_util.dart';
 
 class FuncUtils {
 
+  /// 当前语言
+  static Locale curLocale;
+
   // 是否登录
   static bool isLogin() {
     LoginInfo loginInfo = SharedStorage.loginInfo;
@@ -117,5 +120,25 @@ class FuncUtils {
     if (themeIndex != null) {
       setThemeData(store, themeIndex);
     }
+  }
+
+  /// 切换语言
+  static changeLocale(Store store, int index) {
+    Locale locale = store.state.platformLocale;
+    switch (index) {
+      case 0:
+        // locale = Locale('zh', 'CH');
+        locale = Locale.fromSubtags(languageCode: 'zh');
+        break;
+      case 1:
+        // locale = Locale('en', 'US');
+        locale = Locale.fromSubtags(languageCode: 'en');
+        break;
+      case 2:
+        locale = Locale.fromSubtags(languageCode: 'ko');
+        break;
+    }
+    curLocale = locale;
+    store.dispatch(RefreshLocaleAction(locale));
   }
 }

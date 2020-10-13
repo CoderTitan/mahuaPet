@@ -63,6 +63,15 @@ class SharedStorage {
       FuncUtils.setThemeData(store, themeIndex);
     }
 
+    // 语言
+    int localeIndex = await SharedUtils.getInt(ShareConstant.localIndex);
+    if (localeIndex != null) {
+      FuncUtils.changeLocale(store, localeIndex);
+    } else {
+      FuncUtils.curLocale = store.state.platformLocale;
+      store.dispatch(RefreshLocaleAction(store.state.platformLocale));
+    }
+
     return DataResult(userInfo.data, (userInfo.result && login.result));
   }
 

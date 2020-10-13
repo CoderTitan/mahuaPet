@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 
@@ -7,7 +9,6 @@ import 'package:mahua_pet/utils/utils_index.dart';
 import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/providered/provider_index.dart';
 import '../tk_store.dart';
-import 'user_reducer.dart';
 import '../action/action_index.dart';
 
 
@@ -78,6 +79,7 @@ class LoginMiddleware implements MiddlewareClass<TKState> {
 
       LoginInfo loginInfo = action.loginInfo;
       SharedStorage.loginInfo = loginInfo;
+      SharedUtils.setString(ShareConstant.loginInfo, jsonEncode(loginInfo?.toJson()));
       PointRequest.eventBaseRequest('APP首页', loginInfo.token, loginInfo.userId).then((value) {});
 
       TKRoute.popToRoutePage(action.context);

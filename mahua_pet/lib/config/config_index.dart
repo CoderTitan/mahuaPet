@@ -1,5 +1,6 @@
 
 export './http_refresh/http_index.dart';
+export '../generated/l10n.dart';
 
 export 'main_config.dart';
 export 'http_refresh/http_config.dart';

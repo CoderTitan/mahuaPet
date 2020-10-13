@@ -5,7 +5,9 @@ import 'package:mahua_pet/pages/find/contents/find_topic.dart';
 import 'package:mahua_pet/pages/find/contents/find_recom.dart';
 
 import 'package:mahua_pet/styles/app_style.dart';
+import 'package:mahua_pet/config/config_index.dart';
 import 'package:mahua_pet/redux/redux_index.dart';
+
 
 
 class FindPage extends StatefulWidget {
@@ -15,7 +17,7 @@ class FindPage extends StatefulWidget {
 
 class _FindPageState extends State<FindPage> with SingleTickerProviderStateMixin {
 
-  List<String> tabs = ['关注', '推荐', '话题'];
+  List<String> tabs = [S.current.mine_flower, S.current.find_recom, S.current.find_topic];
   List<Widget> tabViews = [FindFocusPage(), FindRecomPage(), FindTopicPage()];
   TabController _tabController ;
 
@@ -30,6 +32,7 @@ class _FindPageState extends State<FindPage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     return StoreBuilder<TKState>(
       builder: (ctx, store) {
+        tabs = [S.of(context).mine_flower, S.of(context).find_recom, S.of(context).find_topic];
         return Scaffold(
           appBar: AppBar(
             title: TabBar(

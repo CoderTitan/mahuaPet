@@ -5,6 +5,8 @@ class ShareConstant {
   static const welcomePage = 'welcomePage';
   /// 当前主题索引
   static const themeColorIndex = 'themeColorIndex';
+  /// 当前语言索引
+  static const localIndex = 'localIndex';
 
   /// 是否登录
   static const isLogin = 'isLogin';

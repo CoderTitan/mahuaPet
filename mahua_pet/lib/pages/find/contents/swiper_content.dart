@@ -78,6 +78,7 @@ class _SwiperContentState extends State<SwiperContent> with AutomaticKeepAliveCl
     if (_showLoading) {
       TKToast.showLoading();
     }
+    _showLoading = true;
     _pageIndex += 1;
     requestCommentList(_pageIndex);
   }

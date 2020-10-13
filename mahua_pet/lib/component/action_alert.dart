@@ -56,21 +56,23 @@ class TKActionAlert {
   }
 
   /// 列表List
-  static Future<Null> showCommitOptionDialog(
-    BuildContext context,
+  static Future<Null> showCommitOptionDialog({
+    @required BuildContext context,
     List<Color> colorList,
-    ValueChanged<int> onTap, {
     double width = 250.0,
     bool isNight = false,
     List<String> titleList,
+    ValueChanged<int> onTap
   }) {
+    final titleArray = titleList ?? [];
+    final colorArray = colorList ?? [];
     return showTKDialog(
       context: context,
       builder: (ctx) {
         return Center(
           child: Container(
             width: width,
-            height: colorList.length * 44.px + 8.px,
+            height: titleArray.length * 44.px + 8.px,
             padding: EdgeInsets.all(4.px),
             margin: EdgeInsets.all(20.px),
             decoration: BoxDecoration(
@@ -78,13 +80,14 @@ class TKActionAlert {
               borderRadius: BorderRadius.circular(4.px)
             ),
             child: ListView.builder(
-              itemCount: colorList.length,
+              itemCount: titleArray.length,
               itemBuilder: (ctx, index) {
-                final title = titleList != null ? titleList[index] ?? '' : '';
+                final backColor = colorArray.length > 0 ? colorArray[index] : (isNight ? TKColor.color_151b26 : TKColor.white);
+                final textColor = (colorArray.length > 0 || isNight) ? TKColor.white : TKColor.color_1a1a1a;
                 return RaisedButton(
                   textColor: Colors.white,
-                  color: colorList[index],
-                  child: Text(title, style: TextStyle(fontSize: 14.px, color: Colors.white)),
+                  color: backColor,
+                  child: Text(titleArray[index], style: TextStyle(fontSize: 14.px, color: textColor)),
                   onPressed: () {
                     Navigator.of(context).pop();
                     onTap(index);

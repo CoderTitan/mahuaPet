@@ -18,3 +18,4 @@ export 'expand_header.dart';
 export 'sticky_header.dart';
 export 'empty_view.dart';
 export 'skeleton_list.dart';
+export 'animated_widget.dart';

@@ -1,11 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:bot_toast/bot_toast.dart';
-import 'package:provider/provider.dart';
+import 'package:mahua_pet/generated/l10n.dart';
 
-import 'package:mahua_pet/styles/app_style.dart';
 import 'package:mahua_pet/redux/redux_index.dart';
 import 'package:mahua_pet/utils/utils_index.dart';
 import 'package:mahua_pet/config/config_index.dart';
@@ -29,6 +29,7 @@ class _FlutterReduxAppState extends State<FlutterReduxApp> with NavigatorObserve
     // 初始化
     initialState: TKState(
       themeData: FuncUtils.getThemeData(0),
+      locale: Locale('zh', 'CH'),
       isNightModal: false,
       isLogin: false,
     ),
@@ -64,6 +65,14 @@ class _FlutterReduxAppState extends State<FlutterReduxApp> with NavigatorObserve
             child: MaterialApp(
               title: '麻花宠物',
               theme: store.state.themeData,
+              supportedLocales: [store.state.locale],
+              locale: store.state.locale,
+              localizationsDelegates: [
+                GlobalMaterialLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                S.delegate
+              ],
               initialRoute: isWelcome ? TKRoute.launchRoute : TKRoute.welcomeRoute,
               onGenerateRoute: TKRoute.generateRoute,
               onUnknownRoute: TKRoute.unknownRoute,

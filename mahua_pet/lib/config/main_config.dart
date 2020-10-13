@@ -19,7 +19,7 @@ class TKMainConfig extends StatelessWidget {
       providers: ProviderConfig.providers,
       child: FlutterEasyLoading(
         child: RefreshConfiguration(
-          headerTriggerDistance: 60,
+          headerTriggerDistance: 100,
           springDescription: SpringDescription(stiffness: 170, damping: 16, mass: 1.9),
             enableScrollWhenRefreshCompleted: true, 
             enableLoadingWhenFailed : true, 

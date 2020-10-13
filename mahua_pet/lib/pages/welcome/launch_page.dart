@@ -31,6 +31,7 @@ class _LaunchPageState extends State<LaunchPage> {
     Store<TKState> store = StoreProvider.of(context);
     Future.delayed(const Duration(seconds: 3), () {
       SharedStorage.initUserInfo(store).then((result) {
+        FetchUserInfoAction.loadPetList(store);
         TKRoute.pushMainRoot(context);
       });
     });

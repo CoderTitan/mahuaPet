@@ -7,6 +7,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/utils/utils_index.dart';
 import 'package:mahua_pet/styles/app_style.dart';
+import 'package:mahua_pet/config/config_index.dart';
 import 'package:mahua_pet/providered/provider_index.dart';
 
 import '../view_model/view_model_index.dart';
@@ -83,8 +84,8 @@ class _FindFocusPageState extends State<FindFocusPage> with AutomaticKeepAliveCl
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('你可能想认识他们~', style: TextStyle(fontSize: 14.px, color: TKColor.color_666666)),
-              SmallButton(title: '换一组', width: 80.px, onPressed: () {
+              Text(S.of(context).find_know, style: TextStyle(fontSize: 14.px, color: TKColor.color_666666)),
+              SmallButton(title: S.of(context).find_change, onPressed: () {
                 recomVM.refreshData();
               })
             ],
@@ -140,7 +141,7 @@ class _FindFocusPageState extends State<FindFocusPage> with AutomaticKeepAliveCl
           ),
           Container(
             height: 20.px, 
-            child: Text('已有${item.relationNum}关注', style: TextStyle(fontSize: 10.px, color: TKColor.color_999999)),
+            child: Text(S.of(context).find_focus_count('${item.relationNum}'), style: TextStyle(fontSize: 10.px, color: TKColor.color_999999)),
           ),
           FocusButton(
             isSelect: item.isRelation ?? false,

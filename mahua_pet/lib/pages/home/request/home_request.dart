@@ -7,8 +7,10 @@ import 'package:mahua_pet/pages/home/view_model/home_view_model.dart';
 import 'package:mahua_pet/pages/home/view_model/pet_view_model.dart';
 import 'package:mahua_pet/providered/provider_index.dart';
 import 'package:mahua_pet/caches/caches_index.dart';
+import 'package:mahua_pet/component/component.dart';
 import 'package:provider/provider.dart';
 import '../../../redux/models/pet_model.dart';
+import '../models/model_index.dart';
 
 
 
@@ -58,4 +60,28 @@ class HomeRequest {
       print(error);
     });
   }
+
+  /// 获取种草列表
+  static Future requestHomeGrass(int pageIndex) async {
+    LoginInfo loginInfo = SharedStorage.loginInfo;
+    final url = '${HttpConfig.getTrialReportList}?auditStatus=1&pageIndex=$pageIndex&pageSize=10&userLoginId=${loginInfo.userId}';
+
+    ResponseData result = await TKRequest.requestData(url);
+
+    List<GrassModel> models = [];
+    if (result.isSuccess) {
+      Map<String, dynamic> maps = result.data ?? {};
+      List<dynamic> jsonArr = maps['records'] ?? [];
+      
+      for (var json in jsonArr) {
+        Map<String, dynamic> mapJson = json;
+        final model = GrassModel.fromJson(mapJson);
+        models.add(model);
+      }
+    } else {
+      TKToast.showError(result.message);
+    }
+    return models;
+  }
+
 }

@@ -50,7 +50,7 @@ class TKColor {
 
   /// 浅色背景
   static Color backColor(bool isNight) {
-    return isNight ? color_151b26 : color_f1f1f1;
+    return isNight ? color_151b26 : color_f7f7f7;
   }
 
   /// 背景颜色

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:mahua_pet/styles/app_style.dart';
+import 'package:mahua_pet/config/config_index.dart';
 
 
 class FocusButton extends StatelessWidget {
@@ -23,7 +24,7 @@ class FocusButton extends StatelessWidget {
           border: Border.all(color: TKColor.main_color, width: 0.5)
         ),
         child: Text(
-          isSelect ? '已关注' : '+关注', 
+          isSelect ? S.of(context).find_focused : ('+' + S.of(context).mine_flower), 
           style: TextStyle(
             fontSize: 12.px, 
             color: isSelect ? TKColor.main_color : TKColor.white

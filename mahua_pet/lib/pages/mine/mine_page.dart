@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mahua_pet/pages/welcome/welcome_page.dart';
@@ -23,7 +24,7 @@ class MinePage extends StatefulWidget {
   _MinePageState createState() => _MinePageState();
 }
 
-class _MinePageState extends State<MinePage> {
+class _MinePageState extends State<MinePage> with NavigatorObserver {
 
   RefreshController _refreshController = RefreshController(initialRefresh: false);
 
@@ -41,7 +42,7 @@ class _MinePageState extends State<MinePage> {
         return Scaffold(
           appBar: AppBar(
             elevation: 0,
-            title: Text('我的'),
+            title: Text(S.of(context).mine_title,),
             centerTitle: true,
             actions: renderActionns(store),
           ),
@@ -103,7 +104,7 @@ class _MinePageState extends State<MinePage> {
     UserData userModel = store.state.userData ?? UserData();
     UserInfo userInfo = userModel.userinfo ?? UserInfo();
     String headerImg = isLogin ? userInfo.headImg ?? '' : '';
-    String nickName = isLogin ? userInfo.nickname ?? '' : '未登录';
+    String nickName = isLogin ? userInfo.nickname ?? '' : S.of(context).login_no;
     String userIntro = isLogin ? userInfo.intro ?? '' : '';
     return SliverToBoxAdapter(
       child: Stack(
@@ -177,7 +178,7 @@ class _MinePageState extends State<MinePage> {
       return SliverToBoxAdapter(child: Container());
     }
 
-    final titles = ['获赞', '粉丝', '关注'];
+    final titles = [S.of(context).mine_agree, S.of(context).mine_fans, S.of(context).mine_flower];
     final numbers = [userModel.agreeCount, userModel.fansCount, userModel.followCount];
     return SliverToBoxAdapter(
       child: Container(
@@ -229,11 +230,11 @@ class _MinePageState extends State<MinePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('我的宠物', style: TextStyle(fontSize: 15.px, color: TKColor.blackColor(store.state.isNightModal))),
+            Text(S.of(context).mine_pet, style: TextStyle(fontSize: 15.px, color: TKColor.blackColor(store.state.isNightModal))),
             GestureDetector(
               child: Row(
                 children: [
-                  Text('全部', style: TextStyle(fontSize: 14.px, color: TKColor.grayColor(store.state.isNightModal))),
+                  Text(S.of(context).mine_all, style: TextStyle(fontSize: 14.px, color: TKColor.grayColor(store.state.isNightModal))),
                   Icon(Icons.keyboard_arrow_right, color: TKColor.grayColor(store.state.isNightModal), size: 18.px)
                 ],
               ),
@@ -304,7 +305,7 @@ class _MinePageState extends State<MinePage> {
   }
 
   Widget renderMineList(BuildContext context, Store store) {
-    final titles = ['设置主题', '设置语言', 'Tools'];
+    final titles = [S.of(context).mine_theme, S.of(context).mine_local, 'Tools'];
     return SliverToBoxAdapter(
       child: Container(
         margin: EdgeInsets.all(16.px),
@@ -335,7 +336,7 @@ class _MinePageState extends State<MinePage> {
                 if (index == 0) {
                   showThemeDialog(context, store);
                 } else if (index == 1) {
-                  
+                  showLocalDialog(context, store);
                 } else {
                   TKRoute.push(context, WelcomePage());
                 }
@@ -349,19 +350,38 @@ class _MinePageState extends State<MinePage> {
 
   void showThemeDialog(BuildContext context, Store store) {
     final titles = [
-      '默认主题',
-      '主题1',
-      '主题2',
-      '主题3',
-      '主题4',
-      '主题5',
-      '主题6',
+      S.of(context).theme_0,
+      S.of(context).theme_1,
+      S.of(context).theme_2,
+      S.of(context).theme_3,
+      S.of(context).theme_4,
+      S.of(context).theme_5,
+      S.of(context).theme_6,
     ];
     final colors = TKCommonConfig.getThemeColors();
-    TKActionAlert.showCommitOptionDialog(context, colors, (index) { 
-      FuncUtils.setThemeData(store, index);
-      SharedUtils.setInt(ShareConstant.themeColorIndex, index);
-    }, titleList: titles, isNight: store.state.isNightModal);
+    TKActionAlert.showCommitOptionDialog(
+      context: context,
+      colorList: colors,
+      titleList: titles,
+      isNight: store.state.isNightModal,
+      onTap: (index) {
+        FuncUtils.setThemeData(store, index);
+        SharedUtils.setInt(ShareConstant.themeColorIndex, index);
+      }
+    );
+  }
+
+  void showLocalDialog(BuildContext context, Store store) {
+    final titles = ['中文', 'English', '한국어'];
+    TKActionAlert.showCommitOptionDialog(
+      context: context,
+      titleList: titles,
+      isNight: store.state.isNightModal,
+      onTap: (index) {
+        FuncUtils.changeLocale(store, index);
+        SharedUtils.setInt(ShareConstant.localIndex, index);
+      }
+    );
   }
 }
 

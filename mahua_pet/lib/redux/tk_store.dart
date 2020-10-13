@@ -52,6 +52,7 @@ TKState appReducer(TKState state, action) {
     // appz主题
     themeData: ThemeDataReducer(state.themeData, action),
     isNightModal: NightModalReducer(state.isNightModal, action),
+    locale: LocaleReducer(state.locale, action),
 
     // 登录
     isLogin: LoginReducer(state.isLogin, action),

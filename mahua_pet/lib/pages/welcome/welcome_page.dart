@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:mahua_pet/redux/redux_index.dart';
 import 'package:mahua_pet/styles/app_style.dart';
@@ -36,7 +37,6 @@ class _WelcomePageState extends State<WelcomePage> {
         return Material(
           child: PageView(
             controller: _pageController,
-            // physics: ,
             children: [1, 2, 3, 4].map((e) {
               return GestureDetector(
                 child: Image.asset(TKImages.asset('guideX$e'), fit: BoxFit.cover),
@@ -44,6 +44,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   if (e == 4) {
                     SharedStorage.saveShowWelcome();
                     SharedStorage.initUserInfo(store).then((result) {
+                      FetchUserInfoAction.loadPetList(store);
                       TKRoute.pushMainRoot(context);
                     });
                   }

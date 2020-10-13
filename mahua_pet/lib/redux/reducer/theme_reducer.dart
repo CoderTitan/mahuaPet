@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 
 
-
+/************* 主题管理 *************/
 /// 创建 Reducer<State> 
 final ThemeDataReducer = combineReducers<ThemeData>([
   TypedReducer<ThemeData, RefreshThemeDataAction>(_refreshTheme),
@@ -36,3 +36,25 @@ class RefreshNightModalAction {
 
   RefreshNightModalAction(this.nightModal);
 }
+/************* end *************/
+
+
+
+
+/************* 语言管理 *************/
+/// 多语言 Reducer<State> 
+final LocaleReducer = combineReducers<Locale>([
+  TypedReducer<Locale, RefreshLocaleAction>(_refreshLocale),
+]);
+
+Locale _refreshLocale(Locale locale, RefreshLocaleAction action) {
+  locale = action.locale;
+  return locale;
+}
+
+class RefreshLocaleAction {
+  final Locale locale;
+
+  RefreshLocaleAction(this.locale);
+}
+/************* end *************/

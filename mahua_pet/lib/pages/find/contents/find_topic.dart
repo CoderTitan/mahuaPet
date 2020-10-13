@@ -6,6 +6,7 @@ import 'package:mahua_pet/pages/find/views/question_item.dart';
 import 'package:mahua_pet/pages/find/views/skele_topic.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:mahua_pet/styles/app_style.dart';
+import 'package:mahua_pet/config/config_index.dart';
 import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/utils/utils_index.dart';
 import 'package:mahua_pet/providered/provider_index.dart';
@@ -84,10 +85,10 @@ class _FindTopicPageState extends State<FindTopicPage> with AutomaticKeepAliveCl
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text('热门话题', style: TextStyle(fontSize: 16.px, color: TKColor.color_333333, fontWeight: FontWeight.bold)),
+                    Text(S.of(context).find_hot_topic, style: TextStyle(fontSize: 16.px, color: TKColor.color_333333, fontWeight: FontWeight.bold)),
                     Row(
                       children: <Widget>[
-                        Text('更多', style: TextStyle(fontSize: 13.px, color: TKColor.color_666666)),
+                        Text(S.of(context).find_more, style: TextStyle(fontSize: 13.px, color: TKColor.color_666666)),
                         Icon(Icons.keyboard_arrow_right, color: TKColor.color_999999)
                       ],
                     )
@@ -120,7 +121,7 @@ class _FindTopicPageState extends State<FindTopicPage> with AutomaticKeepAliveCl
     return SliverToBoxAdapter(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 16.px, vertical: 10.px),
-        child: Text('热门讨论', style: TextStyle(fontSize: 20.px, color: TKColor.color_1a1a1a, fontWeight: FontWeight.w700)),
+        child: Text(S.of(context).find_hot_talk, style: TextStyle(fontSize: 20.px, color: TKColor.color_1a1a1a, fontWeight: FontWeight.w700)),
       ),
     );
   }
