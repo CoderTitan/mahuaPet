@@ -50,7 +50,44 @@ class HttpConfig {
   /// 首页推荐列表: messageTotal=0&pageIndex=1&reportTotal=0&thirtyPieces=1&userLoginId=136899
   static const String selectMessageRecommendList = 'user/message/selectMessageRecommendList';
 
+  /// 首页种草列表: post: /user/trialReport/getTrialReportInfo
+  static const String getTrialReportInfo = 'user/trialReport/getTrialReportInfo';
   
+  /// 首页种草点赞: post: user/agree/updateTrialReportAgree
+  static const String updateTrialReportAgree = 'user/agree/updateTrialReportAgree';
+
+  /// 首页种草收藏: post: user/collections/update
+  static const String collectionApi = 'user/collections/update';
+
+
+
+  /**
+   * 日历部分
+   */
+  /// 日历记录天数: /user/growManager/selectGrowManagerList?petId=19985&year=2020
+  /// 日历某一天的记录: user/growManager/selectGrowManagerList?day=10&month=09&petId=19985&year=2020
+  static const String selectGrowManagerList = 'user/growManager/selectGrowManagerList';
+
+  /// 日历每天的可记录项: /user/growManager/selectManagerDetailByGrowManagerId?growManagerId=25010
+  static const String selectManagerDetailByGrowManagerId = 'user/growManager/selectManagerDetailByGrowManagerId';
+
+  /// 日历每天的医疗记录: user/diseaseRecords/selectRecordsListByManagerId?growManagerId=25010&pageIndex=1&pageSize=10
+  static const String selectRecordsListByManagerId = 'user/diseaseRecords/selectRecordsListByManagerId';
+
+  /// 保存日常记录/体重(post): user/templePetValue/save, 
+  /// {"growTempleId":"9","growManagerId":31755,"value":"13,14","templePetValueId":27342,"petId":"19985"}
+  /// post: {"growTempleId":"9","growManagerId":33376,"value":"14","petId":"19985"}
+  static const String record_save = 'user/templePetValue/save';
+
+  /// 添加医疗记录: user/diseaseRecords/save
+  /// post: {"userId":136899,"symptom":"亲","fileIds":"68088","diagnosticResult":"这","day":"26","month":"10","growManagerId":33376,"year":"2020","desc":"是不是"}
+  static const String fit_save = 'user/diseaseRecords/save';
+
+  /// 添加日常小计: user/templePetValue/save
+  
+
+
+
 
 
 

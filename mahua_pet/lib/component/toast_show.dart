@@ -5,32 +5,32 @@ import 'package:mahua_pet/styles/app_style.dart';
 
 class TKToast {
   static void showToast(String msg) {
-    setToastStyle();
+    // setToastStyle();
     EasyLoading.showToast(msg);
   }
 
   static void showLoading() {
-    setToastStyle();
+    // setToastStyle();
     EasyLoading.show(status: '加载中...');
   }
 
   static void showSuccess(String msg) {
-    setToastStyle();
+    // setToastStyle();
     EasyLoading.showSuccess(msg);
   }
 
   static void showError(String msg) {
-    setToastStyle();
+    // setToastStyle();
     EasyLoading.showError(msg);
   }
 
   static void showWarn(String msg) {
-    setToastStyle();
+    // setToastStyle();
     EasyLoading.showInfo(msg);
   }
 
   static void showProgress(double value, {String status = '正在保存...'}) {
-    setToastStyle();
+    // setToastStyle();
     EasyLoading.showProgress(value, status: status);
   }
 
@@ -45,7 +45,7 @@ class TKToast {
       ..indicatorColor = Colors.white
       ..progressColor = Colors.white
       ..textColor = Colors.white
-      ..fontSize = 15.px
+      ..fontSize = 15
       ..indicatorType = EasyLoadingIndicatorType.circle
       ..userInteractions = false;
   }

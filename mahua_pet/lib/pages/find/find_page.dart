@@ -25,7 +25,7 @@ class _FindPageState extends State<FindPage> with SingleTickerProviderStateMixin
   void initState() {
     super.initState();
 
-    _tabController = TabController(initialIndex: 0, length: tabs.length, vsync: this);
+    _tabController = TabController(length: tabs.length, vsync: this);
   }
 
   @override

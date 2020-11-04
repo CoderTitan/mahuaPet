@@ -141,4 +141,13 @@ class FuncUtils {
     curLocale = locale;
     store.dispatch(RefreshLocaleAction(locale));
   }
+
+
+  /// 字符串补0
+  static String fillInt(int number) {
+    if (number < 10) {
+      return '0$number';
+    }
+    return '$number';
+  }
 }

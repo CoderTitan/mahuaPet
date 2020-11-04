@@ -40,6 +40,9 @@ class FetchUserInfoAction {
         modelList = jsonArr.map((e) => PetModel.fromJson(e)).toList();
       }
       store.dispatch(UpdatePetList(modelList));
+      if (modelList.length > 0 && store.state.currentPet == null) {
+        store.dispatch(UpdateCurrentPet(modelList.first));
+      }
     } 
   }
 }

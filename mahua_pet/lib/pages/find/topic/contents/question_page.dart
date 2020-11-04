@@ -40,6 +40,7 @@ class _QuestionPageState extends State<QuestionPage> with SingleTickerProviderSt
             SliverPersistentHeader(
               pinned: true,
               delegate: StickyTabBarDelegate(
+                isNight: false,
                 child: TabBar(
                   controller: _tabController,
                   tabs: tabs.map((e) => Tab(text: e)).toList(),

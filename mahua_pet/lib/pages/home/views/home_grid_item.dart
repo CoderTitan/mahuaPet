@@ -35,7 +35,7 @@ class HomeGridItem extends StatelessWidget {
             ),
           ),
           onTap: () {
-
+            actionCallBack(model);
           },
         );
       },
@@ -133,12 +133,27 @@ class HomeGridItem extends StatelessWidget {
   }
 
   Widget renderMessageItem(TKState state) {
+    final mainColor = state.isNightModal ? TKColor.white : state.themeData.primaryColor;
     return Container(
-      child: Text(
-        model.messageInfo, 
-        maxLines: 3, 
+      child: Text.rich(
+        TextSpan(
+          children: [
+            WidgetSpan(child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 2.px),
+              decoration: BoxDecoration(
+                border: Border.all(color: mainColor, width: 0.5),
+                borderRadius: BorderRadius.circular(2)
+              ),
+              child: Text('种草', style: TextStyle(fontSize: 9.px, color: mainColor)),
+            )),
+            TextSpan(
+              text: ' ' + model.messageInfo,
+              style: TextStyle(fontSize: 12.px, color: TKColor.grayColor(state.isNightModal))
+            )
+          ]
+        ),
+        maxLines: 3,
         overflow: TextOverflow.ellipsis, 
-        style: TextStyle(fontSize: 12.px, color: TKColor.grayColor(state.isNightModal))
       ),
     );
   }
@@ -156,7 +171,7 @@ class HomeGridItem extends StatelessWidget {
         renderBottomItem(
           Icons.remove_red_eye, 
           TKColor.lightGray(state.isNightModal), 
-          model.messageReadnum, 
+          model.messageCommentnum, 
           state, 
           textAlign: TextAlign.right,
         ),

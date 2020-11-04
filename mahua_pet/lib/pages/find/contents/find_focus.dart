@@ -32,7 +32,9 @@ class _FindFocusPageState extends State<FindFocusPage> with AutomaticKeepAliveCl
     return ConsumerProvider<FindFocusProvider>(
       model: FindFocusProvider(),
       onModelReady: (focusVM) {
-        focusVM.initDatas();
+        if (FuncUtils.isLogin()) {
+          focusVM.initDatas();
+        }
       },
       builder: (ctx, focusVM, child) {
         focusVM.setPostArray(focusVM.list);

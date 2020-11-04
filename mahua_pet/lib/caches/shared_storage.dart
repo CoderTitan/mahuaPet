@@ -17,6 +17,9 @@ class SharedStorage {
   static LoginInfo loginInfo = LoginInfo();
   static UserData userData = UserData();
   static DeviceInfoModel deviceInfo = DeviceInfoModel();
+  static PetModel petModel = PetModel();
+  
+  static int currentPetId = 0;
   static bool showWelcome = false;
 
 
@@ -48,6 +51,13 @@ class SharedStorage {
     if (userInfo != null && userInfo.result) {
       userData = userInfo.data;
       store.dispatch(UpdateUserInfo(userInfo.data));
+    }
+
+    // 宠物信息
+    DataResult petInfo = await getCurrentModel();
+    if (petInfo != null && petInfo.result) {
+      petModel = petInfo.data;
+      store.dispatch(UpdateCurrentPet(petInfo.data));
     }
 
     // 设备信息
@@ -91,7 +101,7 @@ class SharedStorage {
   static getConfigInfoLocal() async {
     var _configInfo = await SharedUtils.getString(ShareConstant.configInfo);
 
-    if (_configInfo != null && _configInfo != 'null') {
+    if (_configInfo != null && _configInfo != '') {
       var dataInfo = json.decode(_configInfo);
       ConfigInfo data = ConfigInfo.fromJson(dataInfo);
       return new DataResult(data, true);
@@ -104,7 +114,7 @@ class SharedStorage {
   static getLoginInfoLocal() async {
     var _loginInfo = await SharedUtils.getString(ShareConstant.loginInfo);
 
-    if (_loginInfo != null && _loginInfo != 'null') {
+    if (_loginInfo != null && _loginInfo != '') {
       var dataInfo = json.decode(_loginInfo);
       LoginInfo data = LoginInfo.fromJson(dataInfo);
       return new DataResult(data, true);
@@ -117,9 +127,22 @@ class SharedStorage {
   static getUserInfoLocal() async {
     var _userData = await SharedUtils.getString(ShareConstant.userData);
 
-    if (_userData != null && _userData != 'null') {
+    if (_userData != null && _userData != '') {
       var dataInfo = json.decode(_userData);
       UserData data = UserData.fromJson(dataInfo);
+      return new DataResult(data, true);
+    } else {
+      return new DataResult(null, false);
+    }
+  }
+
+  /// 获取当前信息
+  static getCurrentModel() async {
+    var _petModel = await SharedUtils.getString(ShareConstant.petModel);
+
+    if (_petModel != null && _petModel != '') {
+      var jsonData = json.decode(_petModel);
+      PetModel data = PetModel.fromJson(jsonData);
       return new DataResult(data, true);
     } else {
       return new DataResult(null, false);
@@ -130,7 +153,7 @@ class SharedStorage {
   static getDeviceInfoLocal() async {
     var _deviceInfo = await SharedUtils.getString(ShareConstant.deviceInfo);
 
-    if (_deviceInfo != null && _deviceInfo != 'null') {
+    if (_deviceInfo != null && _deviceInfo != '') {
       var dataInfo = json.decode(_deviceInfo);
       DeviceInfoModel data = DeviceInfoModel.fromJson(dataInfo);
       return new DataResult(data, true);

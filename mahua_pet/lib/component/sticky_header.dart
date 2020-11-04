@@ -9,14 +9,18 @@ import 'package:mahua_pet/styles/app_style.dart';
 
 class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   final TabBar child;
+  final bool isNight;
 
-  StickyTabBarDelegate({@required this.child});
+  StickyTabBarDelegate({
+    @required this.child,
+    @required this.isNight,
+  });
 
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 4.px),
-      color: TKColor.white,
+      color: isNight ? TKColor.black : TKColor.white,
       child: child,
     );
   }

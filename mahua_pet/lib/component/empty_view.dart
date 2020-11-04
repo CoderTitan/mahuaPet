@@ -21,12 +21,14 @@ class EmptyContent extends StatelessWidget {
 
   final String image;
   final String title;
+  final double offsetY;
   final bool showReload;
   final VoidCallback onPressed;
 
   EmptyContent({
     this.image = TKImages.empty_data,
     this.title,
+    this.offsetY = 200,
     this.showReload = true,
     this.onPressed
   });
@@ -34,8 +36,11 @@ class EmptyContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 32.px, vertical: 32.px),
+      width: SizeFit.screenWidth,
+      height: SizeFit.screenHeight,
+      padding: EdgeInsets.only(left: 32.px, right: 32.px, top: offsetY),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: renderItems(context),
       ),
     );
@@ -46,7 +51,7 @@ class EmptyContent extends StatelessWidget {
 
     final message = title ?? S.of(context).empty_data;
 
-    Widget imageItem = Image.asset(image, fit: BoxFit.contain, width: 196.px, height: 168.px);
+    Widget imageItem = Image.asset(image, fit: BoxFit.contain, width: 150.px, height: 150.px);
     itemList.add(imageItem);
 
     Widget titleItem = Text(message, style: TextStyle(fontSize: 16.px, color: TKColor.color_999999), textAlign: TextAlign.center);

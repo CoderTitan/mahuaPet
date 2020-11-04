@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:mahua_pet/redux/redux_index.dart';
 import 'package:mahua_pet/styles/app_colors.dart';
+import 'package:mahua_pet/component/component.dart';
 
 import 'initial_items.dart';
 
@@ -40,7 +41,10 @@ class _MainPageState extends State<MainPage> {
             selectedIconTheme: IconThemeData(size: 24, color: store.state.isNightModal ? TKColor.white : store.state.themeData.primaryColor),
             unselectedIconTheme: IconThemeData(size: 24, color: TKColor.grayColor(store.state.isNightModal)),
             onTap: (index) {
-              if (index == 2) { return; }
+              if (index == 2) { 
+                TKActionSheet.bottomSheet(context, GrowthAlert());
+                return;
+              }
               setState(() {
                 _currentIndex = index;
               });

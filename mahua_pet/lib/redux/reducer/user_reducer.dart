@@ -109,7 +109,7 @@ class UpdatePetList {
 
 
 
-/************* 宠物列表信息 *************/
+/************* 当前宠物信息 *************/
 final CurrentPetReducer = combineReducers<PetModel>([
   TypedReducer<PetModel, UpdateCurrentPet>(_updateCurrentPet)
 ]);

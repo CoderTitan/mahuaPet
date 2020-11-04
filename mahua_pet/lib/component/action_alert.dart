@@ -10,6 +10,32 @@ typedef VoidCallBack = void Function();
 
 
 class TKActionAlert {
+  /// 中间弹出弹窗
+  static showCenter(BuildContext context, {
+    @required Widget child,
+    bool barrierDismissible = false,
+  }) {
+    showDialog(
+      context: context,
+      useSafeArea: false,
+      builder: (ctx) {
+        return GestureDetector(
+          child: Container(
+            color: Colors.black38,
+            child: Center(child: child),
+          ),
+          onTap: () {
+            if (barrierDismissible) {
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+              }
+            }
+          },
+        );
+      },
+    );
+  }
+
   
   // 中间显示的取消/确认弹窗
   static showAlert({

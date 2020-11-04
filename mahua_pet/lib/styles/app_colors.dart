@@ -8,6 +8,7 @@ class TKColor {
 
   // Color
   static const color_ffea9e = Color(0xFFffea9e);
+  static const color_ffe277 = Color(0xFFffe277);
   static const color_ffea9e_33 = Color(0x33ffea9e);
   static const color_f5ca2b = Color(0xFFF5CA2B);
   static const color_ffb51b = Color(0xFFffb51b);
@@ -40,6 +41,9 @@ class TKColor {
   static const color_2b364d = Color(0xFF2B364D);
   static const color_f1f1f1 = Color(0xFFF1F1F1);
   static const color_151b26 = Color(0xFF151B26);
+  static const color_e7e9ea = Color(0xFFE7E9EA);
+  static const color_abb0b7 = Color(0xFFABB0B7);
+  static const color_7c848d = Color(0xFF7C848D);
 
   static const color_5d5d5d = Color(0xFF5D5D5D);
   static const color_edf2fa = Color(0xFFEDF2FA);
@@ -83,6 +87,20 @@ class TKColor {
     return isNight ? color_424e66 : color_c6c6c6;
   }
 
+  /// 333333
+  static Color font33(bool isNight) {
+    return isNight ? color_e7e9ea : color_333333;
+  }
+
+  /// 333333
+  static Color font66(bool isNight) {
+    return isNight ? color_abb0b7 : color_666666;
+  }
+
+  /// 333333
+  static Color font99(bool isNight) {
+    return isNight ? color_7c848d : color_999999;
+  }
 
   /// MaterialColor
   static const int _mainValue = 0xFFF5CA2B;

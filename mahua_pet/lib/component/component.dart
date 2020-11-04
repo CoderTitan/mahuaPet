@@ -3,6 +3,7 @@ export 'action_alert.dart';
 export 'action_sheet.dart';
 export 'action_timer.dart';
 export 'action_input.dart';
+export 'growth_alert.dart';
 export 'text_input.dart';
 export 'large_button.dart';
 export 'small_button.dart';

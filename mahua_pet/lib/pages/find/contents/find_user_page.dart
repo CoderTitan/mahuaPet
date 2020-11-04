@@ -53,6 +53,7 @@ class _FindUserPageState extends State<FindUserPage> with SingleTickerProviderSt
           SliverPersistentHeader(
             pinned: true,
             delegate: StickyTabBarDelegate(
+              isNight: false,
               child: TabBar(
                 controller: _tabController,
                 tabs: tabs.map((e) => Tab(text: e)).toList(),

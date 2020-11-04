@@ -38,8 +38,6 @@ class TKRoute {
     PasswordPage.routeName: (ctx) => PasswordPage(),
 
     // 首页相关模块
-    CalendarPage.routeName: (ctx) => CalendarPage(),
-    PetListPage.routeName: (ctx) => PetListPage(),
 
 
   };

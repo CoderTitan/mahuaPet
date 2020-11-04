@@ -34,7 +34,9 @@ class _FindRecomPageState extends State<FindRecomPage> with AutomaticKeepAliveCl
         return ConsumerProvider<FindRecommendProvider>(
           model: FindRecommendProvider(),
           onModelReady: (recomVM) {
-            recomVM.initDatas();
+            if (FuncUtils.isLogin()) {
+              recomVM.initDatas();
+            }
           },
           builder: (_, recomVM, child) {
             _recommendVM = recomVM;

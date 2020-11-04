@@ -86,10 +86,6 @@ class HomeHeader extends StatelessWidget {
   }
 
   Widget initAnimalInfo(BuildContext context, Store store) {
-    List<PetModel> petList = store.state.petList ?? []; 
-    PetModel model = store.state.currentPet;
-    if (model == null && petList.length == 0) return Positioned(child: Container());
-
     return Positioned(
       left: 20.px,
       top: 90.px,
@@ -136,10 +132,8 @@ class HomeHeader extends StatelessWidget {
 
   Widget renderAnimalHeader(BuildContext context, Store store, double size) {
     List<PetModel> petList = store.state.petList ?? []; 
-    PetModel model = store.state.currentPet;
-    if (model == null && petList.length == 0) return Container();
-    
-    model ??= petList.first;
+    PetModel model = store.state.currentPet ?? (petList.length > 0 ? petList.first : null);
+
     final isLogin = store.state.isLogin;
     final animalIcon = isLogin ? (model != null ? (model.petImg ?? '') : '') : '';
 
@@ -161,7 +155,7 @@ class HomeHeader extends StatelessWidget {
   List<Widget> animalInfoList(BuildContext context, Store store) {
     bool isNight = store.state.isNightModal;
     List<PetModel> petList = store.state.petList ?? []; 
-    PetModel model = store.state.currentPet ?? petList.first;
+    PetModel model = store.state.currentPet ?? (petList.length > 0 ? petList.first : null);
     final isLogin = store.state.isLogin;
     final isPet = petList.length > 0;
 
@@ -264,7 +258,7 @@ class HomeHeader extends StatelessWidget {
     }
 
     if (petList.length > 0) {
-      Navigator.of(context).pushNamed(PetListPage.routeName);
+      TKRoute.push(context, PetListPage());
     } else {
       TKRoute.push(context, PetAddPage(isAdd: true, model: null));
     }

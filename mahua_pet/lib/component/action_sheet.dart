@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:mahua_pet/styles/app_style.dart';
+import 'growth_alert.dart';
 
 
 typedef ActionRowsSelect = void Function(int index, String title);
 
 
+/// 从底部弹出
 class TKActionSheet {
+  /// 弹窗底部弹出通用方式
+  static void bottomSheet(BuildContext context, Widget child) {
+    showModalBottomSheet(
+      context: context, 
+      backgroundColor: Colors.transparent,
+      barrierColor: Colors.black45,
+      builder: (ctx) => child
+    );
+  }
+
+
   static void showActionSheet(BuildContext context,{
     List<String> rows,
     bool showCancel = true,
@@ -22,6 +35,9 @@ class TKActionSheet {
         );
     });
   } 
+
+
+  
 }
 
 class TKActionSheetWidget extends StatelessWidget {

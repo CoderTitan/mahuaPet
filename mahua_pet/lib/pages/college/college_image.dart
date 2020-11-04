@@ -5,6 +5,7 @@ class HYImageDetail extends StatelessWidget {
 
   HYImageDetail(this.imageURL);
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-import 'package:bot_toast/bot_toast.dart';
 import 'package:mahua_pet/generated/l10n.dart';
 
 import 'package:mahua_pet/redux/redux_index.dart';
@@ -78,8 +78,10 @@ class _FlutterReduxAppState extends State<FlutterReduxApp> with NavigatorObserve
               onUnknownRoute: TKRoute.unknownRoute,
               routes: TKRoute.routeList,
               debugShowCheckedModeBanner: false,
-              builder: BotToastInit(),
-              navigatorObservers: [BotToastNavigatorObserver(), this],
+              builder: (ctx, child) {
+                return FlutterEasyLoading(child: child);
+              },
+              navigatorObservers: [this],
             ),
           );
         },

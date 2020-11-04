@@ -42,6 +42,7 @@ class _FindSwiperPageState extends State<FindSwiperPage> with SingleTickerProvid
             SliverPersistentHeader(
               pinned: true,
               delegate: StickyTabBarDelegate(
+                isNight: false,
                 child: TabBar(
                   controller: _tabController,
                   tabs: tabs.map((e) => Tab(text: e)).toList(),
