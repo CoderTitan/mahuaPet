@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -11,22 +10,17 @@ import 'package:mahua_pet/utils/utils_index.dart';
 import 'package:mahua_pet/config/config_index.dart';
 import 'package:mahua_pet/caches/caches_index.dart';
 
-
-
-class FlutterReduxApp extends StatefulWidget {
+class ReduxApp extends StatefulWidget {
   @override
-  _FlutterReduxAppState createState() => _FlutterReduxAppState();
+  _ReduxAppState createState() => _ReduxAppState();
 }
 
-class _FlutterReduxAppState extends State<FlutterReduxApp> with NavigatorObserver {
+class _ReduxAppState extends State<ReduxApp> with NavigatorObserver {
 
-  
   /// 初始化state
   final store = Store<TKState>(
     appReducer,
-    // 拦截器
     middleware: middleware,
-    // 初始化
     initialState: TKState(
       themeData: FuncUtils.getThemeData(0),
       locale: Locale('zh', 'CH'),
@@ -39,20 +33,12 @@ class _FlutterReduxAppState extends State<FlutterReduxApp> with NavigatorObserve
   void initState() {
     super.initState();
 
-
     Future.delayed(Duration(seconds: 0), () {
-      /*
-      通过 with NavigatorObserver ，在这里可以获取到
-      MaterialApp 和 StoreProvider 的 context
-      还可以获取到 navigator;
-      比如在这里增加一个监听，如果 token 失效就退回登陆页。
-      */
-      
       navigator.context;
       navigator;
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final isWelcome = SharedStorage.showWelcome;
@@ -78,10 +64,10 @@ class _FlutterReduxAppState extends State<FlutterReduxApp> with NavigatorObserve
               onUnknownRoute: TKRoute.unknownRoute,
               routes: TKRoute.routeList,
               debugShowCheckedModeBanner: false,
+              navigatorObservers: [this],
               builder: (ctx, child) {
                 return FlutterEasyLoading(child: child);
               },
-              navigatorObservers: [this],
             ),
           );
         },
@@ -89,4 +75,3 @@ class _FlutterReduxAppState extends State<FlutterReduxApp> with NavigatorObserve
     );
   }
 }
-

@@ -159,7 +159,7 @@ class _CalendarPageState extends State<CalendarPage> {
     _currentDay = date.day;
   }
 
-  void daySelected(DateTime dayTime, List events) {
+  void daySelected(DateTime dayTime, List events, List events2) {
     _currentYear = dayTime.year;
     _currentMounth = dayTime.month;
     _currentDay = dayTime.day;

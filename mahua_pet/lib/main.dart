@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:mahua_pet/caches/caches_index.dart';
 import 'package:mahua_pet/component/toast_show.dart';
 import 'package:mahua_pet/config/config_index.dart';
@@ -17,13 +16,11 @@ void main() {
   }).catchError((error) {
     print(error);
   });
-
   
 }
 
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
 
@@ -31,6 +28,6 @@ class MyApp extends StatelessWidget {
     TKDeviceInfo.initialezed();
     
 
-    return FlutterReduxApp();
+    return ReduxApp();
   }
 }

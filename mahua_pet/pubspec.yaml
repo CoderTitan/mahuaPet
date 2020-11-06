@@ -28,6 +28,7 @@ dependencies:
 
 
   # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
   # slide_up_panel: flutter可定制的上下滑出抽屉
   # like_button: 推特点赞效果带数量滚动动画
   # flutter_swiper: flutter最强大的siwiper, 多种布局方式，无限轮播
@@ -41,14 +42,13 @@ dependencies:
   # flutter_custom_clippers: flutter将widget裁剪成各种自定义形状
   # flutter_custom_dialog: 对全局弹窗的功能封装
 
-
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.3
+  flutter_easyloading: ^1.1.4
   dio: ^3.0.9
   provider: ^4.1.3
   flutter_redux: ^0.6.0
   shared_preferences: ^0.5.7+3
-  flutter_easyloading: ^1.1.4
+  shimmer: ^1.1.1
   table_calendar: ^2.2.3
   cached_network_image: ^2.2.0+1
   carousel_slider: ^2.2.1
@@ -62,7 +62,6 @@ dependencies:
   video_player: ^0.10.11+2
   device_info: ^0.4.2+4
   location: ^3.0.2
-  shimmer: ^1.1.1
   bot_toast: ^3.0.3
 
 
@@ -86,7 +85,8 @@ flutter:
     - resource/images/
     - resource/images/2.0x/
     - resource/images/3.0x/
-    
+
+  
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
