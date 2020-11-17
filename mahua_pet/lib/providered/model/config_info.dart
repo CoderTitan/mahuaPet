@@ -23,11 +23,9 @@ class ConfigInfo {
         this.registerType,
         this.loginType,
         this.registerChannel,
-        this.registerTime,
         this.deviceBrand,
         this.deviceModel,
         this.deviceNo,
-        this.createTime,
         this.isFlag,
         this.delFlag,
     });
@@ -47,11 +45,9 @@ class ConfigInfo {
     String registerType;
     String loginType;
     String registerChannel;
-    DateTime registerTime;
     String deviceBrand;
     String deviceModel;
     String deviceNo;
-    DateTime createTime;
     String isFlag;
     String delFlag;
 
@@ -73,11 +69,9 @@ class ConfigInfo {
         registerType: json["registerType"],
         loginType: json["loginType"],
         registerChannel: json["registerChannel"],
-        registerTime: DateTime.parse(json["registerTime"]),
         deviceBrand: json["deviceBrand"],
         deviceModel: json["deviceModel"],
         deviceNo: json["deviceNo"],
-        createTime: DateTime.parse(json["createTime"]),
         isFlag: json["isFlag"],
         delFlag: json["delFlag"],
       );
@@ -99,11 +93,9 @@ class ConfigInfo {
         "registerType": registerType,
         "loginType": loginType,
         "registerChannel": registerChannel,
-        "registerTime": registerTime.toIso8601String(),
         "deviceBrand": deviceBrand,
         "deviceModel": deviceModel,
         "deviceNo": deviceNo,
-        "createTime": createTime.toIso8601String(),
         "isFlag": isFlag,
         "delFlag": delFlag,
     };

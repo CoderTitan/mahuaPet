@@ -73,13 +73,14 @@ class LoginMiddleware implements MiddlewareClass<TKState> {
     }
     if (action is LoginSuccessAction) {
       store.dispatch(LoginStatusAction(true));
-      SharedUtils.setBool(ShareConstant.isLogin, true);
-      FetchUserInfoAction.loadPetList(store);
-      FetchUserInfoAction.loadUserData(store).then((value) {});
-
+      
       LoginInfo loginInfo = action.loginInfo;
       SharedStorage.loginInfo = loginInfo;
       SharedUtils.setString(ShareConstant.loginInfo, jsonEncode(loginInfo?.toJson()));
+      SharedUtils.setBool(ShareConstant.isLogin, true);
+      FetchUserInfoAction.loadPetList(store);
+      FetchUserInfoAction.loadUserData(store).then((value) {});
+      
       PointRequest.eventBaseRequest('APP首页', loginInfo.token, loginInfo.userId).then((value) {});
 
       TKRoute.popToRoutePage(action.context);

@@ -60,6 +60,8 @@ class _MinePageState extends State<MinePage> with NavigatorObserver {
                 FetchUserInfoAction.loadPetList(store);
                 FetchUserInfoAction.loadUserData(store).then((value) {
                   _refreshController.refreshCompleted();
+                }).catchError((e) {
+                  _refreshController.refreshCompleted();
                 });
               },
               child: CustomScrollView(
@@ -83,7 +85,7 @@ class _MinePageState extends State<MinePage> with NavigatorObserver {
     List<Widget> actions = [];
 
     Widget message = IconButton(icon: Icon(Icons.notifications_active), onPressed: () {
-
+      _refreshController.refreshCompleted();
     });
     actions.add(message);
 

@@ -11,7 +11,7 @@ import '../reducer/reducer_index.dart';
 class FetchUserInfoAction {
   /// 获取用户信息
   static Future loadUserData(Store store) async {
-    LoginInfo loginInfo = store.state.loginInfo;
+    LoginInfo loginInfo = SharedStorage.loginInfo;
     final url = HttpConfig.userIndex;
     final httpURL = url + '?userId=${loginInfo.userId}';
 
@@ -40,7 +40,9 @@ class FetchUserInfoAction {
         modelList = jsonArr.map((e) => PetModel.fromJson(e)).toList();
       }
       store.dispatch(UpdatePetList(modelList));
-      if (modelList.length > 0 && store.state.currentPet == null) {
+
+      PetModel currentPet = store.state.currentPet;
+      if (modelList.length > 0 && (currentPet == null || currentPet.petName == null)) {
         store.dispatch(UpdateCurrentPet(modelList.first));
       }
     } 

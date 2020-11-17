@@ -92,7 +92,7 @@ class CardRecordShareItem extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 14.px, vertical: 16.px),
+            padding: EdgeInsets.symmetric(horizontal: 14.px, vertical: 8.px),
             child: Row(
               children: [
                 Image.asset(TKImages.asset('card_left_pig'), width: 24, height: 20),

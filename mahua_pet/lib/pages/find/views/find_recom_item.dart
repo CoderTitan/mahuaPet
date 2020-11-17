@@ -203,7 +203,11 @@ class FindRecomItem extends StatelessWidget {
           )
         ],
       ),
-      onTap: () => actionCallBack(type),
+      onTap: () {
+        if (actionCallBack != null) {
+          actionCallBack(type);
+        }
+      },
     );
   }
 

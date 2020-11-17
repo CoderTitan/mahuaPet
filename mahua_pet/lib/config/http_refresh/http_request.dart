@@ -31,6 +31,7 @@ class TKRequest extends BaseHttp {
       Response response = await tkhttp.request(url, queryParameters: params, options: options);
       return response.data;
     } on DioError catch(e) {
+      TKToast.showError('请求失败, 请重试');
       return Future.error(e);
     }
   }

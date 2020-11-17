@@ -63,7 +63,10 @@ class _FindFocusPageState extends State<FindFocusPage> with AutomaticKeepAliveCl
       child: ConsumerProvider<FindRecomFocusProvider>(
         model: FindRecomFocusProvider(),
         onModelReady: (recomVM) {
-          recomVM.refreshData();
+          
+          if (FuncUtils.isLogin()){
+            recomVM.refreshData();
+          }
         },
         builder: (_, recomVM, child) {
           return Column(

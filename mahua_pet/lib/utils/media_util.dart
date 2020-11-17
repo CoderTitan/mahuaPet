@@ -47,7 +47,7 @@ class TKMediaUtil {
       quality: 100,
       name: 'image'
     );
-    if (result) {
+    if (result != null) {
       TKToast.showSuccess('图片保存成功');
     } else {
       TKToast.showError('图片保存失败');
