@@ -22,7 +22,7 @@ class LargeButton extends StatelessWidget {
         width: SizeFit.screenWidth - 30.px,
         height: 50.px,
         child: RaisedButton(
-          child: Text('登录', style: TextStyle(fontSize: 16.px)),
+          child: Text(title ?? '', style: TextStyle(fontSize: 16.px)),
           textColor: TKColor.color_4b4b4b,
           disabledTextColor: TKColor.color_6f6f6f,
           color: TKColor.main_color,

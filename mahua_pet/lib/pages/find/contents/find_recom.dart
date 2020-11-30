@@ -44,8 +44,12 @@ class _FindRecomPageState extends State<FindRecomPage> with AutomaticKeepAliveCl
               controller: recomVM.refreshController,
               enablePullUp: FuncUtils.isLogin(),
               onRefresh: () {
-                recomVM.refreshData();
-                recomVM.showErrorMessage(context);
+                if (FuncUtils.isLogin()) {
+                  recomVM.refreshData();
+                  recomVM.showErrorMessage(context);
+                } else {
+                  recomVM.refreshController.refreshCompleted();
+                }
               },
               onLoading: recomVM.loadMoreData,
               child: CustomScrollView(

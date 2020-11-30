@@ -29,7 +29,9 @@ class _FindTopicPageState extends State<FindTopicPage> with AutomaticKeepAliveCl
     return ConsumerProvider<TopicPageProvider>(
       model: TopicPageProvider(),
       onModelReady: (topicModel) {
-        topicModel.initDatas();
+        if (FuncUtils.isLogin()) {
+          topicModel.initDatas();
+        }
       },
       builder: (ctx, topicVM, child) {
         return Container(
@@ -38,8 +40,12 @@ class _FindTopicPageState extends State<FindTopicPage> with AutomaticKeepAliveCl
             controller: topicVM.refreshController,
             enablePullUp: FuncUtils.isLogin(),
             onRefresh: () async {
-              await topicVM.refreshData();
-              topicVM.showErrorMessage(context);
+              if (FuncUtils.isLogin()) {
+                await topicVM.refreshData();
+                topicVM.showErrorMessage(context);
+              } else {
+                topicVM.refreshController.refreshCompleted();
+              }
             },
             onLoading: topicVM.loadMoreData,
             child: CustomScrollView(

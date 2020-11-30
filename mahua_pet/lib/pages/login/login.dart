@@ -1,12 +1,12 @@
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:redux/redux.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
 import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/pages/login/password_login.dart';
 import 'package:mahua_pet/providered/provider_index.dart';
+import 'package:mahua_pet/redux/redux_index.dart';
 
 import 'package:mahua_pet/styles/app_style.dart';
 import 'package:mahua_pet/utils/utils_index.dart';
@@ -26,7 +26,7 @@ class LoginPage extends StatelessWidget {
         elevation: 0,
       ),
       body: Container(
-         height: double.infinity,
+        height: double.infinity,
         child: Stack(
           children: <Widget>[
             Image.asset(
@@ -69,30 +69,32 @@ class _LoginContentState extends State<LoginContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      top: 105.px,
-      child: Container(
-        decoration: BoxDecoration(
-          color: TKColor.color_f7f7f7,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(25.px),
-            topRight: Radius.circular(25.px),
-          )
+    return StoreBuilder<TKState>(builder: (ctx, store) {
+      return Positioned(
+        top: 105.px,
+        child: Container(
+          decoration: BoxDecoration(
+            color: TKColor.color_f7f7f7,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25.px),
+              topRight: Radius.circular(25.px),
+            )
+          ),
+          child: Column(
+            children: <Widget>[
+              SizedBox(height: 18.px),
+              accountWidget(),
+              SizedBox(height: 10.px),
+              codeWidget(),
+              SizedBox(height: 15.px),
+              registerWidget(context),
+              SizedBox(height: 30.px),
+              loginButton(store),
+            ],
+          ),
         ),
-        child: Column(
-          children: <Widget>[
-            SizedBox(height: 18.px),
-            accountWidget(),
-            SizedBox(height: 10.px),
-            codeWidget(),
-            SizedBox(height: 15.px),
-            registerWidget(context),
-            SizedBox(height: 30.px),
-            loginButton(context),
-          ],
-        ),
-      ),
-    );
+      );
+    });
   }
 
   Widget accountWidget() {
@@ -128,7 +130,7 @@ class _LoginContentState extends State<LoginContent> {
   }
 
   void updateLoginState() {
-    final isDisable = _account.length == 11 && _code.length >= 4;
+    final isDisable = _account.length >= 3 && _code.length >= 3;
     setState(() {
       _disabled = isDisable;
     });
@@ -171,54 +173,41 @@ class _LoginContentState extends State<LoginContent> {
     );
   }
 
-  Widget loginButton(BuildContext context) {
+  Widget loginButton(Store store) {
     return LargeButton(
       title: '登录',
       disabled: _disabled,
       onPressed: () {
-        loginAction(context);
+        loginAction(store);
       }
     );
   }
 
   void getCodeAction() {
-
-    // final phone = '%7B%22phone%22%3A%2213456789417%22,%22time%22%3A%221593436035612%22,%22sign%22%3A%2288F2127F942900F5199A43BC0042C195%22%7D';
-    // Utf8Decoder()
-
-
-
-
-    TKToast.showLoading();
-    TKRequest.requestData(HttpConfig.sendCode, method: 'get', params: {'phone': _account})
-      .then((result) {
-        if (result.isSuccess) {
-          TKToast.showSuccess('验证码已发送');
-          authCodeKey.currentState.startAction();
-        } else {
-          TKToast.showError(result.message);
-        }
-      })
-      .catchError((error) {
-        TKToast.dismiss();
-        print('object = $error');
-      });
+    TKToast.showSuccess('验证码已发送');
+    authCodeKey.currentState.startAction();
   }
 
-  void loginAction(BuildContext context) {
-    TKToast.showLoading();
-    final params = {'username': _account, 'code': _code, 'type': 'code', 'token': ''};
+  void loginAction(Store store) {
+    if (_account != '123') {
+      TKToast.showWarn('账号为: 123');
+      return;
+    }
+    if (_code != '123') {
+      TKToast.showWarn('验证码为: 123');
+      return;
+    }
 
+    TKToast.showLoading();
+    final params = {'username': '13456789417', 'password': 'mmmm0000', 'type': 'password', 'token': ''};
     TKRequest.requestData(HttpConfig.applogin, method: 'post', params: params)
       .then((value) {
         if (value.isSuccess) {
           Map<String, dynamic> result = value.data;
-          UserProvider userModel = Provider.of<UserProvider>(context, listen: false);
-          userModel.loginInfo = LoginInfo.fromJson(result);
-          UserProvider.config('APP首页', userModel.loginInfo.token, userModel.loginInfo.userId);
-          UserProvider.user(userModel.loginInfo.userId);
-          TKRoute.popToRoutePage(context);
-          TKToast.showSuccess('登录成功');
+
+          LoginInfo loginInfo = LoginInfo.fromJson(result);
+          store.dispatch(LoginSuccessAction(context, loginInfo));
+          
         } else {
           TKToast.showError(value.message);
         }

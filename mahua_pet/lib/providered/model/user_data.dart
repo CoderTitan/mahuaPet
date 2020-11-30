@@ -56,7 +56,7 @@ class UserData {
         user: User.fromJson(json["user"] ?? {}),
         userinfo: UserInfo.fromJson(json["userinfo"]),
         userlevel: UserLevel.fromJson(json["userlevel"]),
-        usermedalList: List<dynamic>.from(json["usermedalList"].map((x) => x)),
+        usermedalList: List<dynamic>.from(json["usermedalList"].map((x) => x)) ?? [],
         petCount: json["petCount"],
         messageCount: json["messageCount"],
         fansCount: json["fansCount"],

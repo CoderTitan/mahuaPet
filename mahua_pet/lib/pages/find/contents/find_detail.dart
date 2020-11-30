@@ -34,7 +34,6 @@ class _FindDetailPageState extends State<FindDetailPage> {
   List<CommentModel> _commentList = [];
   CommentModel _currentComment = CommentModel();
   int _postPage = 1;
-  bool _showLoading = false;
 
   FocusNode _focusNode = FocusNode();
   TextEditingController _editController = TextEditingController();
@@ -162,18 +161,14 @@ class _FindDetailPageState extends State<FindDetailPage> {
   
 
   void _onRefresh() {
-    if (_showLoading) {
-      TKToast.showLoading();
-    }
+    TKToast.showLoading();
     _postPage = 1;
     requestFindDetail();
     requestCommentList(1);
   }
 
   void _onLoading() {
-    if (_showLoading) {
-      TKToast.showLoading();
-    }
+    TKToast.showLoading();
     _postPage += 1;
     requestCommentList(_postPage);
   }
@@ -183,7 +178,6 @@ class _FindDetailPageState extends State<FindDetailPage> {
       setState(() {
         _model = value;
       });
-      _showLoading = true;
     }).catchError((error) {
       print(error);
     });
@@ -192,7 +186,6 @@ class _FindDetailPageState extends State<FindDetailPage> {
   void requestCommentList(pageIndex) {
     FindRequest.requestCommentList(widget.messageId, pageIndex).then((value) {
       TKToast.dismiss();
-      _showLoading = true;
       if (pageIndex == 1) {
         _commentList = value;
         _model.commentList = value;

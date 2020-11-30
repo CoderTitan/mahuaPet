@@ -123,7 +123,7 @@ class _PasswordPageState extends State<PasswordPage> {
   }
 
   void updateLoginState() {
-    final isDisable = _account.length == 11 && _password.length >= 6 && _password.length <= 20;
+    final isDisable = _account.length >= 3 && _password.length >= 3 && _password.length <= 20;
     setState(() {
       _disabled = isDisable;
     });
@@ -166,8 +166,18 @@ class _PasswordPageState extends State<PasswordPage> {
   }
 
   void loginAction(Store store) {
+
+    if (_account != '123') {
+      TKToast.showWarn('账号为: 123');
+      return;
+    }
+    if (_password != '123') {
+      TKToast.showWarn('密码为: 123');
+      return;
+    }
+
     TKToast.showLoading();
-    final params = {'username': _account, 'password': _password, 'type': 'password', 'token': ''};
+    final params = {'username': '13456789417', 'password': 'mmmm0000', 'type': 'password', 'token': ''};
     TKRequest.requestData(HttpConfig.applogin, method: 'post', params: params)
       .then((value) {
         if (value.isSuccess) {

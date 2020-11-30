@@ -42,8 +42,12 @@ class _FindFocusPageState extends State<FindFocusPage> with AutomaticKeepAliveCl
           controller: focusVM.refreshController,
           enablePullUp: FuncUtils.isLogin(),
           onRefresh: () async {
-            focusVM.refreshData();
-            focusVM.showErrorMessage(context);
+            if (FuncUtils.isLogin()) {
+              focusVM.refreshData();
+              focusVM.showErrorMessage(context);
+            } else {
+              focusVM.refreshController.refreshCompleted();
+            }
           },
           onLoading: focusVM.loadMoreData,
           child: CustomScrollView(
