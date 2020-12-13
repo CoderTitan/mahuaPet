@@ -10,6 +10,8 @@ import 'package:mahua_pet/utils/utils_index.dart';
 import 'package:mahua_pet/config/config_index.dart';
 import 'package:mahua_pet/caches/caches_index.dart';
 
+import 'package:mahua_pet/flutter_widget/widget/list_items.dart';
+
 class ReduxApp extends StatefulWidget {
   @override
   _ReduxAppState createState() => _ReduxAppState();
@@ -47,6 +49,8 @@ class _ReduxAppState extends State<ReduxApp> with NavigatorObserver {
       child: StoreBuilder<TKState>(
         builder: (context, store) {
           store.state.platformLocale = WidgetsBinding.instance.window.locale;
+          Map<String, WidgetBuilder> routeArr = TKRoute.routeList;
+          routeArr.addAll(routeLists);
           return TKMainConfig(
             child: MaterialApp(
               title: '麻花宠物',
@@ -62,7 +66,7 @@ class _ReduxAppState extends State<ReduxApp> with NavigatorObserver {
               initialRoute: isWelcome ? TKRoute.launchRoute : TKRoute.welcomeRoute,
               onGenerateRoute: TKRoute.generateRoute,
               onUnknownRoute: TKRoute.unknownRoute,
-              routes: TKRoute.routeList,
+              routes: routeArr,
               debugShowCheckedModeBanner: false,
               navigatorObservers: [this],
               builder: (ctx, child) {

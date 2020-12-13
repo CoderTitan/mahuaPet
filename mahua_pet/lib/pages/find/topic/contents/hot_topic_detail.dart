@@ -171,23 +171,38 @@ class _HotTopicDetailState extends State<HotTopicDetail> {
           Text('$_totalCount个讨论', style: TextStyle(fontSize: 18.px, color: TKColor.color_1a1a1a, fontWeight: FontWeight.bold)),
           Builder(
             builder: (ctx) {
-              return GestureDetector(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(_orderType == 1 ? '热门' : '全部问题', style: TextStyle(fontSize: 14.px, color: TKColor.color_666666)),
-                    SizedBox(width: 4.px),
-                    Icon(Icons.sort, size: 18.px, color: TKColor.color_666666)
-                  ],
-                ),
-                onTap: () {
-                  final rows = ['热门', '全部问题'];
-                  BTToast.showAttached(ctx, rows, (text, i) { 
-                    TKToast.showLoading();
-                    _orderType = i + 1;
-                    _onRefresh();
-                  });
-                },
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  PopupMenuButton<String>(
+                    padding: EdgeInsets.all(0),
+                    child: Text(
+                      _orderType == 1 ? '热门' : '全部问题', 
+                      style: TextStyle(fontSize: 14.px, color: TKColor.color_666666)
+                    ),
+                    onSelected: (text) {
+                      TKToast.showLoading();
+                      _orderType = text == '热门' ? 1 : 2;
+                      _onRefresh();
+                    },
+                    itemBuilder: (ctx) {
+                      return <PopupMenuEntry<String>>[
+                        PopupMenuItem(
+                          value: '热门',
+                          height: 30.px,
+                          child: Text('热门', style: TextStyle(fontSize: 14.px)),
+                        ),
+                        PopupMenuItem(
+                          value: '全部问题',
+                          height: 30.px,
+                          child: Text('全部问题', style: TextStyle(fontSize: 14.px)),
+                        )
+                      ];
+                    }
+                  ),
+                  SizedBox(width: 4.px),
+                  Icon(Icons.sort, size: 18.px, color: TKColor.color_666666)
+                ],
               );
             },
           )

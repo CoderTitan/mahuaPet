@@ -58,7 +58,6 @@ dependencies:
   video_player: ^0.10.11+2
   device_info: ^0.4.2+4
   location: ^3.0.2
-  bot_toast: ^3.0.3
 
 
 dev_dependencies:

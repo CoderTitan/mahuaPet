@@ -36,10 +36,6 @@ class TKRoute {
     LoginPage.routeName: (ctx) => LoginPage(),
     RegisterPage.routeName: (ctx) => RegisterPage(),
     PasswordPage.routeName: (ctx) => PasswordPage(),
-
-    // 首页相关模块
-
-
   };
 
   // 自行扩展的

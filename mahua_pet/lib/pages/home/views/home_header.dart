@@ -148,7 +148,7 @@ class HomeHeader extends StatelessWidget {
         fit: BoxFit.cover,
         placeholder: '${TKImages.image_path}animal_icon.png',
       ),
-      onTap: () => animalHeaderClick(context, petList.length > 0, model)
+      onTap: () => animalHeaderClick(context, model)
     );
   }
 
@@ -264,7 +264,7 @@ class HomeHeader extends StatelessWidget {
     }
   }
 
-  void animalHeaderClick(BuildContext context, bool isPet, PetModel model) {
+  void animalHeaderClick(BuildContext context, PetModel model) {
     final isLogin = FuncUtils.isLogin();
     if (!isLogin) {
       FuncUtils.jumpLogin(context);

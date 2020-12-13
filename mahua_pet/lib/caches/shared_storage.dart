@@ -87,12 +87,15 @@ class SharedStorage {
 
   /// 清除缓存信息
   static clearAll(Store store) async {
+    configInfo = ConfigInfo();
     SharedUtils.remove(ShareConstant.configInfo);
     store.dispatch(UpdateConfigInfo(ConfigInfo()));
 
+    loginInfo = LoginInfo();
     SharedUtils.remove(ShareConstant.loginInfo);
     store.dispatch(UpdateLoginInfo(LoginInfo()));
 
+    userData = UserData();
     SharedUtils.remove(ShareConstant.userData);
     store.dispatch(UpdateUserInfo(UserData()));
   }

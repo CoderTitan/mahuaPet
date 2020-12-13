@@ -7,7 +7,6 @@ import 'package:mahua_pet/config/config_index.dart';
 import 'package:mahua_pet/pages/college/college_test.dart';
 import 'package:mahua_pet/styles/app_style.dart';
 import 'package:mahua_pet/utils/utils_index.dart';
-import 'package:bot_toast/bot_toast.dart';
 
 
 class CollegePage extends StatefulWidget {
@@ -35,8 +34,33 @@ class _CollegePageState extends State<CollegePage> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               IconButton(icon: Icon(Icons.access_alarm), onPressed: () {
-                TKRoute.push(context, CollegeTest());
-              })
+
+                
+              }),
+              PopupMenuButton<String>(
+                child: Text('数学'),
+                initialValue: '语文',
+                itemBuilder: (ctx) {
+                  return <PopupMenuEntry<String>>[
+                    PopupMenuItem<String>(
+                      value: '语文',
+                      child: Text('语文'),
+                    ),
+                    PopupMenuItem<String>(
+                      value: '数学',
+                      child: Text('数学'),
+                    ),
+                    PopupMenuItem<String>(
+                      value: '英语',
+                      child: Text('英语'),
+                    ),
+                    PopupMenuItem<String>(
+                      value: '生物',
+                      child: Text('生物'),
+                    ),
+                  ];
+                },
+              ),
             ],
           )
         )

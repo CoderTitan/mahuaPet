@@ -1,18 +1,20 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:mahua_pet/pages/welcome/welcome_page.dart';
-import 'package:mahua_pet/providered/provider_index.dart';
-import 'package:mahua_pet/utils/utils_index.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:mahua_pet/caches/caches_index.dart';
+
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import 'package:mahua_pet/providered/provider_index.dart';
+import 'package:mahua_pet/utils/utils_index.dart';
+import 'package:mahua_pet/caches/caches_index.dart';
 import 'package:mahua_pet/component/component.dart';
 import 'package:mahua_pet/redux/redux_index.dart';
 import 'package:mahua_pet/styles/app_style.dart';
-import 'package:mahua_pet/utils/func_utils.dart';
 import 'package:mahua_pet/config/config_index.dart';
+
+import 'package:mahua_pet/flutter_widget/widget/widget_page.dart';
 import './contents/setting_page.dart';
 
 
@@ -307,7 +309,7 @@ class _MinePageState extends State<MinePage> with NavigatorObserver {
   }
 
   Widget renderMineList(BuildContext context, Store store) {
-    final titles = [S.of(context).mine_theme, S.of(context).mine_local, 'Tools'];
+    final titles = [S.of(context).mine_theme, S.of(context).mine_local, 'Flutter Widget'];
     return SliverToBoxAdapter(
       child: Container(
         margin: EdgeInsets.all(16.px),
@@ -340,7 +342,7 @@ class _MinePageState extends State<MinePage> with NavigatorObserver {
                 } else if (index == 1) {
                   showLocalDialog(context, store);
                 } else {
-                  TKRoute.push(context, WelcomePage());
+                  TKRoute.push(context, WidgetPage());
                 }
               },
             );

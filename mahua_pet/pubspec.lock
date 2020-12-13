@@ -15,13 +15,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.1.0-nullsafety.1"
-  bot_toast:
-    dependency: "direct main"
-    description:
-      name: bot_toast
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "3.0.5"
   cached_network_image:
     dependency: "direct main"
     description:
