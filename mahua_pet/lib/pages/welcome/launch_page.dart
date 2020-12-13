@@ -42,6 +42,14 @@ class _LaunchPageState extends State<LaunchPage> {
   Widget build(BuildContext context) {
     return StoreBuilder<TKState>(
       builder: (ctx, store) {
+        return Scaffold(
+          body: WillPopScope(
+            onWillPop: () => Future.value(false),
+            child: Container(
+              child: Image.asset(TKImages.asset('launch_image'), fit: BoxFit.f),
+            ),
+          ),
+        );
         return Material(
           child: Container(
             child: Stack(
