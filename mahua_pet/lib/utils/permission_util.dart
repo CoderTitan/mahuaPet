@@ -41,7 +41,7 @@ class TKPermissionUtil {
     }
 
     var status = await permissionType.status;
-    if (status == PermissionStatus.undetermined) {
+    if (status == PermissionStatus.restricted) {
       Map<Permission, PermissionStatus> statuses = await [permissionType].request();
       var state = statuses[type];
 

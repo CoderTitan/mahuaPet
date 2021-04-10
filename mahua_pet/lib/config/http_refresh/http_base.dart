@@ -34,12 +34,12 @@ abstract class BaseHttp extends DioForNative {
 /// 配置请求拦截器
 class HeaderInterceptor extends InterceptorsWrapper {
   @override
-  onRequest(RequestOptions options) async {
+  onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     options.connectTimeout = HttpConfig.timeout;
     options.receiveTimeout = HttpConfig.timeout;
     options.baseUrl = HttpConfig.baseURL;
     options.headers = getHeader();
-    return options;
+    return handler.next(options);
   }
 
   static Map<String, dynamic> getHeader() {

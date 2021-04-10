@@ -39,18 +39,20 @@ class TKRequest extends BaseHttp {
 
 class ApiInterceptor extends InterceptorsWrapper {
   @override
-  Future onRequest(RequestOptions options) async {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+    super.onRequest(options, handler);
     debugPrint('url--> ${options.baseUrl}${options.path}' + ' queryParameters: ${options.queryParameters}');
-    return options;
   }
 
+
+
   @override
-  Future onResponse(Response response) {
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
     print('response = ${response.data}');
     ResponseData respData = ResponseData.fromJson(response.data);
     if (respData.isSuccess) {
       response.data = respData;
-      return tkhttp.resolve(response);
+      return handler.resolve(response);
     } else {
       TKToast.showError(respData.message);
       throw NotSuccessException.fromRespData(respData);

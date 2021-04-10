@@ -10,6 +10,14 @@
 - 验证码登录和密码登录都可以登录, 账号: 123 密码: 123
 - 个人博客地址: https://www.titanjun.top/
 
+
+## 项目版本信息
+
+- Flutter 2.0.0 • channel stable
+- Engine • revision 40441def69
+- Tools • Dart 2.12.0
+- 项目下载完成之后, 请先执行`flutter pub get`命令
+
 ## 部分界面展示
 
 ### 首页
