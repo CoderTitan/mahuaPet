@@ -19,12 +19,13 @@ import 'route_util.dart';
 class FuncUtils {
 
   /// 当前语言
-  static Locale curLocale;
+  static Locale curLocale = Locale('zh', 'CH');
 
   // 是否登录
   static bool isLogin() {
     LoginInfo loginInfo = SharedStorage.loginInfo;
-    if (loginInfo.userId != null && loginInfo.userId > 0) {
+    final userId = loginInfo.userId ?? 0;
+    if (userId > 0) {
       return true;
     }
     return false;
@@ -117,9 +118,7 @@ class FuncUtils {
   static initThemeData(Store store) async {
     ///读取主题
     int themeIndex = await SharedUtils.getInt(ShareConstant.themeColorIndex);
-    if (themeIndex != null) {
-      setThemeData(store, themeIndex);
-    }
+    setThemeData(store, themeIndex);
   }
 
   /// 切换语言

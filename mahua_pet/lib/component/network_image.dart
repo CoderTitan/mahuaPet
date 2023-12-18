@@ -8,12 +8,12 @@ import 'package:mahua_pet/styles/app_images.dart';
 class TKNetworkImage extends StatelessWidget {
 
   final String imageUrl;
-  final ImageWidgetBuilder imageBuilder;
+  final ImageWidgetBuilder? imageBuilder;
   final String placeholder;
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
   final BoxFit fit;
-  final BorderRadius borderRadius;
+  final BorderRadius? borderRadius;
   final double boxRadius;
   final double borderWidth;
   final Color borderColor;
@@ -21,8 +21,8 @@ class TKNetworkImage extends StatelessWidget {
 
 
   TKNetworkImage({
-    Key key,
-    @required String imageUrl,
+    Key? key,
+    required this.imageUrl,
     this.imageBuilder,
     this.placeholder = TKImages.image_empty,
     this.width,
@@ -33,7 +33,7 @@ class TKNetworkImage extends StatelessWidget {
     this.borderWidth = 0.0,
     this.borderColor = const Color(0x00000000),
     this.showProgress = false,
-  }): imageUrl = imageUrl ?? '', super(key: key);
+  }): super(key: key);
 
 
   @override
@@ -47,11 +47,6 @@ class TKNetworkImage extends StatelessWidget {
       } : imageBuilder,
       placeholder: (ctx, url) => renderPlaceHolder(),
       errorWidget: (ctx, url, error) => renderError(),
-      // progressIndicatorBuilder: (context, url, downloadProgress) {
-      //   return showProgress ? Center(
-      //     child: CircularProgressIndicator(value: downloadProgress.progress),
-      //   ) : null;
-      // },
     );
   }
 
@@ -89,10 +84,10 @@ class TKNetworkImage extends StatelessWidget {
       Stack(
         children: <Widget>[
           Image.asset(placeholder, width: width, height: height, fit: BoxFit.cover),
-          Positioned(child: Center(child: CupertinoActivityIndicator(radius: min(12, width / 3))))
+          Positioned(child: Center(child: CupertinoActivityIndicator(radius: min(12, (width ?? 0) / 3))))
         ],
       ) :
-      CupertinoActivityIndicator(radius: min(16, width / 3))
+      CupertinoActivityIndicator(radius: min(16, (width ?? 0) / 3))
     );
   }
 
@@ -115,7 +110,7 @@ class TKNetworkImage extends StatelessWidget {
       child: placeholder.length > 0 ?
       Container()
       :
-      Icon(Icons.error, size: width > height ? height : width, color: Colors.black38)
+      Icon(Icons.error, size: min(width ?? 0, height ?? 0), color: Colors.black38)
     );
   }
 }

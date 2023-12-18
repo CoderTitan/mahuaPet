@@ -66,7 +66,7 @@ class TKRoute {
   }
 
   /// push
-  static push(BuildContext context, Widget pageRoute, {RouteSettings settings}) {
+  static push(BuildContext context, Widget pageRoute, {RouteSettings? settings}) {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (ctx) => pageRoute,
       settings: settings
@@ -85,11 +85,11 @@ class TKRoute {
 
   /// 登录返回到指定路由
   static popToRoutePage(BuildContext context) {
-    final routeName = ModalRoute.of(context).settings.arguments;
+    final routeName = ModalRoute.of(context)?.settings.arguments;
     if (routeName == '/') {
       popRoot(context);
     } else {
-      Navigator.of(context).popUntil(routeName);
+      Navigator.of(context).popUntil((route) => route.settings.name == '/');
     }
   }
 }

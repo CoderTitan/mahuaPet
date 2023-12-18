@@ -42,35 +42,35 @@ class UserInfo {
         this.delFlag,
     });
 
-    int userinfoId;
-    int userId;
-    String accid;
-    String accToken;
-    String hxPassword;
-    String headImg;
-    String nickname;
-    String sex;
-    String intro;
-    int coin;
-    double accountBalance;
-    String province;
-    String city;
-    String deviceNo;
-    String inviteCode;
-    int starRankId;
-    int starRank;
-    String starRankName;
-    int starValue;
-    String chainPrivateKey;
-    String chainPublicKey;
-    String chainAddress;
-    String talentType;
-    String isRecommend;
-    String imei;
-    DateTime createTime;
-    DateTime modifyTime;
-    String isFlag;
-    String delFlag;
+    int? userinfoId;
+    int? userId;
+    String? accid;
+    String? accToken;
+    String? hxPassword;
+    String? headImg;
+    String? nickname;
+    String? sex;
+    String? intro;
+    int? coin;
+    double? accountBalance;
+    String? province;
+    String? city;
+    String? deviceNo;
+    String? inviteCode;
+    int? starRankId;
+    int? starRank;
+    String? starRankName;
+    int? starValue;
+    String? chainPrivateKey;
+    String? chainPublicKey;
+    String? chainAddress;
+    String? talentType;
+    String? isRecommend;
+    String? imei;
+    DateTime? createTime;
+    DateTime? modifyTime;
+    String? isFlag;
+    String? delFlag;
 
     factory UserInfo.fromJson(Map<String, dynamic> json) {
 

@@ -12,8 +12,8 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   final bool isNight;
 
   StickyTabBarDelegate({
-    @required this.child,
-    @required this.isNight,
+    required this.child,
+    required this.isNight,
   });
 
   @override
@@ -40,12 +40,12 @@ class StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
 class StickyChildDelegate extends SliverPersistentHeaderDelegate {
   final double minHeight;
   final double maxHeight;
-  final Widget child;
+  final Widget? child;
 
   StickyChildDelegate({
-    @required this.minHeight,
-    @required this.maxHeight,
-    @required this.child,
+    required this.minHeight,
+    required this.maxHeight,
+    required this.child,
   });
 
   @override

@@ -4,20 +4,20 @@ import 'package:provider/provider.dart';
 class SelectorProvider<A extends ChangeNotifier, S> extends StatefulWidget {
 
   final A model;
-  final Widget child;
+  final Widget? child;
   final bool autoDispose;
-  final Function(A model) onModelReady;
+  final Function(A model)? onModelReady;
   final ValueWidgetBuilder<S> builder;
   final S Function(BuildContext, A) selector;
 
   SelectorProvider({
-    Key key,
-    @required this.model,
-    @required this.builder,
-    this.selector,
+    Key? key,
+    required this.model,
+    required this.builder,
+    required this.selector,
     this.child,
     this.onModelReady,
-    this.autoDispose,
+    this.autoDispose = false,
   }): super(key: key);
 
   @override
@@ -26,7 +26,7 @@ class SelectorProvider<A extends ChangeNotifier, S> extends StatefulWidget {
 
 class _SelectorProviderState<A extends ChangeNotifier> extends State<SelectorProvider<A, A>> {
 
-  A model;
+  late A model;
 
   @override
   void initState() {

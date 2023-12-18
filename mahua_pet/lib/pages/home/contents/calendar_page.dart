@@ -76,16 +76,17 @@ class _CalendarPageState extends State<CalendarPage> {
           )
         ],
       ),
-      floatingActionButton: RaisedButton(
-        color: Colors.transparent,
-        disabledColor: Colors.transparent,
-        elevation: 16,
+      floatingActionButton: ElevatedButton(
         child: Image.asset('${TKImages.image_path}tabbar_add.png', width: 37.px, height: 37.px),
-        shape: CircleBorder(),
+        style: ButtonStyle(
+          shape: MaterialStatePropertyAll(CircleBorder()),
+          elevation: MaterialStatePropertyAll(16),
+          backgroundColor: MaterialStatePropertyAll(Colors.transparent)
+        ),
         onPressed: (){
           TKActionSheet.bottomSheet(context, GrowthAlert());
         }
-      ),
+      )
     );
   }
 

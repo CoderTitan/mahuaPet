@@ -29,23 +29,23 @@ class LoginInfo {
     // 最后一位登录的用户的userId
     int lastUserId = 0;
 
-    int userId;
-    String userPhone;
-    String userPassword;
-    String userType;
-    String authStatus;
-    String userProperty;
-    String registerChannel;
-    String registerType;
-    String platformType;
-    String isFlag;
-    String delFlag;
-    String token;
-    String nickname;
-    String headImg;
-    String accid;
-    String accToken;
-    String hxPassword;
+    int? userId;
+    String? userPhone;
+    String? userPassword;
+    String? userType;
+    String? authStatus;
+    String? userProperty;
+    String? registerChannel;
+    String? registerType;
+    String? platformType;
+    String? isFlag;
+    String? delFlag;
+    String? token;
+    String? nickname;
+    String? headImg;
+    String? accid;
+    String? accToken;
+    String? hxPassword;
 
   factory LoginInfo.fromJson(Map<String, dynamic> json) {
 

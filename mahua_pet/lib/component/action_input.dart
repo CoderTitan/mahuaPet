@@ -8,10 +8,10 @@ typedef ActionInputSelect = void Function(String text);
 
 class TKActionComment {
   static void showActionSheet(BuildContext context,{
-    FocusNode focusNode,
-    TextEditingController textController,
+    FocusNode? focusNode,
+    TextEditingController? textController,
     String placehold = '',
-    ActionInputSelect submitAction,
+    ActionInputSelect? submitAction,
   }) {
     showModalBottomSheet(
       context: context,
@@ -29,13 +29,13 @@ class TKActionComment {
 
 class TKActionInputDialog extends StatefulWidget {
   final String placehold;
-  final FocusNode focusNode;
-  final TextEditingController textController;
-  final ActionInputSelect submitAction;
+  final FocusNode? focusNode;
+  final TextEditingController? textController;
+  final ActionInputSelect? submitAction;
 
   TKActionInputDialog({
-    Key key,
-    @required this.placehold,
+    Key? key,
+    required this.placehold,
     this.focusNode,
     this.textController,
     this.submitAction,
@@ -102,7 +102,6 @@ class _TKActionInputDialogState extends State<TKActionInputDialog> with WidgetsB
         focusNode: widget.focusNode,
         controller: widget.textController,
         autofocus: true,
-//        maxLines: null,
         style: TextStyle(fontSize: 14.px, color: TKColor.color_333333),
         textInputAction: TextInputAction.send,
         textAlignVertical: TextAlignVertical.top,
@@ -118,11 +117,13 @@ class _TKActionInputDialogState extends State<TKActionInputDialog> with WidgetsB
           focusedBorder: OutlineInputBorder(borderSide: BorderSide(style: BorderStyle.none, color: Colors.transparent), borderRadius: BorderRadius.circular(30.px)),
         ),
         onSubmitted: (text) {
-          widget.focusNode.unfocus();
+          widget.focusNode?.unfocus();
           if (Navigator.of(context).canPop()) {
             Navigator.of(context).pop();
           }
-          widget.submitAction(text);
+          if (widget.submitAction != null) {
+            widget.submitAction!(text);
+          }
         },
       ),
     );
@@ -137,11 +138,13 @@ class _TKActionInputDialogState extends State<TKActionInputDialog> with WidgetsB
         ),
       ),
       onTap: () {
-        widget.focusNode.unfocus();
+        widget.focusNode?.unfocus();
         if (Navigator.of(context).canPop()) {
           Navigator.of(context).pop();
         }
-        widget.submitAction(widget.textController.text);
+        if (widget.submitAction != null) {
+          widget.submitAction!(widget.textController?.text ?? '');
+        }
       },
     );
   }

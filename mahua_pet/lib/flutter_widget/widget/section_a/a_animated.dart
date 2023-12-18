@@ -7,15 +7,15 @@ class AnimatWidget extends StatefulWidget {
 
 class _AnimatedWidgetState extends State<AnimatWidget> with TickerProviderStateMixin {
 
-  AnimationController _animationAlignTransition;
-  Animation<AlignmentGeometry> _animationTransition;
-  AlignmentGeometry _aligmentAlign = Alignment.topLeft;
+  late AnimationController _animationAlignTransition;
+  late Animation<AlignmentGeometry> _animationTransition;
+  late AlignmentGeometry _aligmentAlign = Alignment.topLeft;
 
-  AnimationController _animationBuildController;
-  Animation<double> _animationBuild;
+  late AnimationController _animationBuildController;
+  late Animation<double> _animationBuild;
 
-  AnimationController _animationModalController;
-  Animation<Color> _animationModal;
+  late AnimationController _animationModalController;
+  late Animation<Color> _animationModal;
 
   bool isClick = false;
   double _opacity = 1;

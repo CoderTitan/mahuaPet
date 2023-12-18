@@ -1,19 +1,17 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ConsumerProvider<T extends ChangeNotifier> extends StatefulWidget {
-
   final T model;
-  final Widget child;
+  final Widget? child;
   final bool autoDispose;
   final ValueWidgetBuilder<T> builder;
-  final Function(T model) onModelReady;
+  final Function(T model)? onModelReady;
 
   ConsumerProvider({
-    Key key,
-    @required this.model,
-    @required this.builder,
+    Key? key,
+    required this.model,
+    required this.builder,
     this.child,
     this.onModelReady,
     this.autoDispose = true,
@@ -24,8 +22,7 @@ class ConsumerProvider<T extends ChangeNotifier> extends StatefulWidget {
 }
 
 class _ConsumerProviderState<T extends ChangeNotifier> extends State<ConsumerProvider<T>> {
-
-  T model;
+  late T model;
 
   @override
   void initState() {
@@ -54,35 +51,35 @@ class _ConsumerProviderState<T extends ChangeNotifier> extends State<ConsumerPro
   }
 }
 
-
-class ConsumerProvider2<A extends ChangeNotifier, B extends ChangeNotifier> extends StatefulWidget {
-
+class ConsumerProvider2<A extends ChangeNotifier, B extends ChangeNotifier>
+    extends StatefulWidget {
   final A model1;
   final B model2;
-  final Widget child;
+  final Widget? child;
   final bool autoDispose;
-  final Function(A model1, B model2) onModelReady;
-  final Widget Function(BuildContext context, A model1, B model2, Widget child)
+  final Function(A model1, B model2)? onModelReady;
+  final Widget Function(BuildContext context, A model1, B model2, Widget? child)
       builder;
 
   ConsumerProvider2({
-    Key key,
-    @required this.model1,
-    @required this.model2,
-    @required this.builder,
+    Key? key,
+    required this.model1,
+    required this.model2,
+    required this.builder,
     this.child,
     this.autoDispose = true,
     this.onModelReady,
-  }): super(key: key);
+  }) : super(key: key);
 
   @override
-  _ConsumerProviderState2<A, B> createState() => _ConsumerProviderState2<A, B>();
+  _ConsumerProviderState2<A, B> createState() =>
+      _ConsumerProviderState2<A, B>();
 }
 
-class _ConsumerProviderState2<A extends ChangeNotifier, B extends ChangeNotifier> extends State<ConsumerProvider2<A, B>> {
-
-  A model1;
-  B model2;
+class _ConsumerProviderState2<A extends ChangeNotifier,
+    B extends ChangeNotifier> extends State<ConsumerProvider2<A, B>> {
+  late A model1;
+  late B model2;
 
   @override
   void initState() {

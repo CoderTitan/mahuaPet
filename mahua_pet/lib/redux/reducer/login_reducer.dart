@@ -81,7 +81,7 @@ class LoginMiddleware implements MiddlewareClass<TKState> {
       FetchUserInfoAction.loadPetList(store);
       FetchUserInfoAction.loadUserData(store).then((value) {});
       
-      PointRequest.eventBaseRequest('APP首页', loginInfo.token, loginInfo.userId).then((value) {});
+      PointRequest.eventBaseRequest('APP首页', loginInfo.token ?? '', loginInfo.userId ?? 0).then((value) {});
 
       TKRoute.popToRoutePage(action.context);
       TKToast.showSuccess('登录成功');

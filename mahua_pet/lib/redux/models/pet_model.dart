@@ -32,21 +32,21 @@ class PetModel {
         this.backgroundUrl,
     });
 
-    int petId;
-    String petImg;
-    String petName;
-    String petBreed;
-    String isSterilization;
-    String sex;
-    String birthday;
-    String adoptionDate;
-    String petKg;
-    String age;
-    String isLoss;
-    String isPair;
-    String day;
-    int breedId;
-    String backgroundUrl;
+    int? petId;
+    String? petImg;
+    String? petName;
+    String? petBreed;
+    String? isSterilization;
+    String? sex;
+    String? birthday;
+    String? adoptionDate;
+    String? petKg;
+    String? age;
+    String? isLoss;
+    String? isPair;
+    String? day;
+    int? breedId;
+    String? backgroundUrl;
 
     factory PetModel.fromJson(Map<String, dynamic> json) => PetModel(
         petId: json["petId"],

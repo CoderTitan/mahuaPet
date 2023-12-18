@@ -20,10 +20,10 @@ class ViewStateBusyWidget extends StatelessWidget {
 class EmptyContent extends StatelessWidget {
 
   final String image;
-  final String title;
+  final String? title;
   final double offsetY;
   final bool showReload;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   EmptyContent({
     this.image = TKImages.empty_data,
@@ -62,8 +62,9 @@ class EmptyContent extends StatelessWidget {
       disabled: true,
       title: S.of(context).empty_refresh,
       onPressed: () {
-        if (onPressed == null) { return; }
-        onPressed();
+        if (onPressed != null) { 
+          onPressed!();
+        }
       },
     );
 

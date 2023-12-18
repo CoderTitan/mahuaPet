@@ -30,26 +30,26 @@ class ConfigInfo {
         this.delFlag,
     });
 
-    int eventBaseId;
-    int userId;
-    String eventCode;
-    String eventName;
-    String eventGroup;
-    String ip;
-    String province;
-    String city;
-    String area;
-    String clientVersion;
-    String sysVersion;
-    String platformType;
-    String registerType;
-    String loginType;
-    String registerChannel;
-    String deviceBrand;
-    String deviceModel;
-    String deviceNo;
-    String isFlag;
-    String delFlag;
+    int? eventBaseId;
+    int? userId;
+    String? eventCode;
+    String? eventName;
+    String? eventGroup;
+    String? ip;
+    String? province;
+    String? city;
+    String? area;
+    String? clientVersion;
+    String? sysVersion;
+    String? platformType;
+    String? registerType;
+    String? loginType;
+    String? registerChannel;
+    String? deviceBrand;
+    String? deviceModel;
+    String? deviceNo;
+    String? isFlag;
+    String? delFlag;
 
     factory ConfigInfo.fromJson(Map<String, dynamic> json) {
 

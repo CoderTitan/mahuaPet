@@ -12,7 +12,7 @@ class DialogShow extends StatelessWidget {
           children: renderItems(context),
         ),
       ),
-      floatingActionButton: RaisedButton(
+      floatingActionButton: TextButton(
           child: Text('titles[i]'),
           onPressed: () {
             _showGeneralDialog(context);
@@ -29,7 +29,7 @@ class DialogShow extends StatelessWidget {
       Widget button = Container(
         padding: EdgeInsets.symmetric(vertical: 16),
         alignment: Alignment.center,
-        child: RaisedButton(
+        child: TextButton(
           child: Text(titles[i]),
           onPressed: () {
             buttonAction(i, context);

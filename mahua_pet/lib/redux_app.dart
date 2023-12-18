@@ -36,7 +36,7 @@ class _ReduxAppState extends State<ReduxApp> with NavigatorObserver {
     super.initState();
 
     Future.delayed(Duration(seconds: 0), () {
-      navigator.context;
+      navigator?.context;
       navigator;
     });
   }

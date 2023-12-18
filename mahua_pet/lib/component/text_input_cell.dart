@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:mahua_pet/styles/app_style.dart';
+
 import 'text_input.dart';
 
 class TextInputCell extends StatefulWidget {
-
   final double height;
   final double horizontalPadding;
   final Color backcolorColor;
@@ -12,44 +11,37 @@ class TextInputCell extends StatefulWidget {
   final double leftTitleFont;
   final Color leftTitleColor;
   final String placeholder;
-  final FocusNode focusNode;
-  final TextEditingController controller;
+  final FocusNode? focusNode;
+  final TextEditingController? controller;
   final TextInputType keyboardType;
   final int maxLength;
   final double inputFont;
-  final ValueChanged<String> onChanged;
+  final ValueChanged<String>? onChanged;
   final bool showLine;
   final bool showArrow;
   final double leftLineMargin;
   final Color lineColor;
 
   TextInputCell({
-    Key key,
-    double height,
-    double horizontalPadding,
+    Key? key,
+    this.height = 56,
+    this.horizontalPadding = 16,
     this.backcolorColor = Colors.white,
-    this.leftTitle,
-    double leftTitleFont,
+    this.leftTitle = '',
+    this.leftTitleFont = 16,
     this.leftTitleColor = TKColor.color_666666,
-    this.placeholder,
+    this.placeholder = '',
     this.focusNode,
     this.controller,
     this.keyboardType = TextInputType.text,
-    this.maxLength,
-    double inputFont,
+    this.maxLength = 0,
+    this.inputFont = 16,
     this.onChanged,
     this.showLine = true,
     this.showArrow = true,
-    double leftLineMargin,
+    this.leftLineMargin = 16,
     this.lineColor = TKColor.color_e8e8e8,
-  }): height = height ?? 56.px, 
-    horizontalPadding = horizontalPadding ?? 16.px, 
-    leftTitleFont = leftTitleFont ?? 16.px,
-    inputFont = inputFont ?? 16.px,
-    leftLineMargin = leftLineMargin ?? 16.px,
-    super(key: key);
-
-
+  }) : super(key: key);
 
   @override
   _TextInputCellState createState() => _TextInputCellState();
@@ -77,7 +69,9 @@ class _TextInputCellState extends State<TextInputCell> {
       width: SizeFit.screenWidth,
       color: widget.backcolorColor,
       child: Padding(
-        padding: EdgeInsets.only(left: widget.horizontalPadding, right: widget.showArrow ? 6.px : 16.px),
+        padding: EdgeInsets.only(
+            left: widget.horizontalPadding,
+            right: widget.showArrow ? 6.px : 16.px),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -88,28 +82,27 @@ class _TextInputCellState extends State<TextInputCell> {
     itemList.add(topItem);
 
     if (widget.showLine) {
-      itemList.add(
-        Padding(
+      itemList.add(Padding(
           padding: EdgeInsets.only(left: widget.leftLineMargin),
           child: Container(
             width: SizeFit.screenWidth - widget.leftLineMargin,
             height: 0.5,
             color: widget.lineColor,
-          )
-        )
-      );
+          )));
     }
-    
+
     return itemList;
   }
 
   List<Widget> childrenRowItem() {
     List<Widget> itemList = [];
 
-    Text leftTitle = Text(widget.leftTitle, style: TextStyle(fontSize: widget.leftTitleFont, color: widget.leftTitleColor));
+    Text leftTitle = Text(widget.leftTitle,
+        style: TextStyle(fontSize: widget.leftTitleFont, color: widget.leftTitleColor));
     itemList.add(leftTitle);
 
-    Widget input = Expanded(child: Row(
+    Widget input = Expanded(
+        child: Row(
       children: childrenRightRowItem(),
     ));
     itemList.add(input);
@@ -125,17 +118,24 @@ class _TextInputCellState extends State<TextInputCell> {
         focusNode: widget.focusNode,
         controller: widget.controller,
         keyboardType: widget.keyboardType,
-        style: TextStyle(fontSize: widget.inputFont, color: TKColor.color_333333),
+        style:
+            TextStyle(fontSize: widget.inputFont, color: TKColor.color_333333),
         placeText: widget.placeholder,
-        placeStyle: TextStyle(fontSize: widget.inputFont, color: TKColor.color_cccccc),
+        placeStyle:
+            TextStyle(fontSize: widget.inputFont, color: TKColor.color_cccccc),
         textAlign: TextAlign.end,
         maxLength: widget.maxLength,
-        onChanged: (text) => widget.onChanged(text),
+        onChanged: (text) {
+          if (widget.onChanged != null) {
+            widget.onChanged!(text);
+          }
+        },
       ),
     );
     itemList.add(textInput);
     if (widget.showArrow) {
-      itemList.add(Icon(Icons.keyboard_arrow_right, color: TKColor.color_cccccc, size: 28.px));
+      itemList.add(Icon(Icons.keyboard_arrow_right,
+          color: TKColor.color_cccccc, size: 28.px));
     }
 
     return itemList;

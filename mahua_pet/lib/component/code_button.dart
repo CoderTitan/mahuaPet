@@ -1,51 +1,51 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
 import 'package:mahua_pet/styles/app_style.dart';
 
-
 class AuthCodeButton extends StatefulWidget {
-
   final int timeCount;
-  final VoidCallback onPressed;
-  final VoidCallback endActoon;
-
+  final VoidCallback? onPressed;
+  final VoidCallback? endActoon;
 
   AuthCodeButton({
-    Key key,
-    @required VoidCallback onPressed,
-    this.timeCount,
-    VoidCallback endActoon,
-  }): onPressed = onPressed, endActoon = endActoon, super(key: key);
+    Key? key,
+    required this.onPressed,
+    this.timeCount = 0,
+    this.endActoon,
+  }) : super(key: key);
 
   @override
   AuthCodeButtonState createState() => AuthCodeButtonState();
 }
 
 class AuthCodeButtonState extends State<AuthCodeButton> {
-
   String title = '获取验证码';
   bool isDisable = true;
 
-  Timer _timer;
+  Timer? _timer;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-       width: 90.px,
+      width: 90.px,
       child: Center(
         child: SizedBox(
           width: 90.px,
           height: 30.px,
-          child: RaisedButton(
-            padding: EdgeInsets.symmetric(horizontal: 2.px),
-            child: Text(title, style: TextStyle(fontSize: 13.px)),
-            textColor: TKColor.color_4b4b4b,
-            disabledTextColor: TKColor.color_6f6f6f,
-            color: TKColor.main_color,
-            disabledColor: TKColor.color_ffea9e,
-            shape: StadiumBorder(),
+          child: TextButton(
+            child: Text(title,
+                style: TextStyle(
+                    fontSize: 13.px,
+                    color: isDisable
+                        ? TKColor.color_4b4b4b
+                        : TKColor.color_6f6f6f)),
+            style: ButtonStyle(
+                padding: MaterialStateProperty.all(
+                    EdgeInsets.symmetric(horizontal: 2.px)),
+                backgroundColor: MaterialStateProperty.all(
+                    isDisable ? TKColor.main_color : TKColor.color_ffea9e),
+                shape: MaterialStatePropertyAll(StadiumBorder())),
             onPressed: isDisable ? widget.onPressed : null,
           ),
         ),
@@ -69,13 +69,13 @@ class AuthCodeButtonState extends State<AuthCodeButton> {
       counter--;
       if (counter <= 0) {
         if (widget.endActoon != null) {
-          widget.endActoon();
+          widget.endActoon!();
         }
         setState(() {
           title = '重新获取';
           isDisable = true;
         });
-        _timer.cancel();
+        _timer?.cancel();
         _timer = null;
       } else {
         setState(() {
@@ -88,9 +88,9 @@ class AuthCodeButtonState extends State<AuthCodeButton> {
   @override
   void dispose() {
     super.dispose();
-    
+
     if (_timer != null) {
-      _timer.cancel();
+      _timer?.cancel();
       _timer = null;
     }
   }

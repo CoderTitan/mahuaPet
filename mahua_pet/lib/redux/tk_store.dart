@@ -7,35 +7,35 @@ import 'package:mahua_pet/providered/model/model_index.dart';
 class TKState {
 
   /// 主题
-  ThemeData themeData;
+  late ThemeData themeData;
   /// 是否夜间模式: 黑色主题也是夜间模式
-  bool isNightModal;
+  late bool isNightModal;
 
   /// 语言
-  Locale locale;
+  late Locale locale;
   /// 当前手机平台默认语言
-  Locale platformLocale;
+  Locale? platformLocale;
 
   /// 是否登录
-  bool isLogin;
+  late bool isLogin;
 
   /// 登录注册获取用户信息
-  ConfigInfo configInfo;
-  LoginInfo loginInfo;
-  UserData userData;
-  DeviceInfoModel deviceInfo;
+  ConfigInfo? configInfo;
+  LoginInfo? loginInfo;
+  UserData? userData;
+  DeviceInfoModel? deviceInfo;
 
   /// 宠物列表
-  List<PetModel> petList;
-  PetModel currentPet;
+  List<PetModel>? petList;
+  PetModel? currentPet;
 
 
 
   TKState({
-    this.locale,
-    this.themeData, 
-    this.isNightModal,
-    this.isLogin,
+    required this.locale,
+    required this.themeData, 
+    required this.isNightModal,
+    required this.isLogin,
     this.loginInfo,
     this.configInfo,
     this.userData,
@@ -64,7 +64,7 @@ TKState appReducer(TKState state, action) {
     deviceInfo: DeviceInfoReducer(state.deviceInfo, action),
 
     // 宠物列表
-    petList: PetListReducer(state.petList, action),
+    petList: PetListReducer(state.petList ?? [], action),
     currentPet: CurrentPetReducer(state.currentPet, action),
   );
 }

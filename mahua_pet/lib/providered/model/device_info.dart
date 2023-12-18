@@ -19,13 +19,13 @@ class DeviceInfoModel {
         this.isPhysicalDevice,
     });
 
-    String mobileType;
-    String mobileName;
-    String mobileVersion;
-    String modelType;
-    String localizedModel;
-    String mobileUid;
-    bool isPhysicalDevice;
+    String? mobileType;
+    String? mobileName;
+    String? mobileVersion;
+    String? modelType;
+    String? localizedModel;
+    String? mobileUid;
+    bool? isPhysicalDevice;
 
     factory DeviceInfoModel.fromJson(Map<String, dynamic> json) => DeviceInfoModel(
         mobileType: json["mobileType"] ?? '',

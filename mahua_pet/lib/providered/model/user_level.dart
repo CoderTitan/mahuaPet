@@ -19,13 +19,13 @@ class UserLevel {
         this.delFlag,
     });
 
-    int userlevelId;
-    int userId;
-    String level;
-    int growthValue;
-    DateTime createTime;
-    String isFlag;
-    String delFlag;
+    int? userlevelId;
+    int? userId;
+    String? level;
+    int? growthValue;
+    DateTime? createTime;
+    String? isFlag;
+    String? delFlag;
 
     factory UserLevel.fromJson(Map<String, dynamic> json) => UserLevel(
         userlevelId: json["userlevelId"],

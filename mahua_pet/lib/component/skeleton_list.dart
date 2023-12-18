@@ -11,7 +11,7 @@ class SkeletonList extends StatelessWidget {
   SkeletonList({
     this.padding = const EdgeInsets.all(8),
     this.count = 6,
-    @required this.builder
+    required this.builder
   });
 
   @override
@@ -23,8 +23,8 @@ class SkeletonList extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       child: Shimmer.fromColors(
         period: Duration(milliseconds: 1500),
-        baseColor: isDark ? Colors.grey[700] : Colors.grey[350],
-        highlightColor: isDark ? Colors.grey[500] : Colors.grey[200],
+        baseColor: (isDark ? Colors.grey[700] : Colors.grey[350]) ?? Colors.grey,
+        highlightColor: (isDark ? Colors.grey[500] : Colors.grey[200]) ?? Colors.grey,
         child: Padding(
           padding: padding,
           child: Column(
@@ -43,8 +43,8 @@ class SkeletonContainer extends StatelessWidget {
   final bool isCircle;
 
   SkeletonContainer({
-    @required this.width, 
-    @required this.height, 
+    required this.width, 
+    required this.height, 
     this.isCircle = false
   });
 

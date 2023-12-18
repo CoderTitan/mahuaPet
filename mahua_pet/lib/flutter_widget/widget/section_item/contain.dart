@@ -63,8 +63,8 @@ class _ContainerWidgetState extends State<ContainerWidget> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                RaisedButton(onPressed: (){ print('object'); },),
-                RaisedButton(onPressed: (){ print('object'); },),
+                OutlinedButton(child: Text(''), onPressed: (){ print('object'); },),
+                OutlinedButton(child: Text(''), onPressed: (){ print('object'); },),
               ],
             ),
           ),
@@ -73,7 +73,7 @@ class _ContainerWidgetState extends State<ContainerWidget> {
           Text('AbsorbPointer本身可以接收点击事件，消耗掉事件，而IgnorePointer无法接收点击事件，其下的控件可以接收到点击事件', style: TextStyle(fontSize: 13)),
           IgnorePointer(
             ignoring: true,
-            child: RaisedButton(onPressed: (){ print('object'); }),
+            child: OutlinedButton(child: Text(''), onPressed: (){ print('object'); }),
           )
         ],
       ),

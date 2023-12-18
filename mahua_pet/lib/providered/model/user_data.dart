@@ -33,30 +33,30 @@ class UserData {
         this.validCouponCount,
     });
 
-    User user;
-    UserInfo userinfo;
-    UserLevel userlevel;
-    List<dynamic> usermedalList;
-    int petCount;
-    int messageCount;
-    int fansCount;
-    int followCount;
-    int agreeCount;
-    String isSelf;
-    String followStatus;
-    String totalWalkDogTime;
-    TargetRule targetRule;
-    String fansNotifyStatus;
-    bool deviceStatus;
-    UserMember userMember;
-    bool tribeFirstStatus;
-    int validCouponCount;
+    User? user;
+    UserInfo? userinfo;
+    UserLevel? userlevel;
+    List<dynamic>? usermedalList;
+    int? petCount;
+    int? messageCount;
+    int? fansCount;
+    int? followCount;
+    int? agreeCount;
+    String? isSelf;
+    String? followStatus;
+    String? totalWalkDogTime;
+    TargetRule? targetRule;
+    String? fansNotifyStatus;
+    bool? deviceStatus;
+    UserMember? userMember;
+    bool? tribeFirstStatus;
+    int? validCouponCount;
 
     factory UserData.fromJson(Map<String, dynamic> json) => UserData(
         user: User.fromJson(json["user"] ?? {}),
         userinfo: UserInfo.fromJson(json["userinfo"]),
         userlevel: UserLevel.fromJson(json["userlevel"]),
-        usermedalList: List<dynamic>.from(json["usermedalList"].map((x) => x)) ?? [],
+        usermedalList: List<dynamic>.from(json["usermedalList"].map((x) => x)),
         petCount: json["petCount"],
         messageCount: json["messageCount"],
         fansCount: json["fansCount"],
@@ -77,7 +77,7 @@ class UserData {
         "user": user?.toJson(),
         "userinfo": userinfo?.toJson(),
         "userlevel": userlevel?.toJson(),
-        "usermedalList": List<dynamic>.from(usermedalList?.map((x) => x)),
+        "usermedalList": '',
         "petCount": petCount,
         "messageCount": messageCount,
         "fansCount": fansCount,
@@ -106,13 +106,13 @@ class TargetRule {
         this.delFlag,
     });
 
-    int ruleId;
-    String level;
-    int growthValue;
-    String createTime;
-    String delTime;
-    String isFlag;
-    String delFlag;
+    int? ruleId;
+    String? level;
+    int? growthValue;
+    String? createTime;
+    String? delTime;
+    String? isFlag;
+    String? delFlag;
 
     factory TargetRule.fromJson(Map<String, dynamic> json) => TargetRule(
         ruleId: json["ruleId"],
@@ -152,19 +152,19 @@ class User {
         this.delFlag,
     });
 
-    int userId;
-    String userPhone;
-    String userPassword;
-    String userType;
-    String authStatus;
-    String userProperty;
-    String registerChannel;
-    String registerType;
-    String platformType;
-    String createTime;
-    String modifyTime;
-    String isFlag;
-    String delFlag;
+    int? userId;
+    String? userPhone;
+    String? userPassword;
+    String? userType;
+    String? authStatus;
+    String? userProperty;
+    String? registerChannel;
+    String? registerType;
+    String? platformType;
+    String? createTime;
+    String? modifyTime;
+    String? isFlag;
+    String? delFlag;
 
     factory User.fromJson(Map<String, dynamic> json) => User(
         userId: json["userId"],
@@ -210,13 +210,13 @@ class UserMember {
         this.nextRankNeedValue,
     });
 
-    int rankId;
-    String rankName;
-    String plusStatus;
-    String plusType;
-    int rankValue;
-    int jifen;
-    int nextRankNeedValue;
+    int? rankId;
+    String? rankName;
+    String? plusStatus;
+    String? plusType;
+    int? rankValue;
+    int? jifen;
+    int? nextRankNeedValue;
 
     factory UserMember.fromJson(Map<String, dynamic> json) => UserMember(
         rankId: json["rankId"],

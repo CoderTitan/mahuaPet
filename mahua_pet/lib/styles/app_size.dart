@@ -9,26 +9,26 @@ class SizeFit {
   static bool isIOS = Platform.isIOS;
 
   // 像素宽高
-  static double physicalWidth;
-  static double physicalHeight;
+  static double physicalWidth = 0;
+  static double physicalHeight = 0;
 
   // 实际尺寸
-  static double screenWidth;
-  static double screenHeight;
-  static double statusHeight;
-  static double navHeight;
-  static double safeHeight;
-  static double tabBarHeight;
+  static double screenWidth = 0;
+  static double screenHeight = 0;
+  static double statusHeight = 0;
+  static double navHeight = 0;
+  static double safeHeight = 0;
+  static double tabBarHeight = 0;
 
   // 是否是刘海屏
-  static bool isIPhoneX;
+  static bool isIPhoneX = false;
 
   // 像素比例
-  static double dpr;
+  static double dpr = 0;
   // 适配相比于参考机型的像素比
-  static double rpx;
+  static double rpx = 0;
   // 适配相比于参考机型的尺寸比
-  static double px;
+  static double px = 0;
 
 
 

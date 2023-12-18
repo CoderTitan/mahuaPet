@@ -9,7 +9,7 @@ class FocusButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   FocusButton({
-    @required VoidCallback onPressed,
+    required VoidCallback onPressed,
     this.isSelect = false,
   }): onPressed = onPressed;
 

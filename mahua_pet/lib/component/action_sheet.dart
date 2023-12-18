@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mahua_pet/styles/app_style.dart';
-import 'growth_alert.dart';
 
 
 typedef ActionRowsSelect = void Function(int index, String title);
@@ -19,10 +18,9 @@ class TKActionSheet {
   }
 
 
-  static void showActionSheet(BuildContext context,{
-    List<String> rows,
+  static void showActionSheet(BuildContext context, List<String> rows, {
     bool showCancel = true,
-    ActionRowsSelect selectAction,
+    ActionRowsSelect? selectAction,
   }) {
     showModalBottomSheet(
       context: context, 
@@ -44,14 +42,14 @@ class TKActionSheetWidget extends StatelessWidget {
 
   final List<String> rows;
   final bool showCancel;
-  final ActionRowsSelect selectAction;
+  final ActionRowsSelect? selectAction;
 
   TKActionSheetWidget({
-    Key key,
-    @required List<String> rows,
+    Key? key,
+    required this.rows,
     this.showCancel = true,
     this.selectAction,
-  }): rows = rows ?? [], super(key: key);
+  }): super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +77,10 @@ class TKActionSheetWidget extends StatelessWidget {
           ),
         ),
         onTap: () {
-          selectAction(i, rows[i]);
+          if (selectAction != null) {
+            selectAction!(i, rows[i]);
+          }
+          
           if (Navigator.of(context).canPop()) {
             Navigator.of(context).pop();
           }

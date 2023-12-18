@@ -11,22 +11,22 @@ import 'package:mahua_pet/styles/app_style.dart';
 
 class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
 
-  final Widget child;
+  final Widget? child;
   final double collapsedHeight;
   final double expandedHeight;
   final double paddingTop;
   final String title;
-  final IconData trailing;
-  final VoidCallback trailingPress;
+  final IconData? trailing;
+  final VoidCallback? trailingPress;
   
   String statusBarMode = 'dark';
 
   SliverCustomHeaderDelegate({
     this.child,
-    this.collapsedHeight,
-    this.expandedHeight,
-    this.paddingTop,
-    this.title,
+    this.collapsedHeight = 0,
+    this.expandedHeight = 0,
+    this.paddingTop = 0,
+    this.title = '',
     this.trailing,
     this.trailingPress
   });
@@ -117,7 +117,9 @@ class SliverCustomHeaderDelegate extends SliverPersistentHeaderDelegate {
                           color: makeStickyHeaderTextColor(shrinkOffset, true),
                         ),
                         onPressed: trailingPress == null ? null : () {
-                          trailingPress();
+                          if (trailingPress != null) {
+                            trailingPress!();
+                          }
                         },
                       ),
                     ],
@@ -140,9 +142,9 @@ class SliverScaleHeaderDelegate extends SliverPersistentHeaderDelegate {
   final Widget child;
 
   SliverScaleHeaderDelegate({
-    @required this.minHeight,
-    @required this.maxHeight,
-    @required this.child,
+    required this.minHeight,
+    required this.maxHeight,
+    required this.child,
   });
 
   @override

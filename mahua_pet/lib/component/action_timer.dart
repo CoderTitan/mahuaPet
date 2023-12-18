@@ -6,14 +6,14 @@ import 'package:mahua_pet/styles/app_style.dart';
 
 class TKDatePickerAction {
   static void showActionSheet(BuildContext context,{
-    CupertinoDatePickerMode mode,
-    DateTime initialDateTime,
-    DateTime minimumDate,
-    DateTime maximumDate,
+    CupertinoDatePickerMode mode = CupertinoDatePickerMode.date,
+    DateTime? initialDateTime,
+    DateTime? minimumDate,
+    DateTime? maximumDate,
     bool use24hFormat = true,
-    @required ValueChanged<DateTime> onDateTimeChanged,
+    required ValueChanged<DateTime> onDateTimeChanged,
   }) {
-    CupertinoDatePickerMode dateMode = mode ?? CupertinoDatePickerMode.date;
+    CupertinoDatePickerMode dateMode = mode;
     showCupertinoModalPopup(
       context: context, 
       builder: (ctx) {
@@ -33,22 +33,21 @@ class TKDatePickerAction {
 class TKActionDateWidget extends StatelessWidget {
 
   final CupertinoDatePickerMode mode;
-  final DateTime initialDateTime;
-  final DateTime minimumDate;
-  final DateTime maximumDate;
+  final DateTime? initialDateTime;
+  final DateTime? minimumDate;
+  final DateTime? maximumDate;
   final bool use24hFormat;
   final ValueChanged<DateTime> onDateTimeChanged;
 
   TKActionDateWidget({
-    Key key,
+    Key? key,
     this.mode = CupertinoDatePickerMode.date,
-    @required this.onDateTimeChanged,
-    DateTime initialDateTime,
+    required this.onDateTimeChanged,
+    this.initialDateTime,
     this.minimumDate,
     this.maximumDate,
     this.use24hFormat = true,
-  }): initialDateTime = initialDateTime ?? DateTime.now(), 
-  super(key: key);
+  }): super(key: key);
 
   @override
   Widget build(BuildContext context) {
